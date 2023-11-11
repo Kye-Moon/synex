@@ -23,7 +23,7 @@ export default function NewJobDialog() {
 				<PlusIcon className={"mr-2 h-4 w-4 shrink-0"} />
 				New Job
 			</DialogTrigger>
-			<DialogContent className={"max-w-2xl"}>
+			<DialogContent className={"max-w-6xl"}>
 				<DialogHeader>
 					<DialogTitle>New Job</DialogTitle>
 				</DialogHeader>

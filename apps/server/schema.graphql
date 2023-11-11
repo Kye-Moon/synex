@@ -37,11 +37,31 @@ type Job {
   updatedAt: DateTime
 }
 
+type JobCrewMember {
+  id: String!
+  name: String!
+  phone: String!
+}
+
+type UserCrew {
+  id: String!
+  userId: String!
+  crewMemberId: String!
+}
+
+type UserCrewResponse {
+  id: String!
+  name: String!
+  phone: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
+  userCrew: [UserCrewResponse!]!
   searchJobs(jobSearchInput: JobSearchInput!): [Job!]!
   job(id: String!): Job!
+  jobCrew(jobId: String!): [JobCrewMember!]!
 }
 
 input JobSearchInput {
@@ -60,6 +80,8 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  createUserCrew(createUserCrewInput: CreateUserCrewInput!): UserCrew!
+  removeUserCrew(id: Int!): UserCrew!
   createJob(createJobInput: CreateJobInput!): Job!
   updateJob(updateJobInput: UpdateJobInput!): Job!
   removeJob(id: String!): Job!
@@ -90,12 +112,18 @@ input UpdateUserInput {
   id: String!
 }
 
+input CreateUserCrewInput {
+  name: String!
+  phone: String!
+}
+
 input CreateJobInput {
   title: String!
   description: String
   customerName: String
   status: String
   dueDate: DateTime
+  crew: [String!]
 }
 
 input UpdateJobInput {
@@ -104,5 +132,6 @@ input UpdateJobInput {
   customerName: String
   status: String
   dueDate: DateTime
+  crew: [String!]
   id: String!
 }

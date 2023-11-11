@@ -13,7 +13,7 @@ export default function VariationsPage() {
 					<div className={"py-5 "}>
 						<VariationActionTypeFilterTabs />
 					</div>
-					<div className={"py-2 "}>
+					<div className={"py-2 pt-3 "}>
 						<JobSelect
 							value={""}
 							setValue={(value) => {
@@ -22,7 +22,6 @@ export default function VariationsPage() {
 						/>
 					</div>
 				</div>
-
 				<VariationTable />
 			</PageContentSection>
 		</>

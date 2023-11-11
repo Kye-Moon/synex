@@ -23,7 +23,7 @@ export const user = pgTable('user', {
     .primaryKey(),
   name: text('full_name').notNull(),
   phone: varchar('phone', { length: 20 }).notNull(),
-  password: varchar('password', { length: 100 }).notNull(),
+  password: varchar('password', { length: 100 }),
   email: varchar('email', { length: 100 }),
   isAdmin: boolean('is_admin').default(false),
   isCrewMember: boolean('is_crew_member').default(false),
@@ -51,6 +51,9 @@ export const userCrew = pgTable('user_crew', {
     .notNull(),
 });
 
+export type UserCrew = InferSelectModel<typeof userCrew>;
+export type NewUserCrew = InferInsertModel<typeof userCrew>;
+
 export const userCrewRelations = relations(userCrew, ({ one }) => ({
   admin: one(user, {
     fields: [userCrew.userId],
@@ -61,6 +64,10 @@ export const userCrewRelations = relations(userCrew, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export type UserCrewWithCrewMember = UserCrew & {
+  crewMember: User;
+}
 
 // ###################### JOB TABLE ######################
 export const job = pgTable('job', {
@@ -85,6 +92,7 @@ export const job = pgTable('job', {
 
 export type Job = InferSelectModel<typeof job>;
 export type NewJob = InferInsertModel<typeof job>;
+export type UpdateJob = Partial<NewJob>
 
 export const jobRelations = relations(job, ({ one, many }) => ({
   owner: one(user, {

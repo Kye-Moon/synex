@@ -7,13 +7,13 @@ import {
 	getPaginationRowModel,
 	SortingState,
 	getSortedRowModel,
-	useReactTable,
+	useReactTable, Row,
 } from "@tanstack/react-table";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Primitives/Table";
-import { Input } from "@/Primitives/Input";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/Primitives/Table";
+import {Input} from "@/Primitives/Input";
 import DataTablePagination from "./DataTablePagination/DataTablePagination";
-import React from "react";
+import React, {useEffect} from "react";
 
 /**
  * The props for the DataTable component
@@ -37,6 +37,7 @@ interface DataTableProps<TData, TValue> {
 	 * The placeholder text for the search input
 	 */
 	searchPlaceholder?: string;
+
 }
 
 /**
@@ -49,11 +50,11 @@ interface DataTableProps<TData, TValue> {
  * @constructor
  */
 function DataTable<TData, TValue>({
-	columns,
-	data,
-	searchColumn,
-	searchPlaceholder,
-}: DataTableProps<TData, TValue>) {
+									  columns,
+									  data,
+									  searchColumn,
+									  searchPlaceholder,
+								  }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
@@ -71,6 +72,7 @@ function DataTable<TData, TValue>({
 			columnFilters,
 		},
 	});
+
 
 	return (
 		<>
@@ -121,7 +123,7 @@ function DataTable<TData, TValue>({
 				</TableBody>
 			</Table>
 			<div className="flex items-center justify-end space-x-2 py-4">
-				<DataTablePagination table={table} />
+				<DataTablePagination table={table}/>
 			</div>
 		</>
 	);

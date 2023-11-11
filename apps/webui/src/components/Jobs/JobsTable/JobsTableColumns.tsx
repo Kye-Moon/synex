@@ -1,12 +1,10 @@
-import { ColumnDef } from "@tanstack/react-table";
+import {ColumnDef} from "@tanstack/react-table";
 import Badge from "@/Primitives/Badge/Badge";
-import { enumToSentenceCase } from "@/Lib/utils";
-import { ArrowUpDown, EditIcon, EyeIcon, NewspaperIcon, TrashIcon } from "lucide-react";
-import ActionsDropMenu, { Action } from "@/Components/ActionsDropMenu/ActionsDropMenu";
-import { Button } from "@/Primitives/Button/Button";
+import {enumToSentenceCase} from "@/Lib/utils";
+import {ArrowUpDown, EditIcon, EyeIcon, NewspaperIcon, TrashIcon} from "lucide-react";
+import ActionsDropMenu, {Action} from "@/Components/ActionsDropMenu/ActionsDropMenu";
 import moment from "moment";
-import { router } from "@/Lib/src/Routes";
-import { Router, useNavigate } from "@tanstack/react-router";
+import {useNavigate} from "@tanstack/react-router";
 
 export interface JobsTableColumn {
 	id: string;
@@ -21,9 +19,9 @@ const getStatusBadgeVariant = (status: string) => {
 	switch (status) {
 		case "IN_PROGRESS":
 			return "blue";
-		case "DONE":
+		case "COMPLETE":
 			return "green";
-		case "OPEN":
+		case "NOT_STARTED":
 			return "yellow";
 	}
 };
@@ -89,6 +87,11 @@ export const jobsTableColumns: ColumnDef<JobsTableColumn>[] = [
 		cell: ({ row }) => {
 			const navigate = useNavigate();
 			const JobsTableColumnActions: Action[] = [
+
+				{
+					label: "Variations",
+					icon: <NewspaperIcon className={"h-4 text-primary/50"} />,
+				},
 				{
 					label: "View Job",
 					icon: <EyeIcon className={"h-4 text-primary/50"} />,
@@ -97,12 +100,11 @@ export const jobsTableColumns: ColumnDef<JobsTableColumn>[] = [
 					},
 				},
 				{
-					label: "Variations",
-					icon: <NewspaperIcon className={"h-4 text-primary/50"} />,
-				},
-				{
-					label: "Edit",
+					label: "Edit Job",
 					icon: <EditIcon className={"h-4 text-primary/50"} />,
+					onClick: async () => {
+						await navigate({ to: "/jobs/$jobId/edit", params: { jobId: row.original.id } });
+					},
 				},
 				{
 					label: "Archive",

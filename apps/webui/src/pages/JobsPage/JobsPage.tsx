@@ -6,7 +6,7 @@ import NewJobDialog from "@/Components/Jobs/NewJobDialog/NewJobDialog";
 import PageContentSection from "@/Components/PageContentSection";
 import JobsTable from "@/Components/Jobs/JobsTable/JobsTable";
 
-const jobPageActions: PageHeadingActionButtonProps[] = [
+const jobsPageActions: PageHeadingActionButtonProps[] = [
 	{
 		dialog: <NewJobDialog />,
 	},
@@ -15,7 +15,7 @@ const jobPageActions: PageHeadingActionButtonProps[] = [
 export default function JobsPage() {
 	return (
 		<>
-			<PageHeadingWithMetaAndActions actions={jobPageActions} pageHeading={"Jobs"} />
+			<PageHeadingWithMetaAndActions actions={jobsPageActions} pageHeading={"Jobs"} />
 			<PageContentSection>
 				<Suspense fallback={<div>Loading...</div>}>
 					<JobsTable />

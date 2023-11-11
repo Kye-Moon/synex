@@ -10,11 +10,23 @@ export const createNewJob = graphql(`
 	}
 `);
 
+export const updateJob = graphql(`
+    mutation UpdateJob($input: UpdateJobInput!) {
+        updateJob(updateJobInput: $input){
+            id	
+        }
+    }
+`);
+
 export const dashboardSearchJobs = graphql(`
 	query DashboardSearchJobs($input: JobSearchInput!) {
 		searchJobs(jobSearchInput: $input) {
 			id
 			title
+			customerName
+			status
+			dueDate
+			description
 		}
 	}
 `);
@@ -31,8 +43,8 @@ export const jobTableSearchJobs = graphql(`
 	}
 `);
 
-export const jobQuery = graphql(`
-	query JobPageQuery($jobId: String!) {
+export const jobWithCrewQuery = graphql(`
+	query JobWithCrew($jobId: String!) {
 		job(id: $jobId) {
 			id
 			title
@@ -42,9 +54,35 @@ export const jobQuery = graphql(`
 			customerName
 			createdAt
 			dueDate
+		},
+		jobCrew(jobId: $jobId) {
+			id
+			name
 		}
 	}
 `);
+
+export const jobWithCrewAndVariationsQuery = graphql(`
+	query JobWithCrewAndVariations($jobId: String!) {
+		job(id: $jobId) {
+			id
+			title
+			description
+			ownerId
+			status
+			customerName
+			createdAt
+			dueDate
+		},
+		jobCrew(jobId: $jobId) {
+			id
+			name
+			phone
+		},
+	}
+`);
+
+
 
 export const convertJobsToJobsTableColumns = (
 	jobs: JobsTableSearchJobsQuery

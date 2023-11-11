@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export function enumToSentenceCase(enumValue) {
+export function enumToSentenceCase(enumValue: string) {
 	// Split the input string by underscores
 	const words = enumValue.split("_");
 
@@ -17,3 +17,14 @@ export function enumToSentenceCase(enumValue) {
 	// Join the words back together with a space between them
 	return sentenceCaseWords.join(" ");
 }
+
+export const getStatusBadgeVariant = (status: string) => {
+	switch (status) {
+		case "IN_PROGRESS":
+			return "blue";
+		case "FINISHED":
+			return "green";
+		case "NOT_STARTED":
+			return "yellow";
+	}
+};

@@ -41,6 +41,10 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 		header: "Name",
 	},
 	{
+		accessorKey: "Job",
+		header: "Job",
+	},
+	{
 		accessorKey: "submittedBy",
 		header: "Submitted by",
 	},

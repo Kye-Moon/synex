@@ -15,7 +15,7 @@ const linkVariants = cva(
 		variants: {
 			variant: {
 				default: "",
-				active: "text-accent bg-primary/10",
+				active: "text-primary bg-primary/10",
 			},
 		},
 	}

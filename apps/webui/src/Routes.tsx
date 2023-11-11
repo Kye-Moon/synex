@@ -1,20 +1,22 @@
-import { Outlet, RootRoute, Route, Router } from "@tanstack/react-router";
+import {Outlet, RootRoute, Route, Router} from "@tanstack/react-router";
 import AppLayout from "./pages/layout";
 import React from "react";
 
 import "./styles/global.css";
-import { DashboardPage } from "@/Pages/DashboardPage.tsx/DashboardPage";
+import {DashboardPage} from "@/Pages/DashboardPage/DashboardPage";
 import Login from "@/Pages/LoginPage/LoginPage";
 import JobsPage from "@/Pages/JobsPage/JobsPage";
-import { Toaster } from "react-hot-toast";
+import {Toaster} from "react-hot-toast";
 import JobPage from "@/Pages/JobPage/JobPage";
 import VariationsPage from "@/Pages/VariationsPage/VariationsPage";
+import EditJobPage from "@/Pages/EditJobPage/EditJobPage";
+import CrewPage from "@/Pages/CrewPage/CrewPage";
 
 const rootRoute = new RootRoute({
 	component: () => (
 		<>
-			<Toaster />
-			<Outlet />
+			<Toaster/>
+			<Outlet/>
 		</>
 	),
 });
@@ -68,6 +70,13 @@ const jobRoute = new Route({
 	component: JobPage,
 });
 
+const editJobRoute = new Route({
+	getParentRoute: () => jobsRoute,
+	path: "$jobId/edit",
+	component: EditJobPage,
+});
+
+
 const variationsRoute = new Route({
 	getParentRoute: () => layoutRoute,
 	path: "/variations",
@@ -77,7 +86,7 @@ const variationsRoute = new Route({
 const crewRoute = new Route({
 	getParentRoute: () => layoutRoute,
 	path: "/crew",
-	component: () => <div>Crew</div>,
+	component: CrewPage,
 });
 
 const routeTree = rootRoute.addChildren([
@@ -85,7 +94,7 @@ const routeTree = rootRoute.addChildren([
 	loginRoute,
 	layoutRoute.addChildren([
 		dashboardRoute,
-		jobsRoute.addChildren([jobIndexRoute, jobRoute]),
+		jobsRoute.addChildren([jobIndexRoute, jobRoute, editJobRoute]),
 		variationsRoute,
 		crewRoute,
 	]),
@@ -100,4 +109,4 @@ declare module "@tanstack/react-router" {
 	}
 }
 
-export { router };
+export {router};

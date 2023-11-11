@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/Primitives/Popover";
 
 interface DatePickerProps {
 	value: Date;
-	onChange: (date: Date) => void;
+	onChange: (date: Date | undefined ) => void;
 }
 
 /**
@@ -25,7 +25,7 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
 				<Button
 					variant={"outline"}
 					className={cn(
-						"w-[300px] justify-start text-left font-normal",
+						"flex justify-start text-left font-normal",
 						!value && "text-muted-foreground"
 					)}
 				>

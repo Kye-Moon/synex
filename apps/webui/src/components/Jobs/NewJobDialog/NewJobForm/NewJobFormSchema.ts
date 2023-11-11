@@ -7,6 +7,7 @@ export const newJobFormSchema = z.object({
 	status: z.enum(["NOT_STARTED", "IN_PROGRESS", "FINISHED"]).optional(),
 	description: z.string().optional().nullable(),
 	dueDate: z.date().optional().nullable(),
+	crew: z.array(z.string()).optional().nullable(),
 });
 
 export type NewJobFormType = InferType<typeof newJobFormSchema>;

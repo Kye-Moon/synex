@@ -1,13 +1,13 @@
 import {
-	ColumnDef,
-	ColumnFiltersState,
-	getFilteredRowModel,
-	flexRender,
-	getCoreRowModel,
-	getPaginationRowModel,
-	SortingState,
-	getSortedRowModel,
-	useReactTable, Row,
+    ColumnDef,
+    ColumnFiltersState,
+    getFilteredRowModel,
+    flexRender,
+    getCoreRowModel,
+    getPaginationRowModel,
+    SortingState,
+    getSortedRowModel,
+    useReactTable, Row,
 } from "@tanstack/react-table";
 
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/Primitives/Table";
@@ -21,22 +21,31 @@ import React, {useEffect} from "react";
  * @template TValue the type of the value of the data
  */
 interface DataTableProps<TData, TValue> {
-	/**
-	 * The column definition to render in the table
-	 */
-	columns: ColumnDef<TData, TValue>[];
-	/**
-	 * The data to render in the table (must match the column definition)
-	 */
-	data: TData[];
-	/**
-	 * The column to search by (must be a string column)
-	 */
-	searchColumn?: string;
-	/**
-	 * The placeholder text for the search input
-	 */
-	searchPlaceholder?: string;
+    /**
+     * The column definition to render in the table
+     */
+    columns: ColumnDef<TData, TValue>[];
+    /**
+     * The data to render in the table (must match the column definition)
+     */
+    data: TData[];
+    /**
+     * The column to search by (must be a string column)
+     */
+    searchColumn?: string;
+    /**
+     * The placeholder text for the search input
+     */
+    searchPlaceholder?: string;
+    /**
+     * secondary search column (must be a string column)
+     */
+    secondarySearchColumn?: string;
+    /**
+     * The placeholder text for the secondary search input
+     */
+    secondarySearchPlaceholder?: string;
+
 
 }
 
@@ -50,83 +59,98 @@ interface DataTableProps<TData, TValue> {
  * @constructor
  */
 function DataTable<TData, TValue>({
-									  columns,
-									  data,
-									  searchColumn,
-									  searchPlaceholder,
-								  }: DataTableProps<TData, TValue>) {
-	const [sorting, setSorting] = React.useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+                                      columns,
+                                      data,
+                                      searchColumn,
+                                      searchPlaceholder,
+                                      secondarySearchColumn,
+                                      secondarySearchPlaceholder,
+                                  }: DataTableProps<TData, TValue>) {
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
-	const table = useReactTable({
-		data,
-		columns,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		onSortingChange: setSorting,
-		getSortedRowModel: getSortedRowModel(),
-		onColumnFiltersChange: setColumnFilters,
-		getFilteredRowModel: getFilteredRowModel(),
-		state: {
-			sorting,
-			columnFilters,
-		},
-	});
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
+        state: {
+            sorting,
+            columnFilters,
+        },
+    });
 
 
-	return (
-		<>
-			{searchColumn && (
-				<div className="flex items-center py-4">
-					<Input
-						placeholder={searchPlaceholder ?? "Search by name..."}
-						value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
-						onChange={(event) => table.getColumn(searchColumn)?.setFilterValue(event.target.value)}
-						className="max-w-sm"
-					/>
-				</div>
-			)}
-			<Table>
-				<TableHeader>
-					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map((header) => {
-								return (
-									<TableHead key={header.id}>
-										{header.isPlaceholder
-											? null
-											: flexRender(header.column.columnDef.header, header.getContext())}
-									</TableHead>
-								);
-							})}
-						</TableRow>
-					))}
-				</TableHeader>
-				<TableBody>
-					{table.getRowModel().rows?.length ? (
-						table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</TableCell>
-								))}
-							</TableRow>
-						))
-					) : (
-						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
-								No results.
-							</TableCell>
-						</TableRow>
-					)}
-				</TableBody>
-			</Table>
-			<div className="flex items-center justify-end space-x-2 py-4">
-				<DataTablePagination table={table}/>
-			</div>
-		</>
-	);
+    return (
+        <>
+            <div className={'flex space-x-8 '}>
+                {searchColumn && (
+                    <div className="flex items-center py-4">
+                        <Input
+                            placeholder={searchPlaceholder ?? "Search by name..."}
+                            value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
+                            onChange={(event) => table.getColumn(searchColumn)?.setFilterValue(event.target.value)}
+                            className="max-w-md"
+                        />
+                    </div>
+                )}
+                {secondarySearchColumn && (
+                    <div className="flex items-center py-4">
+                        <Input
+                            placeholder={secondarySearchPlaceholder ?? "Search..."}
+                            value={(table.getColumn(secondarySearchColumn)?.getFilterValue() as string) ?? ""}
+                            onChange={(event) => table.getColumn(secondarySearchColumn)?.setFilterValue(event.target.value)}
+                            className="max-w-md"
+                        />
+                    </div>
+                )}
+            </div>
+
+            <Table>
+                <TableHeader>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => {
+                                return (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead>
+                                );
+                            })}
+                        </TableRow>
+                    ))}
+                </TableHeader>
+                <TableBody>
+                    {table.getRowModel().rows?.length ? (
+                        table.getRowModel().rows.map((row) => (
+                            <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                                No results.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <div className="flex items-center justify-end space-x-2 py-4">
+                <DataTablePagination table={table}/>
+            </div>
+        </>
+    );
 }
 
 export default DataTable;

@@ -141,9 +141,12 @@ export const variation = pgTable('variation', {
     .notNull(),
   title: text('title').notNull(),
   description: text('description'),
+  flag: varchar('flag', { enum: ['EARLY_WARNING', 'POTENTIAL', 'ACTIONED'] }),
   submittedBy: uuid('submitted_by')
     .references(() => user.id)
     .notNull(),
+  estimatedCost: decimal('estimated_cost'),
+  estimatedTime: decimal('estimated_time'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .default(sql`CURRENT_TIMESTAMP`)
@@ -153,7 +156,7 @@ export const variation = pgTable('variation', {
 export type Variation = InferSelectModel<typeof variation>;
 export type NewVariation = InferInsertModel<typeof variation>;
 
-export const variationRelations = relations(variation, ({ one }) => ({
+export const variationRelations = relations(variation, ({ one,many }) => ({
   job: one(job, {
     fields: [variation.jobId],
     references: [job.id],
@@ -162,6 +165,7 @@ export const variationRelations = relations(variation, ({ one }) => ({
     fields: [variation.submittedBy],
     references: [user.id],
   }),
+  resources: many(variationResource),
 }));
 
 // ###################### VARIATION RESOURCES TABLE ######################

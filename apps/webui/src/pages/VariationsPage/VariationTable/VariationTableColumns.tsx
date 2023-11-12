@@ -6,11 +6,16 @@ import { useNavigate } from "@tanstack/react-router";
 
 export interface VariationTableColumn {
 	id: string;
+	jobId: string;
+	jobName: string;
+	description: string;
 	title: string;
 	submittedBy: string;
-	dateSubmitted: Date;
-	estHours: number;
-	estCost: number;
+	createdAt: string;
+	updatedAt: string;
+	flag: string;
+	estimatedCost: number;
+	estimatedTime: number;
 }
 
 const getStatusBadgeVariant = (status: string) => {
@@ -41,7 +46,7 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 		header: "Name",
 	},
 	{
-		accessorKey: "Job",
+		accessorKey: "jobName",
 		header: "Job",
 	},
 	{
@@ -49,7 +54,7 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 		header: "Submitted by",
 	},
 	{
-		accessorKey: "dateSubmitted",
+		accessorKey: "createdAt",
 		header: ({ column }) => {
 			return (
 				<button
@@ -62,17 +67,17 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			return moment(row.getValue("dueDate")).isValid()
-				? moment(row.getValue("dueDate")).toDate().toDateString()
+			return moment(row.getValue("createdAt")).isValid()
+				? moment(row.getValue("createdAt")).toDate().toDateString()
 				: "-";
 		},
 	},
 	{
-		accessorKey: "estHours",
+		accessorKey: "estimatedTime",
 		header: "Est. hours",
 	},
 	{
-		accessorKey: "estCost",
+		accessorKey: "estimatedCost",
 		header: "Est. cost",
 	},
 	{
@@ -81,19 +86,22 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 			const navigate = useNavigate();
 			const JobsTableColumnActions: Action[] = [
 				{
-					label: "View Job",
+					label: "View",
 					icon: <EyeIcon className={"h-4 text-primary/50"} />,
 					onClick: async () => {
-						await navigate({ to: "/jobs/$jobId", params: { jobId: row.original.id } });
+						await navigate({ to: "/variations/$variationId", params: { variationId: row.original.id } });
 					},
-				},
-				{
-					label: "Variations",
-					icon: <NewspaperIcon className={"h-4 text-primary/50"} />,
 				},
 				{
 					label: "Edit",
 					icon: <EditIcon className={"h-4 text-primary/50"} />,
+					onClick: async () => {
+						await navigate({to: '/variations/$variationId/edit', params:{variationId: row.original.id}})
+					}
+				},
+				{
+					label: "Confirm",
+					icon: <NewspaperIcon className={"h-4 text-primary/50"} />,
 				},
 				{
 					label: "Archive",

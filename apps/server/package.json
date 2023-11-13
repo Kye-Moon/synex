@@ -36,6 +36,7 @@
     "@types/pg": "^8.10.7",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
+    "dayjs": "^1.11.10",
     "drizzle-orm": "^0.28.6",
     "graphql": "^16.8.1",
     "graphql-yoga": "^5.0.0",

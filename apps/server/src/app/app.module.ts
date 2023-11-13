@@ -9,10 +9,9 @@ import {UserModule} from '../modules/user/user.module';
 import {DrizzleModule} from '../drizzle/drizzle.module';
 import {JobModule} from '../modules/job/job.module';
 import {RequestModule} from '../modules/request/request.module';
-import {UserCrew} from "../modules/user-crew/entities/user-crew.entity";
 import {UserCrewModule} from "../modules/user-crew/user-crew.module";
-import {JobCrew} from "../../dist/src/job-crew/entities/job-crew.entity";
 import {JobCrewModule} from "../modules/job-crew/job-crew.module";
+import {VariationModule} from "../modules/variation/variation.module";
 
 @Module({
     imports: [
@@ -36,6 +35,7 @@ import {JobCrewModule} from "../modules/job-crew/job-crew.module";
         UserCrewModule,
         JobModule,
         JobCrewModule,
+        VariationModule,
         DrizzleModule,
         RequestModule,
     ],

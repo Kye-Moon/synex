@@ -4,6 +4,14 @@
 
 type LoginResponse {
   access_token: String!
+  refresh_token: String!
+  user: UserAuth!
+}
+
+type UserAuth {
+  id: String!
+  name: String!
+  phone: String!
 }
 
 type User {
@@ -23,6 +31,8 @@ scalar DateTime
 
 type RefreshTokenResponse {
   access_token: String!
+  refresh_token: String!
+  user: UserAuth!
 }
 
 type Job {
@@ -55,6 +65,13 @@ type UserCrewResponse {
   phone: String!
 }
 
+type Variation {
+  id: String!
+  title: String!
+  description: String!
+  customer: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
@@ -62,6 +79,7 @@ type Query {
   searchJobs(jobSearchInput: JobSearchInput!): [Job!]!
   job(id: String!): Job!
   jobCrew(jobId: String!): [JobCrewMember!]!
+  variation(id: Int!): Variation!
 }
 
 input JobSearchInput {
@@ -85,6 +103,9 @@ type Mutation {
   createJob(createJobInput: CreateJobInput!): Job!
   updateJob(updateJobInput: UpdateJobInput!): Job!
   removeJob(id: String!): Job!
+  createVariation(createVariationInput: CreateVariationInput!): Variation!
+  updateVariation(updateVariationInput: UpdateVariationInput!): Variation!
+  removeVariation(id: Int!): Variation!
 }
 
 input LoginInput {
@@ -134,4 +155,19 @@ input UpdateJobInput {
   dueDate: DateTime
   crew: [String!]
   id: String!
+}
+
+input CreateVariationInput {
+  title: String!
+  description: String!
+  customer: String!
+  jobId: String!
+}
+
+input UpdateVariationInput {
+  title: String
+  description: String
+  customer: String
+  jobId: String
+  id: Int!
 }

@@ -1,4 +1,4 @@
-import {forwardRef, Inject, Injectable, Scope} from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import {CreateJobInput} from './dto/create-job.input';
 import {UpdateJobInput} from './dto/update-job.input';
 import {JobRepository} from './job.repository';
@@ -19,7 +19,6 @@ export class JobService {
         @Inject(ORM) private db: NodePgDatabase<typeof schema>,
     ) {
     }
-
     async create(createJobInput: CreateJobInput) {
         return await this.jobRepository.createJob({
             ...createJobInput,

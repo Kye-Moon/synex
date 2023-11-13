@@ -45,8 +45,6 @@ export default function VariationsScreen() {
                     <Button
                         width={'90%'}
                         size="lg"
-                        variant="solid"
-                        action="primary"
                         isDisabled={false}
                         isFocusVisible={false}
                     >

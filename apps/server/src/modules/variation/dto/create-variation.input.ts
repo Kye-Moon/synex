@@ -13,4 +13,7 @@ export class CreateVariationInput {
 
     @Field(() => String)
     jobId: string
+
+    @Field(() => [String], {nullable: true})
+    imageUrls?: string[]
 }

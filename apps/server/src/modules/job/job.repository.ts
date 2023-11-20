@@ -56,4 +56,11 @@ export class JobRepository {
         }).where(eq(job.id, id)).returning();
         return _job[0];
     }
+
+    async findByVariationId(variationId: string):Promise<Job> {
+        const _job =   this.db.query.job.findFirst({
+            where: eq(job.id, variationId),
+        });
+        return null
+    }
 }

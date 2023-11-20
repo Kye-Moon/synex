@@ -15,7 +15,7 @@ import {ControllerRenderProps, FieldValues, UseFormStateReturn} from "react-hook
 interface FormInputWrapperProps {
     children: JSX.Element
     formState: UseFormStateReturn<FieldValues>
-    field: ControllerRenderProps<FieldValues, any>
+    field: ControllerRenderProps<any, any>
     helperText?: string
     title?: string
 }

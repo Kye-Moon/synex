@@ -69,7 +69,18 @@ type Variation {
   id: String!
   title: String!
   description: String!
-  customer: String!
+  job: Job!
+  submittedBy: User!
+}
+
+type VariationInitialData {
+  id: String!
+  variationId: String!
+  hours: String
+  numPeople: String
+  who: String
+  materials: String
+  equipment: String
 }
 
 type Query {
@@ -79,7 +90,9 @@ type Query {
   searchJobs(jobSearchInput: JobSearchInput!): [Job!]!
   job(id: String!): Job!
   jobCrew(jobId: String!): [JobCrewMember!]!
+  variations: [Variation!]!
   variation(id: Int!): Variation!
+  presignedUrl(key: String!): String!
 }
 
 input JobSearchInput {
@@ -106,6 +119,7 @@ type Mutation {
   createVariation(createVariationInput: CreateVariationInput!): Variation!
   updateVariation(updateVariationInput: UpdateVariationInput!): Variation!
   removeVariation(id: Int!): Variation!
+  createVariationInitialData(createVariationInitialDataInput: CreateVariationInitialDataInput!): VariationInitialData!
 }
 
 input LoginInput {
@@ -162,6 +176,7 @@ input CreateVariationInput {
   description: String!
   customer: String!
   jobId: String!
+  imageUrls: [String!]
 }
 
 input UpdateVariationInput {
@@ -169,5 +184,15 @@ input UpdateVariationInput {
   description: String
   customer: String
   jobId: String
-  id: Int!
+  imageUrls: [String!]
+  id: String!
+}
+
+input CreateVariationInitialDataInput {
+  variationId: String!
+  hours: String
+  numPeople: String
+  who: String
+  materials: String
+  equipment: String
 }

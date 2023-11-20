@@ -1,7 +1,7 @@
 import {Stack, useRouter} from "expo-router";
 import {ArrowLeftIcon, Icon, Pressable} from "@gluestack-ui/themed";
 
-export default function NewVariationLayout(){
+export default function NewVariationLayout() {
     const router = useRouter();
     return (
         <Stack
@@ -13,8 +13,9 @@ export default function NewVariationLayout(){
                 ),
             }}
         >
-            <Stack.Screen name="VariationDetails" options={{title:"Variation Details", headerShown: true}}  />
-            <Stack.Screen name="VariationResources" options={{title:"Variation Details", headerShown: true}}  />
+            <Stack.Screen name="VariationDetails" options={{title: "Variation Details", headerShown: true}}/>
+            <Stack.Screen name="VariationResources"
+                          options={{title: "Variation Resources", headerLeft: () => null, headerShown: true}}/>
         </Stack>
     );
 }

@@ -9,3 +9,13 @@ export const variationDetailsSchema = z.object({
 });
 
 export type VariationDetailsFormType = InferType<typeof variationDetailsSchema>;
+
+
+export const variationResourcesSchema = z.object({
+    estimatedHours: z.string().max(1000).optional().nullable(),
+    numPeople: z.string().max(1000).optional().nullable(),
+    who: z.string().max(50).optional(),
+    materials: z.string().max(500).optional(),
+    equipment: z.string().max(500).optional(),
+});
+export type VariationResourcesFormType = InferType<typeof variationResourcesSchema>;

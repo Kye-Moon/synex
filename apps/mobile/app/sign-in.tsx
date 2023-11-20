@@ -1,17 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, Button, ButtonText, Center, KeyboardAvoidingView, Text} from "@gluestack-ui/themed";
 import {Platform} from "react-native";
 import {useMutation} from "@apollo/client";
 import {graphql} from "gql-types";
 import {useRecoilState} from "recoil";
 import {accessTokenState} from "../state/atoms";
+import {useNavigation, useRouter} from "expo-router";
 
 
 export const loginMutationMobile = graphql(`
     mutation LoginMutationMobile($input: LoginInput!) {
         login(loginUserInput: $input) {
             access_token
-            expires_at
             refresh_token
             user {
                 id
@@ -22,6 +22,7 @@ export const loginMutationMobile = graphql(`
 
 export default function SignIn() {
     const [accessToken, setAccess] = useRecoilState(accessTokenState)
+    const router = useRouter();
     const [login] = useMutation(loginMutationMobile, {
         variables: {
             input: {
@@ -45,9 +46,12 @@ export default function SignIn() {
             >
                 <Center h="100%" bg={'$primary0'}>
                     <Button onPress={() => login()}>
-                        <ButtonText>S  ign  In</ButtonText>
+                        <ButtonText>S ign In</ButtonText>
                     </Button>
                     <Text>{accessToken}</Text>
+                    <Button onPress={() => router.replace('/(application)/(home)/variations')}>
+                        <ButtonText>Home</ButtonText>
+                    </Button>
                 </Center>
             </KeyboardAvoidingView>
         </Box>

@@ -39,9 +39,19 @@ export type CreateUserInput = {
   phone: Scalars['String']['input'];
 };
 
+export type CreateVariationInitialDataInput = {
+  equipment?: InputMaybe<Scalars['String']['input']>;
+  hours?: InputMaybe<Scalars['String']['input']>;
+  materials?: InputMaybe<Scalars['String']['input']>;
+  numPeople?: InputMaybe<Scalars['String']['input']>;
+  variationId: Scalars['String']['input'];
+  who?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateVariationInput = {
   customer: Scalars['String']['input'];
   description: Scalars['String']['input'];
+  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
   jobId: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };
@@ -83,7 +93,6 @@ export type LoginInput = {
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   access_token: Scalars['String']['output'];
-  expires_at: Scalars['Float']['output'];
   refresh_token: Scalars['String']['output'];
   user: UserAuth;
 };
@@ -94,6 +103,7 @@ export type Mutation = {
   createUser: User;
   createUserCrew: UserCrew;
   createVariation: Variation;
+  createVariationInitialData: VariationInitialData;
   login: LoginResponse;
   refreshAccessToken: RefreshTokenResponse;
   removeJob: Job;
@@ -124,6 +134,11 @@ export type MutationCreateUserCrewArgs = {
 
 export type MutationCreateVariationArgs = {
   createVariationInput: CreateVariationInput;
+};
+
+
+export type MutationCreateVariationInitialDataArgs = {
+  createVariationInitialDataInput: CreateVariationInitialDataInput;
 };
 
 
@@ -180,11 +195,13 @@ export type Query = {
   __typename?: 'Query';
   job: Job;
   jobCrew: Array<JobCrewMember>;
+  presignedUrl: Scalars['String']['output'];
   searchJobs: Array<Job>;
   user: User;
   userCrew: Array<UserCrewResponse>;
   users: Array<User>;
   variation: Variation;
+  variations: Array<Variation>;
 };
 
 
@@ -195,6 +212,11 @@ export type QueryJobArgs = {
 
 export type QueryJobCrewArgs = {
   jobId: Scalars['String']['input'];
+};
+
+
+export type QueryPresignedUrlArgs = {
+  key: Scalars['String']['input'];
 };
 
 
@@ -220,7 +242,6 @@ export type RefreshTokenInput = {
 export type RefreshTokenResponse = {
   __typename?: 'RefreshTokenResponse';
   access_token: Scalars['String']['output'];
-  expires_at: Scalars['Float']['output'];
   refresh_token: Scalars['String']['output'];
   user: UserAuth;
 };
@@ -246,7 +267,8 @@ export type UpdateUserInput = {
 export type UpdateVariationInput = {
   customer?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['Int']['input'];
+  id: Scalars['String']['input'];
+  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
   jobId?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -285,10 +307,22 @@ export type UserCrewResponse = {
 
 export type Variation = {
   __typename?: 'Variation';
-  customer: Scalars['String']['output'];
   description: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  job: Job;
+  submittedBy: User;
   title: Scalars['String']['output'];
+};
+
+export type VariationInitialData = {
+  __typename?: 'VariationInitialData';
+  equipment?: Maybe<Scalars['String']['output']>;
+  hours?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  materials?: Maybe<Scalars['String']['output']>;
+  numPeople?: Maybe<Scalars['String']['output']>;
+  variationId: Scalars['String']['output'];
+  who?: Maybe<Scalars['String']['output']>;
 };
 
 export type DashboardSearchJobsMobileQueryVariables = Exact<{
@@ -298,6 +332,25 @@ export type DashboardSearchJobsMobileQueryVariables = Exact<{
 
 export type DashboardSearchJobsMobileQuery = { __typename?: 'Query', searchJobs: Array<{ __typename?: 'Job', id: string, title: string, customerName?: string | null, status?: string | null, dueDate?: any | null, description?: string | null }> };
 
+export type PreSignedUrlQueryVariables = Exact<{
+  key: Scalars['String']['input'];
+}>;
+
+
+export type PreSignedUrlQuery = { __typename?: 'Query', presignedUrl: string };
+
+export type LoginMutationMobileMutationVariables = Exact<{
+  input: LoginInput;
+}>;
+
+
+export type LoginMutationMobileMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', access_token: string, refresh_token: string, user: { __typename?: 'UserAuth', id: string } } };
+
+export type VariationsCellQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VariationsCellQuery = { __typename?: 'Query', variations: Array<{ __typename?: 'Variation', id: string, title: string, description: string, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name?: string | null } }> };
+
 export type SaveVariationDetailsMutationVariables = Exact<{
   input: CreateVariationInput;
 }>;
@@ -305,12 +358,12 @@ export type SaveVariationDetailsMutationVariables = Exact<{
 
 export type SaveVariationDetailsMutation = { __typename?: 'Mutation', createVariation: { __typename?: 'Variation', id: string } };
 
-export type LoginMutationMobileMutationVariables = Exact<{
-  input: LoginInput;
+export type UpdateVariationMutationVariables = Exact<{
+  input: UpdateVariationInput;
 }>;
 
 
-export type LoginMutationMobileMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', access_token: string, expires_at: number, refresh_token: string, user: { __typename?: 'UserAuth', id: string } } };
+export type UpdateVariationMutation = { __typename?: 'Mutation', updateVariation: { __typename?: 'Variation', id: string } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -380,8 +433,11 @@ export type GetUserCrewQuery = { __typename?: 'Query', userCrew: Array<{ __typen
 
 
 export const DashboardSearchJobsMobileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DashboardSearchJobsMobile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<DashboardSearchJobsMobileQuery, DashboardSearchJobsMobileQueryVariables>;
+export const PreSignedUrlDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreSignedUrl"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"presignedUrl"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}]}}]} as unknown as DocumentNode<PreSignedUrlQuery, PreSignedUrlQueryVariables>;
+export const LoginMutationMobileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginMutationMobile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"loginUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"access_token"}},{"kind":"Field","name":{"kind":"Name","value":"refresh_token"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutationMobileMutation, LoginMutationMobileMutationVariables>;
+export const VariationsCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationsCell"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"variations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<VariationsCellQuery, VariationsCellQueryVariables>;
 export const SaveVariationDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveVariationDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateVariationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createVariation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createVariationInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SaveVariationDetailsMutation, SaveVariationDetailsMutationVariables>;
-export const LoginMutationMobileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginMutationMobile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"loginUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"access_token"}},{"kind":"Field","name":{"kind":"Name","value":"expires_at"}},{"kind":"Field","name":{"kind":"Name","value":"refresh_token"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutationMobileMutation, LoginMutationMobileMutationVariables>;
+export const UpdateVariationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateVariation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateVariationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateVariation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateVariationInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateVariationMutation, UpdateVariationMutationVariables>;
 export const UsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<UsersQuery, UsersQueryVariables>;
 export const LoginMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"loginUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"access_token"}}]}}]}}]} as unknown as DocumentNode<LoginMutationMutation, LoginMutationMutationVariables>;
 export const CreateJobMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateJobMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateJobInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createJob"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createJobInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<CreateJobMutationMutation, CreateJobMutationMutationVariables>;

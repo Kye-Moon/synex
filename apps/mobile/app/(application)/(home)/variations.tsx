@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import {StyleSheet} from 'react-native';
 
 import {
@@ -15,44 +15,27 @@ import {
     VStack, Divider
 } from "@gluestack-ui/themed";
 import {Link} from "expo-router";
+import VariationsCell from "../../../components/home/VariationsCell";
 
 export default function VariationsScreen() {
     return (
         <View style={styles.container}>
-            <Box m='$4'>
-                <FlatList
-                    height={'80%'}
-                    data={variations}
-                    keyExtractor={(item: any) => item.id}
-                    renderItem={({item}: any) => (
-                        <Box
-                            p={2}
-                            rounded="$lg"
-                            overflow="hidden"
-                            m={2}
-                        >
-                            <VStack space={'sm'}>
-                                <Heading size="md">{item.title}</Heading>
-                                <Text>{item.description}</Text>
-                            </VStack>
-                            <Divider my="$0.5"/>
-                        </Box>
-                    )}
-                />
-            </Box>
-            <Center h={'15%'} w={'100%'}>
-                <Link asChild={true} href={{pathname: '/new-variation'}}>
+            <View m={'$4'}>
+                <Suspense fallback={<Text>Loading...</Text>}>
+                    <VariationsCell/>
+                </Suspense>
+            </View>
+            <View style={styles.buttonContainer}>
+                <Link asChild={true} href={{pathname: '/new-variation/VariationResources'}}>
                     <Button
                         width={'90%'}
-                        size="lg"
-                        isDisabled={false}
-                        isFocusVisible={false}
+                        size="xl"
                     >
                         <ButtonText>New Variation </ButtonText>
                         <ButtonIcon as={AddIcon}/>
                     </Button>
                 </Link>
-            </Center>
+            </View>
         </View>
     );
 }
@@ -72,33 +55,8 @@ const styles = StyleSheet.create({
         height: 1,
         width: '80%',
     },
+    buttonContainer: {
+        display: 'flex',
+        alignItems: 'center',
+    },
 });
-
-const variations = [
-    {
-        id: "1",
-        jobId: "1",
-        jobName: "Job 1",
-        title: "Variation 1",
-        description: "This is a variation",
-        submittedBy: "John Smith",
-        flag: "POTENTIAL",
-        estimatedTime: 10,
-        estimatedCost: 100,
-        createdAt: "2021-01-01",
-        updatedAt: "2021-01-01",
-    },
-    {
-        id: "2",
-        jobId: "2",
-        jobName: "Job 2",
-        title: "Variation 2",
-        description: "This is a variation",
-        submittedBy: "John Smith",
-        flag: "POTENTIAL",
-        estimatedTime: 10,
-        estimatedCost: 100,
-        createdAt: "2021-01-01",
-        updatedAt: "2021-01-01",
-    },
-]

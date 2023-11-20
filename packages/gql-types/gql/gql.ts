@@ -14,8 +14,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n    query DashboardSearchJobsMobile($input: JobSearchInput!) {\n        searchJobs(jobSearchInput: $input) {\n            id\n            title\n            customerName\n            status\n            dueDate\n            description\n        }\n    }\n": types.DashboardSearchJobsMobileDocument,
+    "\n    query PreSignedUrl($key: String!) {\n        presignedUrl(key: $key)\n    }\n": types.PreSignedUrlDocument,
+    "\n    mutation LoginMutationMobile($input: LoginInput!) {\n        login(loginUserInput: $input) {\n            access_token\n            refresh_token\n            user {\n                id\n            }\n        }\n    }\n": types.LoginMutationMobileDocument,
+    "\n    query VariationsCell {\n        variations {\n            id\n            title\n            description\n            job {\n                title\n            }\n            submittedBy {\n                name\n            }\n        }\n    }\n": types.VariationsCellDocument,
     "\n    mutation SaveVariationDetails($input: CreateVariationInput!) {\n        createVariation(createVariationInput: $input) {\n            id\n        }\n    }\n": types.SaveVariationDetailsDocument,
-    "\n    mutation LoginMutationMobile($input: LoginInput!) {\n        login(loginUserInput: $input) {\n            access_token\n            expires_at\n            refresh_token\n            user {\n                id\n            }\n        }\n    }\n": types.LoginMutationMobileDocument,
+    "\n    mutation UpdateVariation($input: UpdateVariationInput!) {\n        updateVariation(updateVariationInput: $input) {\n            id\n        }\n    }\n": types.UpdateVariationDocument,
     "\n\tquery Users {\n\t\tusers {\n\t\t\tid\n\t\t\tphone\n\t\t\tname\n\t\t}\n\t}\n": types.UsersDocument,
     "\n\tmutation LoginMutation($input: LoginInput!) {\n\t\tlogin(loginUserInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n": types.LoginMutationDocument,
     "\n\tmutation CreateJobMutation($input: CreateJobInput!) {\n\t\tcreateJob(createJobInput: $input) {\n\t\t\tid\n\t\t\ttitle\n\t\t}\n\t}\n": types.CreateJobMutationDocument,
@@ -49,11 +52,23 @@ export function graphql(source: "\n    query DashboardSearchJobsMobile($input: J
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n    query PreSignedUrl($key: String!) {\n        presignedUrl(key: $key)\n    }\n"): (typeof documents)["\n    query PreSignedUrl($key: String!) {\n        presignedUrl(key: $key)\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation LoginMutationMobile($input: LoginInput!) {\n        login(loginUserInput: $input) {\n            access_token\n            refresh_token\n            user {\n                id\n            }\n        }\n    }\n"): (typeof documents)["\n    mutation LoginMutationMobile($input: LoginInput!) {\n        login(loginUserInput: $input) {\n            access_token\n            refresh_token\n            user {\n                id\n            }\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query VariationsCell {\n        variations {\n            id\n            title\n            description\n            job {\n                title\n            }\n            submittedBy {\n                name\n            }\n        }\n    }\n"): (typeof documents)["\n    query VariationsCell {\n        variations {\n            id\n            title\n            description\n            job {\n                title\n            }\n            submittedBy {\n                name\n            }\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n    mutation SaveVariationDetails($input: CreateVariationInput!) {\n        createVariation(createVariationInput: $input) {\n            id\n        }\n    }\n"): (typeof documents)["\n    mutation SaveVariationDetails($input: CreateVariationInput!) {\n        createVariation(createVariationInput: $input) {\n            id\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    mutation LoginMutationMobile($input: LoginInput!) {\n        login(loginUserInput: $input) {\n            access_token\n            expires_at\n            refresh_token\n            user {\n                id\n            }\n        }\n    }\n"): (typeof documents)["\n    mutation LoginMutationMobile($input: LoginInput!) {\n        login(loginUserInput: $input) {\n            access_token\n            expires_at\n            refresh_token\n            user {\n                id\n            }\n        }\n    }\n"];
+export function graphql(source: "\n    mutation UpdateVariation($input: UpdateVariationInput!) {\n        updateVariation(updateVariationInput: $input) {\n            id\n        }\n    }\n"): (typeof documents)["\n    mutation UpdateVariation($input: UpdateVariationInput!) {\n        updateVariation(updateVariationInput: $input) {\n            id\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

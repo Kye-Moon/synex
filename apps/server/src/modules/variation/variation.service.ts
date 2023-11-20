@@ -1,38 +1,67 @@
-import {Inject, Injectable} from '@nestjs/common';
-import { CreateVariationInput } from './dto/create-variation.input';
-import { UpdateVariationInput } from './dto/update-variation.input';
-import {JobRepository} from "../job/job.repository";
+import {Injectable} from '@nestjs/common';
+import {CreateVariationInput} from './dto/create-variation.input';
+import {UpdateVariationInput} from './dto/update-variation.input';
 import {RequestService} from "../request/request.service";
-import {JobCrewService} from "../job-crew/job-crew.service";
-import {ORM} from "../../drizzle/drizzle.module";
-import {NodePgDatabase} from "drizzle-orm/node-postgres/index";
-import * as schema from "../../drizzle/schema";
 import {VariationRepository} from "./variation.repository";
+import {VariationImageService} from "../variation-image/variation-image.service";
+import {User} from "../user/entities/user.entity";
 
 @Injectable()
 export class VariationService {
 
-  constructor(
-      private readonly variationRepository: VariationRepository,
-  ) {
-  }
-  create(createVariationInput: CreateVariationInput) {
-    // const variation = this.variationRepository.create(createVariationInput)
-  }
+    constructor(
+        private readonly variationRepository: VariationRepository,
+        private readonly requestService: RequestService,
+        private readonly variationImageService: VariationImageService,
+    ) {
+    }
 
-  findAll() {
-    return `This action returns all variation`;
-  }
+    create(createVariationInput: CreateVariationInput) {
+        return this.variationRepository.create({
+            ...createVariationInput,
+            submittedBy: this.requestService.userId,
+        })
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} variation`;
-  }
+    findAll() {
+        return this.variationRepository.findAll()
+    }
 
-  update(id: number, updateVariationInput: UpdateVariationInput) {
-    return `This action updates a #${id} variation`;
-  }
+    findAllWithDetails() {
+        return `This action returns all variation`;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} variation`;
-  }
+
+    findOne(id: number) {
+        return `This action returns a #${id} variation`;
+    }
+
+    async update(id: string, updateVariationInput: UpdateVariationInput) {
+        const {imageUrls, ...newVariation} = updateVariationInput
+        const variation = await this.variationRepository.update(id, newVariation)
+
+        if (updateVariationInput.imageUrls.length > 0) {
+            updateVariationInput.imageUrls.map(async (url) => {
+                await this.variationImageService.create({
+                    variationId: variation.id,
+                    url,
+                })
+            })
+        }
+
+        return variation
+    }
+
+
+    remove(id: number) {
+        return `This action removes a #${id} variation`;
+    }
+
+    getVariationJob(id: string) {
+        return this.variationRepository.findVariationJob(id)
+    }
+
+    getVariationSubmittedBy(id: string) {
+        return this.variationRepository.findVariationSubmittedBy(id)
+    }
 }

@@ -5,14 +5,14 @@ import {accessTokenState} from "../../state/atoms";
 export default function AppLayout() {
      const auth = useRecoilValue(accessTokenState); // TODO: This is just crude auth, we need to check if the token is valid
     if (!auth) {
-        console.log('redirecting to sign in')
-        console.log(auth)
         return <Redirect href={'/sign-in'}/>
     }
     return (
         <Stack>
             <Stack.Screen name="(home)" options={{headerShown:false}}/>
             <Stack.Screen name="new-variation" options={{headerShown:false}}/>
+            <Stack.Screen name="job/[id]" options={{headerShown:false}}/>
+            <Stack.Screen name="variation/[id]" options={{headerShown:false}}/>
         </Stack>
     );
 }

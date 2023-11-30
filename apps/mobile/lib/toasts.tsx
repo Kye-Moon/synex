@@ -37,7 +37,7 @@ export function showErrorToast({error, toast, placement = "top right"}: ErrorToa
     })
 }
 
-const showSuccessToast = ({message, toast, placement = "top right"}: SuccessToastProps) => {
+export const showSuccessToast = ({message, toast, placement = "top right"}: SuccessToastProps) => {
     return toast.show({
         placement: "top right",
         render: ({id}: { id: string }) => {

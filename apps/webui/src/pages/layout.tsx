@@ -3,6 +3,7 @@ import SideBar from "@/Components/Navigation/SideBar/SideBar";
 import StickyTopMobileSideBar from "@/Components/Navigation/StickyTopMobileSideBar/StickyTopMobileSideBar";
 import SidebarDialog from "@/Components/Navigation/SidebarDialog/SidebarDialog";
 import { Outlet } from "@tanstack/react-router";
+import ScrollToTop from "@/Lib/src/ScrollToTop";
 
 export default function AppLayout() {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function AppLayout() {
 			</div>
 			<main className={"lg:ml-60 flex-grow flex flex-col"}>
 				<div className="p-10 flex flex-col min-h-screen bg-primary-foreground">
+
 					<Outlet />
 				</div>
 			</main>

@@ -14,10 +14,12 @@ import JobActionsCell from "@/Components/Dashboard/JobListSection/JobList/JobAct
 import {useQuery, useSuspenseQuery} from "@apollo/client";
 import {dashboardSearchJobs} from "@/Services/jobService";
 import {Job} from "gql-types/gql/graphql";
+import {useRouter} from "@tanstack/react-router";
 
 export default function JobList() {
     const {data} = useSuspenseQuery(dashboardSearchJobs, {variables: {input: {}}});
-
+	const router = useRouter();
+	router.state.location
     return (
         <>
             <Table>

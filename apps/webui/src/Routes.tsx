@@ -13,11 +13,13 @@ import EditJobPage from "@/Pages/EditJobPage/EditJobPage";
 import CrewPage from "@/Pages/CrewPage/CrewPage";
 import VariationPage from "@/Pages/VariationPage/VariationPage";
 import EditVariationPage from "@/Pages/EditVariationPage/EditVariationPage";
+import ScrollToTop from "./ScrollToTop";
 
 const rootRoute = new RootRoute({
     component: () => (
         <>
             <Toaster/>
+			<ScrollToTop />
             <Outlet/>
         </>
     ),

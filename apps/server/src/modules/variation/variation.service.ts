@@ -23,17 +23,13 @@ export class VariationService {
         })
     }
 
+    // TODO - add multi tenancy restriction
     findAll() {
         return this.variationRepository.findAll()
     }
 
-    findAllWithDetails() {
-        return `This action returns all variation`;
-    }
-
-
-    findOne(id: number) {
-        return `This action returns a #${id} variation`;
+    findOne(id: string) {
+        return this.variationRepository.findOne(id)
     }
 
     async update(id: string, updateVariationInput: UpdateVariationInput) {
@@ -48,13 +44,16 @@ export class VariationService {
                 })
             })
         }
-
         return variation
     }
 
 
     remove(id: number) {
         return `This action removes a #${id} variation`;
+    }
+
+    findJobVariations(jobId: string) {
+        return this.variationRepository.findByJobId(jobId)
     }
 
     getVariationJob(id: string) {

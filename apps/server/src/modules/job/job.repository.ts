@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import {ORM} from '../../drizzle/drizzle.module';
 import {NodePgDatabase} from 'drizzle-orm/node-postgres';
 import * as schema from '../../drizzle/schema';
-import {Job, job, NewJob, UpdateJob} from '../../drizzle/schema';
+import {Job, job, NewJob, UpdateJob, variation} from '../../drizzle/schema';
 import {eq, like, or} from 'drizzle-orm';
 import {JobSearchInput} from './dto/search-job.input';
 

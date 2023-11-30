@@ -2,8 +2,8 @@ import {Label} from "@/Primitives/Label";
 import React from "react";
 
 interface StackedLabelAndValueProps {
-    label: string
-    value: string | React.ReactNode
+    label?: string
+    value?: string | React.ReactNode
 }
 export default function StackedLabelAndValue({label,value}:StackedLabelAndValueProps){
     return (

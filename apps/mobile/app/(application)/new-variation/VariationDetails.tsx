@@ -86,7 +86,9 @@ export default function NewVariationDetails() {
     })
     const [updateDetails, {loading: updateLoading}] = useMutation(updateMutation, {
         onError: (error) => console.log(error),
-        onCompleted: (data) => console.log(data)
+        onCompleted: (data) => console.log(data),
+        refetchQueries: ['VariationsCell'],
+        awaitRefetchQueries: true
     })
 
     const onSubmit = async (data: any) => {

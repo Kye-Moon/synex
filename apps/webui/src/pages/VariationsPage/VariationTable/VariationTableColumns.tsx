@@ -79,6 +79,9 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 	{
 		accessorKey: "estimatedCost",
 		header: "Est. cost",
+		cell: ({ row }) => {
+			return `$${row.getValue("estimatedCost")}`;
+		}
 	},
 	{
 		id: "actions",
@@ -86,18 +89,11 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 			const navigate = useNavigate();
 			const JobsTableColumnActions: Action[] = [
 				{
-					label: "View",
+					label: "View / Edit ",
 					icon: <EyeIcon className={"h-4 text-primary/50"} />,
 					onClick: async () => {
-						await navigate({ to: "/variations/$variationId", params: { variationId: row.original.id } });
-					},
-				},
-				{
-					label: "Edit",
-					icon: <EditIcon className={"h-4 text-primary/50"} />,
-					onClick: async () => {
 						await navigate({to: '/variations/$variationId/edit', params:{variationId: row.original.id}})
-					}
+					},
 				},
 				{
 					label: "Confirm",

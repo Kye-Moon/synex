@@ -5,6 +5,7 @@ import React, {Suspense} from "react";
 import {ApolloWrapper} from "../context/ApolloWrapper";
 import {config} from "../config/gluestack-ui.config";
 import {StyleSheet} from 'react-native';
+import {loadDevMessages, loadErrorMessages} from "@apollo/client/dev";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -15,12 +16,16 @@ export const unstable_settings = {
     // Ensure any route can link back to `/`
     initialRouteName: '/(application)/(home)/variations',
 };
+
+if (__DEV__) {  // Adds messages only in a dev environment
+    loadDevMessages();
+    loadErrorMessages();
+}
 export default function RootLayout() {
     return (
         <GluestackUIProvider config={config}>
             <RecoilRoot>
                 <Suspense>
-
                     <AppWrapper/>
                 </Suspense>
             </RecoilRoot>
@@ -31,13 +36,11 @@ export default function RootLayout() {
 const AppWrapper = () => {
     return (
         <ApolloWrapper>
-            <Suspense>
                 <Stack initialRouteName={'/(application)/(home)/variations'}>
                     <Stack.Screen name="sign-in" options={{headerShown: false, presentation: 'modal'}}/>
                     <Stack.Screen name="(application)" options={{headerShown: false}}/>
                 </Stack>
                 {/*<Spinner style={styles.spinner} color={'#fff'} size="large" />*/}
-            </Suspense>
         </ApolloWrapper>
     )
 }

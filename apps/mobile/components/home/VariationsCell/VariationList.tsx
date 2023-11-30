@@ -15,17 +15,16 @@ interface VariationListProps {
  * @description a component that renders a list of variations
  * @constructor
  */
-export default function VariationList({variations}: VariationListProps){
+export default function VariationList({variations}: VariationListProps) {
     return (
-        <>
-         <FlatList
-                height={'90%'}
-                data={variations}
-                keyExtractor={(item: any) => item.id}
-                renderItem={({item}: any) => (
-                        <VariationListItem variation={item}/>
-                )}
-            />
-        </>
+        <FlatList
+            height={'88%'}
+            marginHorizontal={'$4'}
+            data={variations}
+            keyExtractor={(item: any) => item.id}
+            renderItem={({item}: any) => (
+                <VariationListItem variation={item}/>
+            )}
+        />
     )
 }

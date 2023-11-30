@@ -21,9 +21,6 @@ const Query = graphql(`
 export default function VariationsCell() {
     const {data} = useSuspenseQuery(Query)
     return (
-        <>
             <VariationList variations={data.variations}/>
-        </>
-
     )
 }

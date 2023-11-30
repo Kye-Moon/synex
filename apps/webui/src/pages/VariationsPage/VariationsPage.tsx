@@ -3,8 +3,8 @@ import PageContentSection from "@/Components/PageContentSection";
 import VariationTable from "@/Pages/VariationsPage/VariationTable/VariationTable";
 import VariationActionTypeFilterTabs
     from "@/Pages/VariationsPage/VariationActionTypeFilterTabs/VariationActionTypeFilterTabs";
-import JobSelect from "@/Components/JobSelect/JobSelect";
 import {VariationTableColumn} from "@/Pages/VariationsPage/VariationTable/VariationTableColumns";
+import React, {Suspense} from "react";
 
 export default function VariationsPage() {
     return (
@@ -16,7 +16,9 @@ export default function VariationsPage() {
                         <VariationActionTypeFilterTabs/>
                     </div>
                 </div>
-                <VariationTable variations={variationData} />
+				<Suspense fallback={<div>Loading...</div>}>
+					<VariationTable variations={variationData} />
+				</Suspense>
             </PageContentSection>
         </>
     );
@@ -26,39 +28,39 @@ export const variationData:VariationTableColumn[] = [
     {
         id: "1",
         jobId: "1",
-        jobName: "Job 1",
-        title: "Variation 1",
+        jobName: "Equipment Calibration",
+        title: "Temp Safety Barrier Installation",
         description: "This is a variation",
         submittedBy: "John Smith",
         flag: "POTENTIAL",
-        estimatedTime: 10,
-        estimatedCost: 100,
+        estimatedTime: 8,
+        estimatedCost: 1500,
         createdAt: "2021-01-01",
         updatedAt: "2021-01-01",
     },
     {
         id: "2",
         jobId: "2",
-        jobName: "Job 2",
-        title: "Variation 2",
+        jobName: "Equipment Calibration",
+        title: "Crane Delay",
         description: "This is a variation",
         submittedBy: "John Smith",
         flag: "POTENTIAL",
-        estimatedTime: 10,
-        estimatedCost: 100,
+        estimatedTime: 0.5,
+        estimatedCost: 180,
         createdAt: "2021-01-01",
         updatedAt: "2021-01-01",
     },
     {
         id: "3",
         jobId: "3",
-        jobName: "Job 3",
-        title: "Variation 3",
+        jobName: "Quality Control Audit and Reporting",
+        title: "Additional Documentation Revisions",
         description: "This is a variation",
         submittedBy: "John Smith",
         flag: "POTENTIAL",
         estimatedTime: 10,
-        estimatedCost: 100,
+        estimatedCost: 1200,
         createdAt: "2021-01-01",
         updatedAt: "2021-01-01",
     },

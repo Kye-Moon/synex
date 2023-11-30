@@ -1,8 +1,10 @@
 import React from 'react';
-import {Box, Button, ButtonText, Divider, Heading, HStack, Text, VStack} from "@gluestack-ui/themed";
+import {Box, Button, ButtonIcon, ButtonText, Divider, Heading, HStack, Text, VStack} from "@gluestack-ui/themed";
 import {VariationsCellQuery} from "gql-types";
-import {truncate} from "../../lib/utils";
+import {truncate} from "../../../lib/utils";
 import {StyleSheet} from "react-native";
+import {EyeIcon} from "lucide-react-native";
+import {Link} from "expo-router";
 
 interface VariationListItemProps {
     variation: VariationsCellQuery['variations'][0]
@@ -23,9 +25,13 @@ export default function VariationListItem({variation}: VariationListItemProps) {
                     <Text size={'2xs'}>{`Job - ${variation.job.title}`}</Text>
                     <Text size={'2xs'}>{`Submitted by - ${variation.submittedBy.name}`}</Text>
                 </VStack>
-                <Button size={'xs'} width={'$20'}>
-                    <ButtonText>JHI</ButtonText>
-                </Button>
+                <Link asChild={true}
+                      href={{pathname: "/(application)/variation/[id]", params: {id: variation.id, variationTitle: variation.title}}}>
+                    <Button size={'xs'} width={'$20'}>
+                        <ButtonText>View </ButtonText>
+                        <ButtonIcon as={EyeIcon}/>
+                    </Button>
+                </Link>
             </HStack>
             <Divider my={'$2'}/>
         </Box>

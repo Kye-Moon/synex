@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {useFormContext} from "react-hook-form";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/Primitives/Table";
 import {Checkbox} from "@/Primitives/Checkbox";
+import {useSuspenseQuery} from "@apollo/client";
+import {getUserCrew} from "@/Services/userCrewService";
 
 export interface CrewTableRowsProps {
 	id: string;
@@ -25,6 +27,7 @@ export default function CrewTable({
 	const [selectedRows, setSelectedRows] = useState<string[]>(initialSelected || [])
 	const [crewRows, setCrew] = useState<CrewTableRowsProps[]>(crew || [])
     const context = useFormContext()
+
 
 	if (context !== null) {
 		useEffect(() => {

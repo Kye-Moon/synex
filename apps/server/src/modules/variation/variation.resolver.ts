@@ -1,13 +1,11 @@
-import {Resolver, Query, Mutation, Args, Int, ResolveField, Parent} from '@nestjs/graphql';
+import {Args, Int, Mutation, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {VariationService} from './variation.service';
 import {Variation} from './entities/variation.entity';
 import {CreateVariationInput} from './dto/create-variation.input';
 import {UpdateVariationInput} from './dto/update-variation.input';
 import {UseGuards} from "@nestjs/common";
 import {JwtAuthGuard} from "../auth/jwt-auth.guards";
-import {VariationWithDetails} from "./entities/variation-with-details.entity";
 import {Job} from "../job/entities/job.entity";
-import {JobService} from "../job/job.service";
 import {User} from "../user/entities/user.entity";
 
 @Resolver(() => Variation)
@@ -28,18 +26,16 @@ export class VariationResolver {
         return this.variationService.findAll();
     }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => Variation, {name: 'variation'})
-    findOne(@Args('id', {type: () => Int}) id: number) {
+    findOne(@Args('id', {type: () => String}) id: string) {
         return this.variationService.findOne(id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Variation)
     async updateVariation(@Args('updateVariationInput') updateVariationInput: UpdateVariationInput) {
-        console.log("Input", updateVariationInput)
-        const variation = await this.variationService.update(updateVariationInput.id, updateVariationInput);
-        console.log(variation)
-        return variation;
+        return await this.variationService.update(updateVariationInput.id, updateVariationInput);
     }
 
     @Mutation(() => Variation)

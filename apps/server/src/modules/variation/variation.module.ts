@@ -1,4 +1,4 @@
-import {Module} from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import {VariationService} from './variation.service';
 import {VariationResolver} from './variation.resolver';
 import {VariationRepository} from "./variation.repository";
@@ -12,7 +12,7 @@ import {VariationImageModule} from "../variation-image/variation-image.module";
     imports: [
         DrizzleModule,
         RequestModule,
-        JobModule,
+        forwardRef(() => JobModule),
         VariationImageModule
     ],
     exports: [VariationService, VariationRepository],

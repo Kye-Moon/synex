@@ -19,6 +19,12 @@ export class VariationRepository {
         return await this.db.query.variation.findMany()
     }
 
+    async findOne(id: string) {
+        return await this.db.query.variation.findFirst({
+            where: eq(variation.id, id),
+        });
+    }
+
     async findVariationJob(variationId: string) {
         const _variation = await this.db.query.variation.findFirst({
             where: eq(variation.id, variationId),
@@ -45,6 +51,12 @@ export class VariationRepository {
         const _variation = await this.db.update(variation).set({...input}).where(eq(variation.id, id)).returning()
         console.log(_variation)
         return _variation[0]
+    }
+
+    async findByJobId(jobId: string) {
+        return await this.db.query.variation.findMany({
+            where: eq(variation.jobId, jobId),
+        });
     }
 
 }

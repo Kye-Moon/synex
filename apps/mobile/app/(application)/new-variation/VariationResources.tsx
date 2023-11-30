@@ -1,6 +1,6 @@
 import React from 'react';
 import {Input, InputField, Text, Textarea, TextareaInput, useToast} from "@gluestack-ui/themed";
-import {useLocalSearchParams} from "expo-router";
+import {useLocalSearchParams, useRouter} from "expo-router";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {
@@ -9,7 +9,7 @@ import {
     variationResourcesSchema
 } from "./variationDetailsFormSchema";
 import {useMutation} from "@apollo/client";
-import {showErrorToast} from "../../../lib/toasts";
+import {showErrorToast, showSuccessToast} from "../../../lib/toasts";
 import {createMutation, updateMutation} from "../../../lib/variationService";
 import * as z from "zod";
 import {uploadImages} from "../../../lib/s3";
@@ -17,6 +17,7 @@ import FormPageTemplate from "../../../components/FormPageTemplate";
 import FormInputWrapper from "../../../components/FormInputWrapper";
 
 export default function VariationResources() {
+    const router = useRouter();
     const {id} = useLocalSearchParams<{ id: string }>();
     const form = useForm<VariationResourcesFormType>({
         mode: 'onBlur', resolver: zodResolver(variationResourcesSchema),
@@ -47,6 +48,8 @@ export default function VariationResources() {
         //         }
         //     }
         // })
+        showSuccessToast({message: 'Variation details saved', toast})
+        router.replace(`/(application)/(home)/variations`)
     };
 
     return (

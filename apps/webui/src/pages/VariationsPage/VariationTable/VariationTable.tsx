@@ -1,6 +1,5 @@
 import DataTable from "@/Components/DataTable/DataTable";
 import {VariationTableColumn, variationTableColumns} from "@/Pages/VariationsPage/VariationTable/VariationTableColumns";
-import {Variation} from "server/dist/src/drizzle/schema";
 
 interface VariationTableProps {
     variations: VariationTableColumn[];

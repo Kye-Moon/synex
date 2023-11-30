@@ -79,6 +79,15 @@ export const jobWithCrewAndVariationsQuery = graphql(`
 			name
 			phone
 		},
+		variations {
+			id
+			title
+			description
+			submittedBy {
+				id
+				name
+			}
+		}
 	}
 `);
 

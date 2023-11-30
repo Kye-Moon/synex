@@ -15,12 +15,12 @@ import {
     VStack, Divider
 } from "@gluestack-ui/themed";
 import {Link} from "expo-router";
-import VariationsCell from "../../../components/home/VariationsCell";
+import VariationsCell from "../../../components/home/VariationsCell/VariationsCell";
 
 export default function VariationsScreen() {
     return (
         <View style={styles.container}>
-            <View m={'$4'}>
+            <View >
                 <Suspense fallback={<Text>Loading...</Text>}>
                     <VariationsCell/>
                 </Suspense>
@@ -58,5 +58,6 @@ const styles = StyleSheet.create({
     buttonContainer: {
         display: 'flex',
         alignItems: 'center',
+        paddingBottom: 15,
     },
 });

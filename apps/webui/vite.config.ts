@@ -12,7 +12,9 @@ export default defineConfig((configEnv) => {
 				{ find: "@/Primitives", replacement: "/src/primitives" },
 				{ find: "@/Lib", replacement: "/src/lib" },
 				{ find: "@/Services", replacement: "/src/services" },
+				{ find: "@/State", replacement: "/src/state" },
 				{ find: "@/Constants", replacement: "/src/constants" },
+				{ find: "@/Context", replacement: "/src/context" },
 			],
 		},
 	};

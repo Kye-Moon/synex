@@ -2,17 +2,18 @@ import React, {useState} from 'react';
 import {
     Box,
     Button,
-    ButtonText,
+    ButtonGroup,
+    ButtonIcon,
+    FlatList,
+    HStack,
+    Image,
     Input,
     InputField,
     Text,
     Textarea,
     TextareaInput,
-    useToast,
-    VStack,
-    Image, HStack, FlatList, ButtonGroup, ButtonIcon, AddIcon, ScrollView, Spinner, ButtonSpinner, View
+    useToast
 } from "@gluestack-ui/themed";
-import {SafeAreaView, StyleSheet} from 'react-native';
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {variationDetailsSchema} from "./variationDetailsFormSchema";
@@ -24,9 +25,9 @@ import * as ImagePicker from 'expo-image-picker';
 import {Camera, ImagePlus} from 'lucide-react-native';
 import FormPageTemplate from "../../../components/FormPageTemplate";
 import {uploadImages} from "../../../lib/s3";
-import {User} from "server/dist/src/modules/user/entities/user.entity";
 import {useRouter} from "expo-router";
 import {createMutation, updateMutation} from "../../../lib/variationService";
+import JobSelect from "../../../components/JobSelect/JobSelect";
 
 
 const preSignedUrlQuery = graphql(`
@@ -76,7 +77,6 @@ export default function NewVariationDetails() {
             job: "",
             title: "",
             description: "",
-            customer: "",
         }
     })
     const toast = useToast()
@@ -95,15 +95,13 @@ export default function NewVariationDetails() {
         const variation = await saveDetails({
             variables: {
                 input: {
-                    jobId: "9337ebcf-7235-4e45-99e6-6052689da859",
+                    jobId: data.job,
                     title: data.title,
                     description: data.description,
-                    customer: data.customer,
                 }
             }
         })
         if (!variation.data?.createVariation) {
-            console.log(variation);
             return;
         }
         const imageUrls = await uploadImages({
@@ -130,13 +128,7 @@ export default function NewVariationDetails() {
                 name="job"
                 render={({field, formState, fieldState}) => (
                     <FormInputWrapper title={'Job'} formState={formState} field={field}>
-                        <Input>
-                            <InputField
-                                onBlur={field.onBlur}
-                                value={field.value}
-                                onChange={value => field.onChange(value.nativeEvent.text)}
-                            />
-                        </Input>
+                        <JobSelect onValueChange={field.onChange}/>
                     </FormInputWrapper>
                 )}
             />
@@ -145,21 +137,6 @@ export default function NewVariationDetails() {
                 name="title"
                 render={({field, formState, fieldState}) => (
                     <FormInputWrapper title={'Title'} formState={formState} field={field}>
-                        <Input>
-                            <InputField
-                                onBlur={field.onBlur}
-                                value={field.value}
-                                onChange={value => field.onChange(value.nativeEvent.text)}
-                            />
-                        </Input>
-                    </FormInputWrapper>
-                )}
-            />
-            <Controller
-                control={form.control}
-                name="customer"
-                render={({field, formState, fieldState}) => (
-                    <FormInputWrapper title={'Customer'} formState={formState} field={field}>
                         <Input>
                             <InputField
                                 onBlur={field.onBlur}
@@ -187,7 +164,7 @@ export default function NewVariationDetails() {
                 )}
             />
             <Box>
-                <HStack width={'$full'} gap={'$4'} justifyContent='space-between' alignItems={'center'}>
+                <HStack marginTop={12} width={'$full'} gap={'$4'} justifyContent='space-between' alignItems={'center'}>
                     <Text size={'lg'} bold>Images</Text>
                     <ButtonGroup space="md">
                         <Button size={'sm'} w={'$24'} onPress={takePhoto}>

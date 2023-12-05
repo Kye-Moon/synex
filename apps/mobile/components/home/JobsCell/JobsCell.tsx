@@ -2,6 +2,7 @@ import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
 import {useToast} from "@gluestack-ui/themed";
 import JobsList from "./JobsList";
+import React from "react";
 
 const query = graphql(`
     query JobsCell($input: JobSearchInput!) {

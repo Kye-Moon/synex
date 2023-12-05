@@ -5,13 +5,14 @@ import {RequestService} from "../request/request.service";
 import {VariationRepository} from "./variation.repository";
 import {VariationImageService} from "../variation-image/variation-image.service";
 import {User} from "../user/entities/user.entity";
+import {VariationSearchInput} from "./dto/search-variation";
 
 @Injectable()
 export class VariationService {
 
     constructor(
         private readonly variationRepository: VariationRepository,
-        private readonly requestService: RequestService,
+        private readonly request: RequestService,
         private readonly variationImageService: VariationImageService,
     ) {
     }
@@ -19,13 +20,21 @@ export class VariationService {
     create(createVariationInput: CreateVariationInput) {
         return this.variationRepository.create({
             ...createVariationInput,
-            submittedBy: this.requestService.userId,
+            submittedBy: this.request.userId,
         })
     }
 
     // TODO - add multi tenancy restriction
-    findAll() {
-        return this.variationRepository.findAll()
+    async search(searchInput: VariationSearchInput) {
+        const result = await this.variationRepository.search({
+            searchInput: searchInput,
+            userId: this.request.userId,
+        })
+        return result.map((variation) => {
+            return {
+                ...variation.variation,
+            }
+        })
     }
 
     findOne(id: string) {

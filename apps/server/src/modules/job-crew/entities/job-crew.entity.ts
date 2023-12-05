@@ -1,4 +1,4 @@
-import {ObjectType, Field, Int} from '@nestjs/graphql';
+import {Field, ObjectType} from '@nestjs/graphql';
 
 @ObjectType()
 export class JobCrewMember {
@@ -10,4 +10,7 @@ export class JobCrewMember {
 
     @Field(() => String)
     phone: string;
+
+    @Field(() => String)
+    role: string;
 }

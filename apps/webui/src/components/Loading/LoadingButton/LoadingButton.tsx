@@ -8,11 +8,12 @@ interface LoadingButtonProps {
 	type?: "button" | "submit" | "reset" | undefined;
 	variant?: "default" | "secondary" | "outline" | "ghost" | "link" | undefined;
 	className?: string;
+	onClick?: () => void;
 }
 
-const LoadingButton = ({ label, loadingStatus, type, className }: LoadingButtonProps) => {
+const LoadingButton = ({ label, loadingStatus, type, className, onClick,variant }: LoadingButtonProps) => {
 	return (
-		<Button className={className} disabled={loadingStatus} type={type}>
+		<Button onClick={onClick} className={className} variant={variant} disabled={loadingStatus} type={type}>
 			{loadingStatus ? (
 				<>
 					<div className={"flex justify-center items-center w-16"}>

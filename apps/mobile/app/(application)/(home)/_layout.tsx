@@ -1,5 +1,6 @@
 import {Tabs} from "expo-router";
-import {ClipboardListIcon, EyeIcon, KanbanIcon, SettingsIcon} from "lucide-react-native";
+import {ClipboardListIcon, KanbanIcon, SettingsIcon} from "lucide-react-native";
+import React from "react";
 
 export default function ApplicationLayout() {
     return (

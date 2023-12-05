@@ -1,22 +1,11 @@
 import {JobWithCrewAndVariationsQuery} from "../../../../../packages/gql-types";
-import VariationTable from "@/Pages/VariationsPage/VariationTable/VariationTable";
-import {VariationTableColumn} from "@/Pages/VariationsPage/VariationTable/VariationTableColumns";
-import {
-	Table,
-	TableBody,
-	TableCaption,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow
-} from "@/Primitives/Table";
-import {Checkbox} from "@/Primitives/Checkbox";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/Primitives/Table";
 import {useNavigate} from "@tanstack/react-router";
 import ActionsDropMenu, {Action} from "@/Components/ActionsDropMenu/ActionsDropMenu";
-import {EditIcon, EyeIcon, NewspaperIcon, TrashIcon} from "lucide-react";
+import {EditIcon, NewspaperIcon, TrashIcon} from "lucide-react";
 
 interface JobVariationsProps {
-	variations: JobWithCrewAndVariationsQuery['variations'] | undefined;
+	variations: JobWithCrewAndVariationsQuery['searchVariations'] | undefined;
 }
 
 export default function JobVariations({variations}: JobVariationsProps) {
@@ -45,7 +34,7 @@ export default function JobVariations({variations}: JobVariationsProps) {
 }
 
 export function JobVariationTableRow({variation}: {
-	variation: JobWithCrewAndVariationsQuery['variations'][0]
+	variation: JobWithCrewAndVariationsQuery['searchVariations'][0]
 }) {
 	const navigate = useNavigate();
 	const JobsTableColumnActions: Action[] = [
@@ -73,8 +62,8 @@ export function JobVariationTableRow({variation}: {
 			<TableCell className={'pl-4'}>{variation.title}</TableCell>
 			<TableCell className={'pl-4'}>{variation.description}</TableCell>
 			<TableCell className={'pl-4'}>{variation.submittedBy.name}</TableCell>
-			<TableCell className={'pl-4'}>{'Occured'}</TableCell>
-			<TableCell className={'pl-4'}>{"Confirmed"}</TableCell>
+			<TableCell className={'pl-4'}>{'DO'}</TableCell>
+			<TableCell className={'pl-4'}>{"DO"}</TableCell>
 			<TableCell className={'pl-4'}>
 				<ActionsDropMenu actions={JobsTableColumnActions}/>
 			</TableCell>

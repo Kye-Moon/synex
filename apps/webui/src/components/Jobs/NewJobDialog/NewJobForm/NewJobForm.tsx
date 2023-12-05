@@ -11,12 +11,13 @@ import {
 	newJobFormSchema,
 	NewJobFormType,
 } from "@/Components/Jobs/NewJobDialog/NewJobForm/NewJobFormSchema";
-import {useMutation} from "@apollo/client";
+import {useMutation, useSuspenseQuery} from "@apollo/client";
 import {createNewJob} from "@/Services/jobService";
 import toast from "react-hot-toast";
 import {JobStatus, JobStatusSelectOptions} from "@/Constants/constants";
 import {Textarea} from "@/Primitives/TextArea";
-import CrewTable from "@/Components/Crew/CrewTable/CrewTable";
+import OrganisationMemberTable from "@/Components/OrganisationMemberTable/OrganisationMemberTable";
+import CrewTableSection from "@/Pages/CrewPage/CrewTableSection";
 
 /**
  * Props for the NewProjectForm component
@@ -34,6 +35,7 @@ interface NewProjectFormProps {
  * @constructor
  */
 export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) {
+
 	const [createJob, {loading}] = useMutation(createNewJob, {
 		onCompleted: () => {
 			toast.success("Job created");
@@ -145,7 +147,7 @@ export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) 
 								name="crew"
 								render={({field}) => (
 									<FormInputWrapper label={"Select Crew"}>
-										<CrewTable/>
+										<CrewTableSection showSelect={true} tableCaption={"Available Crew"}/>
 									</FormInputWrapper>
 								)}
 							/>

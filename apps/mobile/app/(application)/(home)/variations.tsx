@@ -1,19 +1,7 @@
 import React, {Suspense} from 'react';
 import {StyleSheet} from 'react-native';
 
-import {
-    AddIcon,
-    FlatList,
-    Box,
-    Button,
-    ButtonIcon,
-    ButtonText,
-    Center,
-    Heading,
-    Text,
-    View,
-    VStack, Divider
-} from "@gluestack-ui/themed";
+import {AddIcon, Button, ButtonIcon, ButtonText, Text, View} from "@gluestack-ui/themed";
 import {Link} from "expo-router";
 import VariationsCell from "../../../components/home/VariationsCell/VariationsCell";
 
@@ -26,7 +14,7 @@ export default function VariationsScreen() {
                 </Suspense>
             </View>
             <View style={styles.buttonContainer}>
-                <Link asChild={true} href={{pathname: '/new-variation/VariationResources'}}>
+                <Link asChild={true} href={{pathname: '/new-variation/VariationDetails'}}>
                     <Button
                         width={'90%'}
                         size="xl"

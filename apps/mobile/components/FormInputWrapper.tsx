@@ -32,9 +32,7 @@ export default function FormInputWrapper({children, formState, field, helperText
                         <FormControlLabelText>{title}</FormControlLabelText>
                     </FormControlLabel>
                 )}
-
                     {children}
-
                 {helperText && (
                     <FormControlHelper>
                         <FormControlHelperText>

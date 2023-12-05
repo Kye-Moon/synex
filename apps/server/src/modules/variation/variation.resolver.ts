@@ -7,6 +7,9 @@ import {UseGuards} from "@nestjs/common";
 import {JwtAuthGuard} from "../auth/jwt-auth.guards";
 import {Job} from "../job/entities/job.entity";
 import {User} from "../user/entities/user.entity";
+import {JobSearchInput} from "../job/dto/search-job.input";
+import {VariationSearchInput} from "./dto/search-variation";
+import {VariationInitialData} from "../variation-initial-data/entities/variation-initial-data.entity";
 
 @Resolver(() => Variation)
 export class VariationResolver {
@@ -21,9 +24,9 @@ export class VariationResolver {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Query(() => [Variation], {name: 'variations'})
-    findAll() {
-        return this.variationService.findAll();
+    @Query(() => [Variation], {name: 'searchVariations'})
+    searchVariations(@Args('variationSearchInput') variationSearchInput: VariationSearchInput) {
+        return this.variationService.search(variationSearchInput);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -55,4 +58,9 @@ export class VariationResolver {
         return this.variationService.getVariationSubmittedBy(id);
     }
 
+    @ResolveField(() => VariationInitialData)
+    async initialData(@Parent() variation: Variation) {
+        const {id} = variation;
+        return this.variationService.getVariationJob(id);
+    }
 }

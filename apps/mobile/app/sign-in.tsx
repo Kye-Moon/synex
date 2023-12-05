@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Box, Button, ButtonText, Center, KeyboardAvoidingView, Text} from "@gluestack-ui/themed";
 import {Platform} from "react-native";
 import {useMutation} from "@apollo/client";
 import {graphql} from "gql-types";
 import {useRecoilState} from "recoil";
 import {accessTokenState} from "../state/atoms";
-import {useNavigation, useRouter} from "expo-router";
+import {useRouter} from "expo-router";
 
 
 export const loginMutationMobile = graphql(`
@@ -26,7 +26,7 @@ export default function SignIn() {
     const [login] = useMutation(loginMutationMobile, {
         variables: {
             input: {
-                phoneNumber: '0409988618',
+                email: 'kyemoondevelopment@gmail.com',
                 password: '123',
             },
         },

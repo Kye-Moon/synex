@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import SideBar from "@/Components/Navigation/SideBar/SideBar";
 import StickyTopMobileSideBar from "@/Components/Navigation/StickyTopMobileSideBar/StickyTopMobileSideBar";
 import SidebarDialog from "@/Components/Navigation/SidebarDialog/SidebarDialog";
-import { Outlet } from "@tanstack/react-router";
+import {Outlet, useRouter} from "@tanstack/react-router";
+import {userState} from "../state/state";
+import {useRecoilValue} from "recoil";
 import ScrollToTop from "@/Lib/src/ScrollToTop";
 
 export default function AppLayout() {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const userInfo = useRecoilValue(userState);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!userInfo) {
+			router.navigate({to: "/login"});
+		}
+	}, [userInfo]);
+
 
 	return (
 		<>

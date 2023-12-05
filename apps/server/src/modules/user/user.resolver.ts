@@ -3,19 +3,27 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import {SearchUserInput} from "./dto/search-user.input";
+import {UseGuards} from "@nestjs/common";
+import {JwtAuthGuard} from "../auth/jwt-auth.guards";
+import {JobSearchInput} from "../job/dto/search-job.input";
+import {RequestService} from "../request/request.service";
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
-
+  constructor(
+      private readonly userService: UserService
+  ) {}
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.userService.create(createUserInput);
+    return this.userService.inviteUser(createUserInput);
   }
 
-  @Query(() => [User], { name: 'users' })
-  findAll() {
-    return this.userService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Query(() => [User], { name: 'searchUsers' })
+  searchUsers(@Args('userSearchInput') searchInput: SearchUserInput) {
+    return this.userService.search(searchInput);
   }
 
   @Query(() => User, { name: 'user' })

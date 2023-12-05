@@ -1,30 +1,57 @@
-import {useNavigate, useParams} from "@tanstack/react-router";
+import {useNavigate, useParams, useRouter} from "@tanstack/react-router";
 import {graphql} from "gql-types";
-import {useQuery} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import PageHeadingWithMetaAndActions, {
     PageHeadingActionButtonProps
 } from "@/Components/PageHeadingWithMetaAndActions/PageHeadingWithMetaAndActions";
 import PageContentSection from "@/Components/PageContentSection";
-import {jobWithCrewAndVariationsQuery} from "@/Services/jobService";
+import {dashboardSearchJobs, jobTableSearchJobs, jobWithCrewAndVariationsQuery} from "@/Services/jobService";
 import JobDetails from "@/Pages/JobPage/JobDetails";
-import JobCrew from "@/Pages/JobPage/JobCrew";
 import JobVariations from "@/Pages/JobPage/JobVariations";
-import CrewTable, {CrewTableRowsProps} from "@/Components/Crew/CrewTable/CrewTable";
+import OrganisationMemberTable, {
+    OrgMemberTableRowsProps
+} from "@/Components/OrganisationMemberTable/OrganisationMemberTable";
 import React, {JSX} from "react";
-import NewJobDialog from "@/Components/Jobs/NewJobDialog/NewJobDialog";
 import {Button} from "@/Primitives/Button/Button";
 import {EditIcon} from "lucide-react";
+import DeleteItemDialog from "@/Components/DeleteItemDialog/DeleteItemDialog";
+import {navigate} from "@storybook/addon-links";
+import toast from "react-hot-toast";
 
+const deleteJobMutation = graphql(`
+    mutation DeleteJob($input: String!) {
+        deleteJob(id: $input)
+    }
+`);
 
-const jobPageActions: PageHeadingActionButtonProps[] = [
-    {
-        dialog: <JobPageActions/>,
-    },
-];
 export default function JobPage(): JSX.Element {
     const params = useParams({from: "/layout/jobs/$jobId"});
+    const router = useRouter();
     const {data} = useQuery(jobWithCrewAndVariationsQuery, {variables: {jobId: params.jobId}});
-    const jobCrew: CrewTableRowsProps[] = data?.jobCrew.map((jobCrew) => ({name: jobCrew.name, id: jobCrew.id, phone: jobCrew.phone})) ?? []
+    const jobCrew: OrgMemberTableRowsProps[] = data?.jobCrew.map((jobCrew) => ({name: jobCrew.name, id: jobCrew.id, phone: jobCrew.phone, role: jobCrew.role})) ?? []
+
+    const [deleteJob, {loading}] = useMutation(deleteJobMutation, {
+        variables: {input: params.jobId},
+        onCompleted: async () => {
+            toast.success("Job deleted successfully");
+            await router.navigate({to: '/jobs'})
+        },
+        onError: () => {
+            toast.error("Error deleting job");
+        },
+        refetchQueries: [{query: jobTableSearchJobs, variables: {input: {}}}, {query: dashboardSearchJobs, variables: {input: {}}}],
+        awaitRefetchQueries: true,
+    });
+
+    const jobPageActions: PageHeadingActionButtonProps[] = [
+        {
+            dialog: <JobPageActions/>,
+        },
+        {
+            dialog: <DeleteItemDialog triggerText={"Delete"} onConfirm={deleteJob} loadingStatus={loading}/>,
+        }
+    ];
+
 
     return (
         <div className={'overflow-auto'}>
@@ -43,7 +70,8 @@ export default function JobPage(): JSX.Element {
                     </div>
                     <div className={'col-span-1 space-y-4 '}>
                         <h1 className={'text-xl font-semibold'}>Crew</h1>
-                        <CrewTable crew={jobCrew} showSelect={false} tableCaption={"Current Job Crew"}/>
+                        <OrganisationMemberTable members={jobCrew} showSelect={false}
+                                                 tableCaption={"Current Job Crew"}/>
                     </div>
                 </div>
             </PageContentSection>

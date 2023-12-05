@@ -19,15 +19,15 @@ import {
 // noinspection TypeScriptValidateTypes
 export const user = pgTable('user', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     name: text('full_name').notNull(),
-    phone: varchar('phone', {length: 20}).notNull(),
+    phone: varchar('phone', {length: 20}),
     password: varchar('password', {length: 100}),
-    email: varchar('email', {length: 100}),
-    isAdmin: boolean('is_admin').default(false),
-    isCrewMember: boolean('is_crew_member').default(false),
+    email: varchar('email', {length: 100}).unique(),
+    organisationId: uuid('organisation_id').notNull(),
+    role: varchar('role', {enum: ['OWNER', 'ADMIN', 'SUPERVISOR', 'CREW_MEMBER']}),
+    status: varchar('status', {enum: ['ACTIVE', 'INVITED', "DEACTIVATED"]}).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -35,53 +35,41 @@ export const user = pgTable('user', {
 export type User = InferSelectModel<typeof user>;
 export type NewUser = InferInsertModel<typeof user>;
 
-export const userRelations = relations(user, ({many}) => ({
-    crew: many(user),
+export const userRelations = relations(user, ({one, many}) => ({
+    organisation: one(organisation, {
+        fields: [user.organisationId],
+        references: [organisation.id],
+    }),
 }));
 
-// ###################### USER TO CREW MEMBER TABLE ######################
-export const userCrew = pgTable('user_crew', {
+// ###################### ORGANISATION TABLE ######################
+export const organisation = pgTable('organisation', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
-    userId: uuid('user_id')
-        .references(() => user.id)
-        .notNull(),
-    crewMemberId: uuid('crew_member_id')
-        .references(() => user.id)
-        .notNull(),
+    name: text('name').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export type UserCrew = InferSelectModel<typeof userCrew>;
-export type NewUserCrew = InferInsertModel<typeof userCrew>;
+export type Organisation = InferSelectModel<typeof organisation>;
+export type NewOrganisation = InferInsertModel<typeof organisation>;
 
-export const userCrewRelations = relations(userCrew, ({one}) => ({
-    admin: one(user, {
-        fields: [userCrew.userId],
-        references: [user.id],
-    }),
-    crewMember: one(user, {
-        fields: [userCrew.crewMemberId],
-        references: [user.id],
-    }),
+const organisationRelations = relations(organisation, ({one, many}) => ({
+    users: many(user),
 }));
 
-export type UserCrewWithCrewMember = UserCrew & {
-    crewMember: User;
-}
 
 // ###################### JOB TABLE ######################
 export const job = pgTable('job', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     title: text('title').notNull(),
     description: text('description'),
     customerName: text('customer_name'),
     status: varchar('status', {
-        enum: ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED'],
+        enum: ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED', "ARCHIVED"],
     }),
     ownerId: uuid('owner_id')
         .references(() => user.id)
@@ -102,19 +90,18 @@ export const jobRelations = relations(job, ({one, many}) => ({
         fields: [job.ownerId],
         references: [user.id],
     }),
-    // variations: many(variation),
-    crew: many(user),
+    variations: many(variation),
+    crew: many(user)
 }));
 
 // ###################### JOB CREW TABLE ######################
 
 export const jobCrew = pgTable('job_crew', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     jobId: uuid('job_id')
-        .references(() => job.id)
+        .references(() => job.id, {onDelete: 'cascade'})
         .notNull(),
     crewMemberId: uuid('crew_member_id')
         .references(() => user.id)
@@ -138,8 +125,7 @@ export const jobCrewRelations = relations(jobCrew, ({one}) => ({
 // ###################### VARIATION TABLE ######################
 export const variation = pgTable('variation', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     jobId: uuid('job_id')
         .references(() => job.id)
@@ -150,6 +136,8 @@ export const variation = pgTable('variation', {
     submittedBy: uuid('submitted_by')
         .references(() => user.id)
         .notNull(),
+    estimatedCost: decimal('estimated_cost'),
+    estimatedTime: decimal('estimated_time'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
         .default(sql`CURRENT_TIMESTAMP`)
@@ -177,11 +165,10 @@ export const variationRelations = relations(variation, ({one, many}) => ({
 // ###################### VARIATION RESOURCES TABLE ######################
 export const variationResource = pgTable('variation_resource', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     variationId: uuid('variation_id')
-        .references(() => variation.id)
+        .references(() => variation.id, {onDelete: 'cascade'})
         .notNull(),
     type: varchar('type', {enum: ['LABOUR', 'MATERIAL', 'EQUIPMENT', 'OTHER']}),
     description: text('description'),
@@ -203,11 +190,10 @@ export type NewVariationResource = InferInsertModel<typeof variationResource>;
 // ###################### VARIATION IMAGE TABLE ######################
 export const variationImage = pgTable('variation_image', {
     id: uuid('id')
-        .default(sql`gen_random_uuid
-            ()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     variationId: uuid('variation_id')
-        .references(() => variation.id)
+        .references(() => variation.id, {onDelete: 'cascade'})
         .notNull(),
     url: text('url').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -225,7 +211,7 @@ export const variationInitialData = pgTable('variation_initial_data', {
             ()`)
         .primaryKey(),
     variationId: uuid('variation_id')
-        .references(() => variation.id)
+        .references(() => variation.id, {onDelete: 'cascade'})
         .notNull(),
     hours: numeric('time'),
     numPeople: numeric('num_people'),
@@ -243,7 +229,7 @@ export type NewVariationInitialData = InferInsertModel<typeof variationInitialDa
 // ###################### NOTIFICATION TABLE ######################
 export const notification = pgTable('notification', {
     id: uuid('id')
-        .default(sql`gen_random_uuid()`)
+        .default(sql`gen_random_uuid ()`)
         .primaryKey(),
     jobId: uuid('job_id')
         .references(() => job.id)
@@ -270,3 +256,18 @@ export const notificationRelations = relations(notification, ({one}) => ({
         references: [variation.id],
     }),
 }));
+
+
+// export const userOrganisationRelations = relations(
+//   userOrganisation,
+//   ({ one }) => ({
+//     user: one(user, {
+//       fields: [userOrganisation.userId],
+//       references: [user.id],
+//     }),
+//     organisation: one(organisation, {
+//       fields: [userOrganisation.organisationId],
+//       references: [organisation.id],
+//     }),
+//   }),
+// );

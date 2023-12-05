@@ -1,10 +1,7 @@
 import React from "react";
 import {
     Box,
-    Button,
-    ButtonIcon,
-    ButtonText, Divider,
-    Heading,
+    Divider,
     HStack,
     ScrollView,
     Text,
@@ -12,14 +9,13 @@ import {
     VStack
 } from "@gluestack-ui/themed";
 import {graphql} from "gql-types";
-import {useQuery, useSuspenseQuery} from "@apollo/client";
+import {useSuspenseQuery} from "@apollo/client";
 import {StyleSheet} from "react-native";
 import ScreenSection from "../ScreenSection";
 import ScreenContentSection from "../ScreenContentSection";
 import LabelAndValue from "../LabelAndValue";
 import {truncate} from "../../lib/utils";
-import {Link} from "expo-router";
-import {EyeIcon} from "lucide-react-native";
+
 
 const query = graphql(`
     query JobCell($jobId: String!) {

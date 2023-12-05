@@ -21,5 +21,11 @@ export class UserAuth {
     name: string;
 
     @Field(() => String)
-    phone: string;
+    email: string;
+
+    @Field(() => String)
+    role: string;
+
+    @Field(() => String)
+    orgId: string;
 }

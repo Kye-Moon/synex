@@ -9,9 +9,10 @@ import {UserModule} from '../modules/user/user.module';
 import {DrizzleModule} from '../drizzle/drizzle.module';
 import {JobModule} from '../modules/job/job.module';
 import {RequestModule} from '../modules/request/request.module';
-import {UserCrewModule} from "../modules/user-crew/user-crew.module";
 import {JobCrewModule} from "../modules/job-crew/job-crew.module";
 import {VariationModule} from "../modules/variation/variation.module";
+import {EmailModule} from "../modules/email/email.module";
+import {SmsModule} from "../modules/sms/sms.module";
 import {S3Module} from "../modules/s3/s3.module";
 import {ConfigModule} from "@nestjs/config";
 import {VariationImageModule} from "../modules/variation-image/variation-image.module";
@@ -37,8 +38,8 @@ import {VariationInitialDataModule} from "../modules/variation-initial-data/vari
             autoSchemaFile: 'schema.graphql',
         }),
         AuthModule,
+        SmsModule,
         UserModule,
-        UserCrewModule,
         JobModule,
         JobCrewModule,
         VariationModule,
@@ -46,6 +47,7 @@ import {VariationInitialDataModule} from "../modules/variation-initial-data/vari
         VariationInitialDataModule,
         DrizzleModule,
         RequestModule,
+        EmailModule,
         S3Module,
     ],
     controllers: [AppResolver],

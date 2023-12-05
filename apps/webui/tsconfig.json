@@ -27,12 +27,14 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/Assets/*": ["*", "src/assets/*"],
+			"@/State/*": ["*", "src/state/*"],
 			"@/Components/*": ["*", "src/components/*"],
 			"@/Pages/*": ["*", "src/pages/*"],
 			"@/Primitives/*": ["*", "src/primitives/*"],
 			"@/Lib/*": ["*", "src/lib/*"],
 			"@/Services/*": ["*", "src/services/*"],
 			"@/Constants/*": ["*", "src/constants/*"],
+			"@/Context/*": ["*", "src/context/*"],
 		}
 	},
 	"include": [

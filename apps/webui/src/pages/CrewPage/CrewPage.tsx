@@ -1,27 +1,23 @@
-import PageHeadingWithMetaAndActions
-	, {
+import PageHeadingWithMetaAndActions, {
 	PageHeadingActionButtonProps
 } from "@/Components/PageHeadingWithMetaAndActions/PageHeadingWithMetaAndActions";
 import PageContentSection from "@/Components/PageContentSection";
 import React, {Suspense} from "react";
-import JobsTable from "@/Components/Jobs/JobsTable/JobsTable";
-import NewJobDialog from "@/Components/Jobs/NewJobDialog/NewJobDialog";
-import NewCrewMemberDialog from "@/Components/Crew/NewCrewMemberDialog";
-import CrewTable from "@/Components/Crew/CrewTable/CrewTable";
-import CrewPageTableSection from "@/Pages/CrewPage/CrewPageTableSection";
+import NewOrgMemberDialog from "@/Components/NewOrgMemberDialog/NewOrgMemberDialog";
+import CrewTableSection from "@/Pages/CrewPage/CrewTableSection";
 
 const crewPageActions: PageHeadingActionButtonProps[] = [
 	{
-		dialog: <NewCrewMemberDialog />,
+		dialog: <NewOrgMemberDialog  triggerText={"New Member"} dialogTitle={"Add a new member"}/>,
 	},
 ];
 export default function CrewPage() {
 	return (
 		<>
-			<PageHeadingWithMetaAndActions actions={crewPageActions} pageHeading={"Crew"} />
+			<PageHeadingWithMetaAndActions actions={crewPageActions} pageHeading={"Supervisors / Crew"} />
 			<PageContentSection>
 				<Suspense fallback={<div>Loading...</div>}>
-					<CrewPageTableSection />
+					<CrewTableSection  showSelect={false} tableCaption={'Supervisors / Crew'}/>
 				</Suspense>
 			</PageContentSection>
 		</>

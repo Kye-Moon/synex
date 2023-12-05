@@ -1,20 +1,17 @@
 import {useForm} from "react-hook-form";
-import {Form, FormField} from "@/Primitives/Form";
+import {Form} from "@/Primitives/Form";
 import {parseISO} from 'date-fns'
 
 import {zodResolver} from "@hookform/resolvers/zod";
 import {editJobFormSchema, EditJobFormType} from "@/Pages/EditJobPage/EditJobFormSchema";
-import EditJobDetails
-    from "@/Pages/EditJobPage/EditJobFormComponents/EditJobDetails/EditJobDetails";
-import * as dayjs from "dayjs";
-import CrewTable from "@/Components/Crew/CrewTable/CrewTable";
+import EditJobDetails from "@/Pages/EditJobPage/EditJobFormComponents/EditJobDetails/EditJobDetails";
 import {Button} from "@/Primitives/Button/Button";
-import EditJobCrewTableSection from "@/Pages/EditJobPage/EditJobCrewTableSection";
 import {Suspense} from "react";
 import {updateJob} from "@/Services/jobService";
 import {useMutation} from "@apollo/client";
 import toast from "react-hot-toast";
 import {useNavigate} from "@tanstack/react-router";
+import CrewTableSection from "@/Pages/CrewPage/CrewTableSection";
 
 
 interface EditJobFormProps {
@@ -60,11 +57,6 @@ export default function EditJobForm({jobDetails, jobCrew}: EditJobFormProps) {
         })
     }
 
-    // helper function to set the value of a field in the form
-    const onValueChange = (fieldName: string, value: string | Date) => {
-        form.setValue(fieldName, value);
-    };
-
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -77,7 +69,7 @@ export default function EditJobForm({jobDetails, jobCrew}: EditJobFormProps) {
                     <div className={'col-span-1 space-y-6 xl:pl-12'}>
                         <h1 className={'text-xl font-semibold'}>Crew</h1>
                         <Suspense fallback={<div>Loading...</div>}>
-                            <EditJobCrewTableSection initialCrew={jobCrew}/>
+                            <CrewTableSection initialSelected={jobCrew}/>
                         </Suspense>
                     </div>
                 </div>

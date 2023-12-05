@@ -1,4 +1,4 @@
-import {Resolver, Query, Mutation, Args, Int, ResolveField, Parent} from '@nestjs/graphql';
+import {Args, Mutation, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {JobService} from './job.service';
 import {Job} from './entities/job.entity';
 import {CreateJobInput} from './dto/create-job.input';
@@ -33,16 +33,18 @@ export class JobResolver {
     job(@Args('id', {type: () => String}) id: string) {
         return this.jobService.findOne(id);
     }
-
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Job)
     updateJob(@Args('updateJobInput') updateJobInput: UpdateJobInput) {
         return this.jobService.update(updateJobInput.id, updateJobInput);
     }
 
-    @Mutation(() => Job)
-    removeJob(@Args('id', {type: () => String}) id: string) {
-        return this.jobService.remove(id);
+    @UseGuards(JwtAuthGuard)
+    @Mutation(() => Boolean)
+    deleteJob(@Args('id', {type: () => String}) id: string) {
+        return this.jobService.delete(id);
     }
+
 
     @ResolveField(() => [Variation])
     variations(@Parent() job: Job) {

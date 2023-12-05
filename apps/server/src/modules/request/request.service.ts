@@ -7,4 +7,9 @@ export class RequestService {
   get userId(): any {
     return this.request.req.user.userId;
   }
+
+  get organisationId(): any {
+    console.log(this.request.req.user.organisationId);
+    return this.request.req.user.organisationId;
+  }
 }

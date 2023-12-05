@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@nestjs/common';
 import {ORM} from '../../drizzle/drizzle.module';
 import {NodePgDatabase} from 'drizzle-orm/node-postgres';
 import * as schema from '../../drizzle/schema';
-import {Job, job, NewJob, UpdateJob, variation} from '../../drizzle/schema';
-import {eq, like, or} from 'drizzle-orm';
+import {Job, job, jobCrew, NewJob, UpdateJob} from '../../drizzle/schema';
+import {eq, or, sql} from 'drizzle-orm';
 import {JobSearchInput} from './dto/search-job.input';
 
 @Injectable()
@@ -27,17 +27,14 @@ export class JobRepository {
         });
     }
 
-    async search(searchInput: JobSearchInput): Promise<Job[]> {
-        return await this.db.query.job.findMany({
-            where: or(
-                searchInput.ownerId && eq(job.ownerId, searchInput.ownerId),
-                searchInput.customerName &&
-                like(job.customerName, searchInput.customerName),
-            ),
-            with: {
-                ...(searchInput.includeOwner ? {owner: true} : {}),
-            },
-        });
+    async search(searchInput: JobSearchInput){
+        return this.db.select()
+            .from(job)
+            .leftJoin(jobCrew, (eq(job.id, jobCrew.jobId)))
+            .where(or(
+                eq(job.ownerId, searchInput.ownerId),
+                eq(jobCrew.crewMemberId, searchInput.ownerId)
+            ))
     }
 
     async findOne(id: string): Promise<Job> {
@@ -62,5 +59,10 @@ export class JobRepository {
             where: eq(job.id, variationId),
         });
         return null
+    }
+
+    async delete(id: string): Promise<boolean> {
+        await this.db.delete(job).where(eq(job.id, id));
+        return true;
     }
 }

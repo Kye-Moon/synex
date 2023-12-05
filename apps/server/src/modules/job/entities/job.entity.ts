@@ -1,4 +1,4 @@
-import {ObjectType, Field, Int} from '@nestjs/graphql';
+import {Field, ObjectType} from '@nestjs/graphql';
 import {Variation} from "../../variation/entities/variation.entity";
 
 @ObjectType()
@@ -38,4 +38,5 @@ export enum JobStatus {
     NOT_STARTED = 'NOT_STARTED',
     IN_PROGRESS = 'IN_PROGRESS',
     FINISHED = 'FINISHED',
+    ARCHIVED = 'ARCHIVED',
 }

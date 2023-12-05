@@ -1,16 +1,23 @@
-import { Field, InputType } from '@nestjs/graphql';
+import {Field, InputType} from '@nestjs/graphql';
+import {UserStatus} from "../entities/user.entity";
 
 @InputType()
 export class CreateUserInput {
-  @Field(() => String)
-  name: string;
+    @Field(() => String)
+    name: string;
 
-  @Field(() => String)
-  phone: string;
+    @Field(() => String)
+    email: string;
 
-  @Field(() => String)
-  password: string;
+    @Field(() => String)
+    phone: string;
 
-  @Field(() => String, { nullable: true })
-  email: string;
+    @Field(() => String)
+    role: "ADMIN" | "SUPERVISOR" | "CREW_MEMBER";
+
+    @Field(() => String, {nullable: true})
+    status?: UserStatus
+
+    @Field(() => String, {nullable: true})
+    password: string;
 }

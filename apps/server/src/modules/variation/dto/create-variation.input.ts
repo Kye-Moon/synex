@@ -1,4 +1,4 @@
-import {InputType, Int, Field} from '@nestjs/graphql';
+import {Field, InputType} from '@nestjs/graphql';
 
 @InputType()
 export class CreateVariationInput {
@@ -7,9 +7,6 @@ export class CreateVariationInput {
 
     @Field(() => String)
     description: string
-
-    @Field(() => String)
-    customer: string
 
     @Field(() => String)
     jobId: string

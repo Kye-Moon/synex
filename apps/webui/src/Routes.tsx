@@ -1,10 +1,10 @@
-import {Outlet, RootRoute, Route, Router} from "@tanstack/react-router";
+import {Outlet, RootRoute, Route, Router, useRouter} from "@tanstack/react-router";
 import AppLayout from "./pages/layout";
-import React from "react";
+import React, {useEffect} from "react";
 
 import "./styles/global.css";
 import {DashboardPage} from "@/Pages/DashboardPage/DashboardPage";
-import Login from "@/Pages/LoginPage/LoginPage";
+import Signup from "@/Pages/SignUpPage/SignUpPage";
 import JobsPage from "@/Pages/JobsPage/JobsPage";
 import {Toaster} from "react-hot-toast";
 import JobPage from "@/Pages/JobPage/JobPage";
@@ -14,6 +14,10 @@ import CrewPage from "@/Pages/CrewPage/CrewPage";
 import VariationPage from "@/Pages/VariationPage/VariationPage";
 import EditVariationPage from "@/Pages/EditVariationPage/EditVariationPage";
 import ScrollToTop from "./ScrollToTop";
+import Login from "@/Pages/LoginPage/LoginPage";
+import {userState} from "@/State/state";
+import AdminPage from "@/Pages/SupervisorPage/AdminPage";
+import {useRecoilValue} from "recoil";
 
 const rootRoute = new RootRoute({
     component: () => (
@@ -25,18 +29,29 @@ const rootRoute = new RootRoute({
     ),
 });
 
-function Index() {
-    return (
-        <div className={"bg-amber-300"}>
-            <h3>Welcome Home!</h3>
-        </div>
-    );
+async function Index() {
+    const router = useRouter();
+    const userInfo = useRecoilValue(userState);
+    if (userInfo) {
+        await router.navigate({to: "/dashboard"});
+    } else {
+        await router.navigate({to: "/login"});
+    }
+    return null;
 }
+
 
 const indexRoute = new Route({
     getParentRoute: () => rootRoute,
     path: "/",
     component: Index,
+});
+
+
+const signupRoute = new Route({
+    getParentRoute: () => rootRoute,
+    path: "/signup",
+    component: Signup,
 });
 
 const loginRoute = new Route({
@@ -110,14 +125,22 @@ const crewRoute = new Route({
     component: CrewPage,
 });
 
+const adminRoute = new Route({
+    getParentRoute: () => layoutRoute,
+    path: "/admins",
+    component: AdminPage,
+});
+
 const routeTree = rootRoute.addChildren([
     indexRoute,
-    loginRoute,
+     signupRoute,
+     loginRoute,
     layoutRoute.addChildren([
         dashboardRoute,
         jobsRoute.addChildren([jobIndexRoute, jobRoute, editJobRoute]),
         variationsRoute.addChildren([variationIndexRoute, variationRoute, editVariationRoute]),
         crewRoute,
+        adminRoute,
     ]),
 ]);
 const router = new Router({

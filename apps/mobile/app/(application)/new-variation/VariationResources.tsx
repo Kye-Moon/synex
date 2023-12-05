@@ -1,18 +1,12 @@
 import React from 'react';
-import {Input, InputField, Text, Textarea, TextareaInput, useToast} from "@gluestack-ui/themed";
+import {Input, InputField, Textarea, TextareaInput, useToast} from "@gluestack-ui/themed";
 import {useLocalSearchParams, useRouter} from "expo-router";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {
-    variationDetailsSchema,
-    VariationResourcesFormType,
-    variationResourcesSchema
-} from "./variationDetailsFormSchema";
+import {VariationResourcesFormType, variationResourcesSchema} from "./variationDetailsFormSchema";
 import {useMutation} from "@apollo/client";
 import {showErrorToast, showSuccessToast} from "../../../lib/toasts";
-import {createMutation, updateMutation} from "../../../lib/variationService";
-import * as z from "zod";
-import {uploadImages} from "../../../lib/s3";
+import {variationInitialDataMutation} from "../../../lib/variationService";
 import FormPageTemplate from "../../../components/FormPageTemplate";
 import FormInputWrapper from "../../../components/FormInputWrapper";
 
@@ -30,24 +24,24 @@ export default function VariationResources() {
         }
     })
     const toast = useToast()
-    const [saveDetails, {loading}] = useMutation(createMutation, {
+    const [saveInitialData, {loading}] = useMutation(variationInitialDataMutation, {
         onError: (error) => showErrorToast({error, toast}),
-        onCompleted: (data) => console.log(data)
-    })
-    const [updateDetails, {loading: updateLoading}] = useMutation(updateMutation, {
-        onError: (error) => console.log(error),
         onCompleted: (data) => console.log(data)
     })
 
     const onSubmit = async (data: any) => {
-        console.log(data);
-        // await updateDetails({
-        //     variables: {
-        //         input: {
-        //             id: id,
-        //         }
-        //     }
-        // })
+        await saveInitialData({
+            variables: {
+                input: {
+                    variationId: id,
+                    hours: data.estimatedHours,
+                    numPeople: data.numPeople,
+                    who: data.who,
+                    materials: data.materials,
+                    equipment: data.equipment
+                }
+            }
+        })
         showSuccessToast({message: 'Variation details saved', toast})
         router.replace(`/(application)/(home)/variations`)
     };

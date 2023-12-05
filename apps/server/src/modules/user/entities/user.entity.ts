@@ -1,27 +1,38 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity } from '@mikro-orm/core';
+import {Field, ObjectType} from '@nestjs/graphql';
+
+
+export type UserRoles = "OWNER" | "ADMIN" | "SUPERVISOR" | "CREW_MEMBER";
+export type UserStatus = "ACTIVE" | "INVITED" | "DEACTIVATED"
 
 @ObjectType()
-@Entity()
 export class User {
-  @Field(() => String)
-  id: string;
+    @Field(() => String)
+    id: string;
 
-  @Field(() => String)
-  phone: string;
+    @Field(() => String)
+    phone: string;
 
-  @Field(() => String, { nullable: true })
-  password: string;
+    @Field(() => String)
+    password: string;
 
-  @Field(() => String, { nullable: true })
-  name: string;
+    @Field(() => String)
+    name: string;
 
-  @Field(() => String, { nullable: true })
-  email: string;
+    @Field(() => String)
+    email: string;
 
-  @Field(() => Date, { nullable: true })
-  createdAt: Date = new Date();
+    @Field(() => String)
+    organisationId: string;
 
-  @Field(() => Date, { nullable: true })
-  updatedAt = new Date();
+    @Field(() => String)
+    role: UserRoles;
+
+    @Field(() => String)
+    status: UserStatus;
+
+    @Field(() => Date)
+    createdAt: Date = new Date();
+
+    @Field(() => Date)
+    updatedAt = new Date();
 }

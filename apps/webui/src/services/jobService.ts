@@ -78,8 +78,9 @@ export const jobWithCrewAndVariationsQuery = graphql(`
 			id
 			name
 			phone
+			role
 		},
-		variations {
+		searchVariations(variationSearchInput: {jobId: $jobId}) {
 			id
 			title
 			description

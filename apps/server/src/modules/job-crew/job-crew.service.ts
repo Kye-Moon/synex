@@ -1,10 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {CreateJobCrewInput} from './dto/create-job-crew.input';
-import {UpdateJobCrewInput} from './dto/update-job-crew.input';
 import {JobCrewMember} from "./entities/job-crew.entity";
-import {RequestService} from "../request/request.service";
-import {UserRepository} from "../user/user.repository";
-import {UserCrewRepository} from "../user-crew/user-crew.repository";
 import {JobCrewRepository} from "./job-crew.repository";
 import {NewJobCrew} from "../../drizzle/schema";
 
@@ -37,6 +32,7 @@ export class JobCrewService {
                 id: jobCrew.crewMember.id,
                 name: jobCrew.crewMember.name,
                 phone: jobCrew.crewMember.phone,
+                role: jobCrew.crewMember.role,
             }
         });
     }

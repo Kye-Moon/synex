@@ -61,7 +61,7 @@ const PageHeadingWithMetaAndActions = ({
 					{actions &&
 						actions.map((action, index) => {
 							if (action.dialog) {
-								return <div key={index}>{action.dialog}</div>;
+								return <div className={'inline-flex  align-middle'} key={index}>{action.dialog}</div>;
 							} else {
 								return (
 									<Button

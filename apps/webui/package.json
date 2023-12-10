@@ -51,8 +51,7 @@
     "test": "jest --watch --config=jest.config.js",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
-    "preview": "vite preview",
-    "prepare": "husky install"
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [

@@ -1,6 +1,5 @@
 {
-  "name": "@codelytv/vite-react_best_practices-template",
-  "author": "codelytv",
+  "name": "webui",
   "license": "MIT",
   "private": true,
   "version": "1.0.0",

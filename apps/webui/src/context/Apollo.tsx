@@ -18,7 +18,7 @@ export default function ApolloWrapper({children}: { children: React.ReactNode })
     });
 
     const httpLink = new HttpLink({
-        uri: `${import.meta.env.VITE_SERVER_URL}/graphql}`,
+        uri: `${import.meta.env.VITE_SERVER_URL}/graphql`,
         headers: {
             authorization: token ? `Bearer ${token}` : "",
         },

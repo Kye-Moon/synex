@@ -5,7 +5,7 @@ import { Logger } from 'nestjs-pino';
 const cookieParser = require('cookie-parser');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{cors: true});
 
   // Add Pino logger
   app.useLogger(app.get(Logger));

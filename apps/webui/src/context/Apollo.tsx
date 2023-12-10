@@ -22,6 +22,9 @@ export default function ApolloWrapper({children}: { children: React.ReactNode })
         headers: {
             authorization: token ? `Bearer ${token}` : "",
         },
+        fetchOptions: {
+            mode: 'no-cors',
+        },
         credentials: "include",
     })
 

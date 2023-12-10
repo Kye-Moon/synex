@@ -52,7 +52,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "preview": "vite preview",
-    "serve": "vite preview --port 3000 --open"
+    "serve": "vite preview --host"
   },
   "eslintConfig": {
     "extends": [

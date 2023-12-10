@@ -21,11 +21,7 @@ export default function ApolloWrapper({children}: { children: React.ReactNode })
         uri: `${import.meta.env.VITE_SERVER_URL}/graphql`,
         headers: {
             authorization: token ? `Bearer ${token}` : "",
-            contentType: "application/json",
-            accept: "application/json",
-        },
-        fetchOptions: {
-            mode: 'no-cors',
+            "Access-Control-Allow-Origin": "*",
         },
         credentials: "include",
     })

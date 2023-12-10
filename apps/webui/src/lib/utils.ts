@@ -30,6 +30,17 @@ export const getStatusBadgeVariant = (status: string) => {
     }
 };
 
+export const getVariationStatusBadgeVariant = (status: string) => {
+    switch (status) {
+        case "OPEN":
+            return "green";
+        case "CLOSED":
+            return "red";
+        case "ARCHIVED":
+            return "yellow";
+    }
+};
+
 
 export const getUserTypeBadgeVariant = (status: string) => {
     switch (status) {

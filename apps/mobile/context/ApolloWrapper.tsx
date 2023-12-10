@@ -1,27 +1,33 @@
-import {ApolloClient, ApolloProvider, createHttpLink, InMemoryCache} from "@apollo/client";
+import {ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache} from "@apollo/client";
 import React from "react";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {accessTokenState} from "../state/atoms";
+import {onError} from "@apollo/client/link/error";
 
 export function ApolloWrapper({children}: React.PropsWithChildren) {
-    const authToken = useRecoilValue(accessTokenState)
+    const [authToken,setAuthToken] = useRecoilState(accessTokenState)
 
-    const link = createHttpLink({
-        uri: "http://localhost:4000/graphql",
+    const errorLink = onError(({graphQLErrors, networkError}) => {
+        if (graphQLErrors)
+            graphQLErrors.forEach(({message}) => {
+                if (message === "Unauthorized") {
+                    setAuthToken("")
+                }
+            })
+        if (networkError) console.log(`[Network error]: ${networkError}`);
+    });
+
+    const httpLink = new HttpLink({
+        uri: 'http://localhost:4000/graphql',
         headers: {
             authorization: authToken ? `Bearer ${authToken}` : "",
         },
         credentials: "include",
-    });
+    })
+
     const client = new ApolloClient({
-        link,
+        link: from([errorLink, httpLink]),
         cache: new InMemoryCache(),
-        defaultOptions: {
-            query: {
-                fetchPolicy: "no-cache",
-                errorPolicy: "all",
-            },
-        }
     });
 
     return <ApolloProvider client={client}>{children}</ApolloProvider>

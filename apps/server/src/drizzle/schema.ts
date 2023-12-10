@@ -1,19 +1,5 @@
-import {
-    text,
-    pgTable,
-    varchar,
-    timestamp,
-    uuid,
-    boolean,
-    integer,
-    decimal, numeric,
-} from 'drizzle-orm/pg-core';
-import {
-    InferInsertModel,
-    InferSelectModel,
-    relations,
-    sql,
-} from 'drizzle-orm';
+import {boolean, numeric, pgTable, text, timestamp, uuid, varchar,} from 'drizzle-orm/pg-core';
+import {InferInsertModel, InferSelectModel, relations, sql,} from 'drizzle-orm';
 
 // ###################### USER ######################
 // noinspection TypeScriptValidateTypes
@@ -69,7 +55,7 @@ export const job = pgTable('job', {
     description: text('description'),
     customerName: text('customer_name'),
     status: varchar('status', {
-        enum: ['NOT_STARTED', 'IN_PROGRESS', 'FINISHED', "ARCHIVED"],
+        enum: ['OPEN', 'CLOSED', "ARCHIVED"],
     }),
     ownerId: uuid('owner_id')
         .references(() => user.id)
@@ -132,12 +118,13 @@ export const variation = pgTable('variation', {
         .notNull(),
     title: text('title').notNull(),
     description: text('description'),
+    status: varchar('status', {
+        enum: ['OPEN', 'CLOSED', "ARCHIVED"],
+    }).default('OPEN'),
     flag: varchar('flag', {enum: ['EARLY_WARNING', 'POTENTIAL', 'ACTIONED']}),
     submittedBy: uuid('submitted_by')
         .references(() => user.id)
         .notNull(),
-    estimatedCost: decimal('estimated_cost'),
-    estimatedTime: decimal('estimated_time'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
         .default(sql`CURRENT_TIMESTAMP`)
@@ -159,7 +146,7 @@ export const variationRelations = relations(variation, ({one, many}) => ({
     }),
     resources: many(variationResource),
     images: many(variationImage),
-    initialData: one(variationInitialData),
+
 }));
 
 // ###################### VARIATION RESOURCES TABLE ######################

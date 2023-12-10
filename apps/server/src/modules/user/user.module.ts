@@ -6,6 +6,7 @@ import {DrizzleModule} from '../../drizzle/drizzle.module';
 import {UserRepository} from './user.repository';
 import {RequestModule} from '../request/request.module';
 import {SmsModule} from "../sms/sms.module";
+import {OrganisationModule} from "../organisation/organisation.module";
 
 @Module({
     providers: [UserResolver, UserService, UserRepository],
@@ -15,6 +16,7 @@ import {SmsModule} from "../sms/sms.module";
         }),
         DrizzleModule,
         RequestModule,
+        OrganisationModule,
         SmsModule
     ],
     exports: [UserService, UserRepository],

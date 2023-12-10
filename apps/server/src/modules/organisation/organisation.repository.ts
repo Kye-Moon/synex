@@ -2,8 +2,8 @@ import {Inject, Injectable} from "@nestjs/common";
 import {ORM} from "../../drizzle/drizzle.module";
 import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import * as schema from "../../drizzle/schema";
-import {eq, or} from "drizzle-orm";
-import {NewOrganisation, Organisation, organisation} from "../../drizzle/schema";
+import {NewOrganisation, organisation} from "../../drizzle/schema";
+import {eq} from "drizzle-orm";
 
 @Injectable()
 export class OrganisationRepository {

@@ -6,31 +6,32 @@ import {OrganisationRepository} from "./organisation.repository";
 @Injectable()
 export class OrganisationService {
 
-  constructor(
-      private readonly organisationRepository: OrganisationRepository,
-  ) {
-  }
-  create(createOrganisationInput: CreateOrganisationInput) {
-    return this.organisationRepository.create(createOrganisationInput);
-  }
+    constructor(
+        private readonly organisationRepository: OrganisationRepository,
+    ) {
+    }
 
-  findAll() {
-    return `This action returns all organisation`;
-  }
+    create(createOrganisationInput: CreateOrganisationInput) {
+        return this.organisationRepository.create(createOrganisationInput);
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organisation`;
-  }
+    findAll() {
+        return `This action returns all organisation`;
+    }
 
-  findOneByName(name: string) {
-    return this.organisationRepository.findOneByName(name);
-  }
+    async findOne(id: string) {
+        return await this.organisationRepository.findOneById(id)
+    }
 
-  update(id: number, updateOrganisationInput: UpdateOrganisationInput) {
-    return `This action updates a #${id} organisation`;
-  }
+    findOneByName(name: string) {
+        return this.organisationRepository.findOneByName(name);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} organisation`;
-  }
+    update(id: number, updateOrganisationInput: UpdateOrganisationInput) {
+        return `This action updates a #${id} organisation`;
+    }
+
+    remove(id: number) {
+        return `This action removes a #${id} organisation`;
+    }
 }

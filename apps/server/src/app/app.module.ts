@@ -16,8 +16,8 @@ import {SmsModule} from "../modules/sms/sms.module";
 import {S3Module} from "../modules/s3/s3.module";
 import {ConfigModule} from "@nestjs/config";
 import {VariationImageModule} from "../modules/variation-image/variation-image.module";
-import {VariationInitialData} from "../modules/variation-initial-data/entities/variation-initial-data.entity";
 import {VariationInitialDataModule} from "../modules/variation-initial-data/variation-initial-data.module";
+import {VariationResourceModule} from "../modules/variation-resource/variation-resource.module";
 
 @Module({
     imports: [
@@ -45,6 +45,7 @@ import {VariationInitialDataModule} from "../modules/variation-initial-data/vari
         VariationModule,
         VariationImageModule,
         VariationInitialDataModule,
+        VariationResourceModule,
         DrizzleModule,
         RequestModule,
         EmailModule,

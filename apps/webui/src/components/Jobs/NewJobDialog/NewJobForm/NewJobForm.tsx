@@ -52,6 +52,9 @@ export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) 
 	// The form hook for the NewProjectForm
 	const form = useForm<NewJobFormType>({
 		resolver: zodResolver(newJobFormSchema),
+		defaultValues: {
+			status: JobStatus.OPEN,
+		}
 	});
 
 	async function onSubmit(values: NewJobFormType) {

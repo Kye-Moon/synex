@@ -42,8 +42,12 @@ export class UserService {
         return await this.userRepository.search(searchInput);
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
+    async findOne(id: string) {
+        return await this.userRepository.findOneById(id);
+    }
+
+    async currentUser() {
+        return await this.userRepository.findOneById(this.request.userId);
     }
 
     async update(id: string, updateUserInput: UpdateUserInput) {

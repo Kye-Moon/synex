@@ -9,7 +9,7 @@ import AdminPageTableSection from "@/Pages/SupervisorPage/AdminPageTableSection"
 
 const crewPageActions: PageHeadingActionButtonProps[] = [
 	{
-		dialog: <NewOrgMemberDialog defaultRole={"ADMIN"} dialogTitle={"Add a new admin"} triggerText={"New Admin"} />,
+		dialog: <NewOrgMemberDialog defaultRole={"ADMIN"} dialogTitle={"Add a new admin or owner"} triggerText={"New"} />,
 	},
 ];
 export default function AdminPage() {

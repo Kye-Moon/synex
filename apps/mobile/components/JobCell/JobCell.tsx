@@ -1,12 +1,14 @@
 import React from "react";
 import {
+    Badge,
     Box,
     Divider,
     HStack,
     ScrollView,
     Text,
     View,
-    VStack
+    VStack,
+    BadgeText
 } from "@gluestack-ui/themed";
 import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
@@ -14,7 +16,8 @@ import {StyleSheet} from "react-native";
 import ScreenSection from "../ScreenSection";
 import ScreenContentSection from "../ScreenContentSection";
 import LabelAndValue from "../LabelAndValue";
-import {truncate} from "../../lib/utils";
+import {enumToSentenceCase, truncate} from "../../lib/utils";
+import dayjs from "dayjs";
 
 
 const query = graphql(`
@@ -41,17 +44,20 @@ export default function JobCell({jobId}: { jobId: string }) {
             <ScrollView>
                 <ScreenContentSection heading={"Details"}>
                     <View style={styles.container}>
-                        <LabelAndValue label={'Status'} value={data.job?.status}/>
+                        <LabelAndValue label={'Status'} value={<Badge><BadgeText>{enumToSentenceCase(data.job?.status ?? '')}</BadgeText></Badge>}/>
                     </View>
                     <View style={styles.container}>
                         <LabelAndValue label={'Customer'} value={data.job.customerName}/>
-                        <LabelAndValue label={'Due Date'} value={data.job?.dueDate}/>
+                        <LabelAndValue label={'Due Date'} value={dayjs(data.job?.dueDate).format('DD/MM/YYYY')}/>
                     </View>
                     <View style={styles.container}>
                         <LabelAndValue label={'Description'} value={data.job?.description}/>
                     </View>
                 </ScreenContentSection>
                 <ScreenContentSection heading={"Variations"}>
+                    {data.job?.variations?.length === 0 && (
+                        <Text>No variations</Text>
+                    )}
                     {data.job?.variations?.map((variation: any) => {
                         return (
                             <Box

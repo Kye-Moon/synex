@@ -35,6 +35,7 @@
 			"@/Services/*": ["*", "src/services/*"],
 			"@/Constants/*": ["*", "src/constants/*"],
 			"@/Context/*": ["*", "src/context/*"],
+			"@/Hooks/*": ["*", "src/hooks/*"],
 		}
 	},
 	"include": [

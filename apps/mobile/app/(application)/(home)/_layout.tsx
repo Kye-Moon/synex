@@ -5,6 +5,7 @@ import React from "react";
 export default function ApplicationLayout() {
     return (
         <Tabs
+            initialRouteName="variations"
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: '#000',
@@ -15,6 +16,7 @@ export default function ApplicationLayout() {
                 name="jobs"
                 options={{
                     title: 'Jobs',
+                    tabBarActiveTintColor: '#fff',
                     tabBarIcon: ({ color}) => (
                         <KanbanIcon color={color}/>
                     ),
@@ -24,6 +26,7 @@ export default function ApplicationLayout() {
                 name="variations"
                 options={{
                     title: 'Variations',
+                    tabBarActiveTintColor: '#fff',
                     tabBarIcon: ({ color}) => (
                         <ClipboardListIcon color={color}/>
                     ),
@@ -33,6 +36,7 @@ export default function ApplicationLayout() {
                 name="settings"
                 options={{
                     title: 'Settings',
+                    tabBarActiveTintColor: '#fff',
                     tabBarIcon: ({ color}) => (
                         <SettingsIcon color={color}/>
                     ),

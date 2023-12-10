@@ -6,15 +6,33 @@ import {
 import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
 import {variationsTableQuery} from "@/Services/variationService";
+import {useMemo} from "react";
+import {da} from "date-fns/locale";
 
 interface VariationTableProps {
-	variations: VariationTableColumn[];
 	filterType?: 'ACTION' | 'CONFIRMED' | 'ARCHIVED';
 }
 
-export default function VariationTable({variations}: VariationTableProps) {
+export default function VariationTable({}: VariationTableProps) {
 	const {data} = useSuspenseQuery(variationsTableQuery, {variables: {input: {}}})
-	console.log(data.searchVariations)
+	const variationRows:VariationTableColumn[] = useMemo(() => {
+		return data.searchVariations.map((variation) => {
+			return {
+				id: variation.id,
+				jobName: variation.job.title,
+				title: variation.title,
+				description: variation.description,
+				submittedBy: variation.submittedBy.name,
+				estimatedTime: variation.initialData.hours,
+				estimatedPeople: variation.initialData.numPeople,
+				material: variation.initialData.materials,
+				status: variation.status,
+				equipment: variation.initialData.equipment,
+				createdAt: variation.createdAt,
+			}
+		})
+	},[])
+
 	return (
 		<div>
 			<DataTable
@@ -23,7 +41,7 @@ export default function VariationTable({variations}: VariationTableProps) {
 				secondarySearchColumn={'jobName'}
 				secondarySearchPlaceholder={'Search by job'}
 				columns={variationTableColumns}
-				data={variations}
+				data={variationRows}
 			/>
 		</div>
 	);

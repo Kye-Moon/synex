@@ -2,8 +2,17 @@ import {Inject, Injectable} from "@nestjs/common";
 import {ORM} from "../../drizzle/drizzle.module";
 import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import * as schema from "../../drizzle/schema";
-import {job, jobCrew, NewVariation, UpdateVariation, User, variation} from "../../drizzle/schema";
-import {and, eq, or} from "drizzle-orm";
+import {
+    job,
+    jobCrew,
+    NewVariation,
+    UpdateVariation,
+    User,
+    variation,
+    variationImage,
+    variationInitialData
+} from "../../drizzle/schema";
+import {and, asc, desc, eq, or} from "drizzle-orm";
 import {VariationSearchInput} from "./dto/search-variation";
 
 @Injectable()
@@ -33,7 +42,7 @@ export class VariationRepository {
                     eq(jobCrew.crewMemberId, userId)
                 ),
                 ...(searchInput.jobId ? [eq(variation.jobId, searchInput.jobId)] : [])
-            ))
+            )).limit(searchInput.limit).orderBy(asc(variation.createdAt))
     }
 
     async findOne(id: string) {
@@ -45,7 +54,6 @@ export class VariationRepository {
     async findVariationJob(variationId: string) {
         const _variation = await this.db.query.variation.findFirst({
             where: eq(variation.id, variationId),
-            columns: {id: true},
             with: {
                 job: true
             }
@@ -56,7 +64,6 @@ export class VariationRepository {
     async findVariationSubmittedBy(variationId: string): Promise<User> {
         const _variation = await this.db.query.variation.findFirst({
             where: eq(variation.id, variationId),
-            columns: {id: true},
             with: {
                 submittedBy: true
             }
@@ -64,9 +71,27 @@ export class VariationRepository {
         return _variation.submittedBy
     }
 
+    async findVariationInitialData(variationId: string) {
+        return await this.db.query.variationInitialData.findFirst({
+            where: eq(variationInitialData.variationId, variationId),
+        })
+    }
+
+    async findVariationImages(variationId: string) {
+        return await this.db.query.variationImage.findMany({
+            where: eq(variationImage.variationId, variationId),
+        })
+    }
+
+    async findVariationResources(variationId: string) {
+        return await this.db.query.variationResource.findMany({
+            where: eq(variationImage.variationId, variationId),
+        })
+    }
+
+
     async update(id: string, input: UpdateVariation) {
         const _variation = await this.db.update(variation).set({...input}).where(eq(variation.id, id)).returning()
-        console.log(_variation)
         return _variation[0]
     }
 

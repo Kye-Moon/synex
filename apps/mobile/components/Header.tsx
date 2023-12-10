@@ -13,7 +13,7 @@ export default function Header({title}: Props) {
         <HStack w={"100%"}>
             <Box style={styles.box}>
                 <Pressable onPress={router.back}>
-                    <ChevronLeftIcon size={'32px'}/>
+                    <ChevronLeftIcon color={'#000'} size={'32px'}/>
                 </Pressable>
             </Box>
             <Center style={styles.box}>

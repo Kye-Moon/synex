@@ -1,4 +1,5 @@
 import {Field, ObjectType} from '@nestjs/graphql';
+import {Organisation} from "../../organisation/entities/organisation.entity";
 
 
 export type UserRoles = "OWNER" | "ADMIN" | "SUPERVISOR" | "CREW_MEMBER";
@@ -29,6 +30,9 @@ export class User {
 
     @Field(() => String)
     status: UserStatus;
+
+    @Field(() => Organisation)
+    organisation?: Organisation;
 
     @Field(() => Date)
     createdAt: Date = new Date();

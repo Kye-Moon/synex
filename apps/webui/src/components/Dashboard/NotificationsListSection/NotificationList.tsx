@@ -1,25 +1,19 @@
-import {
-	Table,
-	TableBody,
-	TableCaption,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/Primitives/Table";
+import {Table, TableBody, TableCaption, TableCell, TableRow,} from "@/Primitives/Table";
 import React from "react";
 import Badge from "@/Primitives/Badge/Badge";
-import { enumToSentenceCase } from "@/Lib/utils";
-import { useNavigate } from "@tanstack/react-router";
+import {DashboardSearchVariationsQuery} from "../../../../../../packages/gql-types";
 
-export default function NotificationList() {
+interface NotificationListProps {
+	notifications: DashboardSearchVariationsQuery["searchVariations"];
+}
+export default function NotificationList({notifications}: NotificationListProps) {
 	return (
 		<div className="overflow-hidden rounded-lg bg-white shadow">
 			<div className="p-6">
 				<Table>
 					<TableCaption>Notifications</TableCaption>
 					<TableBody>
-						{notifications.map((notification: Notification) => (
+						{notifications.map((notification: DashboardSearchVariationsQuery["searchVariations"][0]) => (
 							<TableRow key={notification.id}>
 								<TableCell className="font-medium rounded-lg">
 									<NotificationCell notification={notification} />
@@ -33,11 +27,9 @@ export default function NotificationList() {
 	);
 }
 
-const NotificationCell = ({ notification }: { notification: Notification }) => {
-	const navigate = useNavigate({ from: "/dashboard" });
-
+const NotificationCell = ({ notification }: { notification: DashboardSearchVariationsQuery["searchVariations"][0] }) => {
 	return (
-		<div onClick={() => navigate({ to: "/jobs" })} className="flex space-x-3 cursor-pointer">
+		<div className="flex space-x-3 cursor-pointer">
 			<div className="max-w-xs space-y-1">
 				<p className="font-medium text-gray-900 truncate">{notification.title}</p>
 				<p className="text-xs text-gray-500 ">
@@ -45,10 +37,10 @@ const NotificationCell = ({ notification }: { notification: Notification }) => {
 						? notification.description.substring(0, 100) + "..."
 						: notification.description}
 				</p>
-				<p className="text-xs text-gray-300  truncate">Submitted by - {notification.submittedBy}</p>
+				<p className="text-xs text-gray-300  truncate">Submitted by - {notification.submittedBy.name}</p>
 			</div>
 			<div>
-				<Badge text={enumToSentenceCase(notification.type)} size={"sm"} variant={"blue"} />
+				<Badge text={'Variation'} size={"sm"} variant={"blue"} />
 			</div>
 		</div>
 	);

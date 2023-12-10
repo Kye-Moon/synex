@@ -79,7 +79,7 @@ export default function JobPage(): JSX.Element {
                 <div className={'grid grid-cols-1 xl:grid-cols-2'}>
                     <div className={'col-span-2 '}>
                         <h1 className={'text-xl font-semibold'}>Variations</h1>
-                        <JobVariations variations={data?.variations}/>
+                        <JobVariations variations={data?.searchVariations}/>
                     </div>
                 </div>
             </PageContentSection>

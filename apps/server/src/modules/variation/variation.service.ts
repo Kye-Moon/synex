@@ -24,7 +24,6 @@ export class VariationService {
         })
     }
 
-    // TODO - add multi tenancy restriction
     async search(searchInput: VariationSearchInput) {
         const result = await this.variationRepository.search({
             searchInput: searchInput,
@@ -71,5 +70,15 @@ export class VariationService {
 
     getVariationSubmittedBy(id: string) {
         return this.variationRepository.findVariationSubmittedBy(id)
+    }
+
+    async getVariationInitialData(id: string) {
+        return await this.variationRepository.findVariationInitialData(id)
+    }
+    async getVariationImages(id: string) {
+        return await this.variationRepository.findVariationImages(id)
+    }
+    async getVariationResources(id: string) {
+        return await this.variationRepository.findVariationResources(id)
     }
 }

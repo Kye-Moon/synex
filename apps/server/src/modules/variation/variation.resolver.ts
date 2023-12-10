@@ -10,11 +10,14 @@ import {User} from "../user/entities/user.entity";
 import {JobSearchInput} from "../job/dto/search-job.input";
 import {VariationSearchInput} from "./dto/search-variation";
 import {VariationInitialData} from "../variation-initial-data/entities/variation-initial-data.entity";
+import {VariationSearchEntity} from "./entities/variation-search.entity";
+import {VariationImage} from "../variation-image/entities/variation-image.entity";
+import {VariationResource} from "../variation-resource/entities/variation-resource.entity";
 
 @Resolver(() => Variation)
 export class VariationResolver {
     constructor(
-        private readonly variationService: VariationService,) {
+        private readonly variationService: VariationService) {
     }
 
     @UseGuards(JwtAuthGuard)
@@ -25,8 +28,8 @@ export class VariationResolver {
 
     @UseGuards(JwtAuthGuard)
     @Query(() => [Variation], {name: 'searchVariations'})
-    searchVariations(@Args('variationSearchInput') variationSearchInput: VariationSearchInput) {
-        return this.variationService.search(variationSearchInput);
+    async searchVariations(@Args('variationSearchInput') variationSearchInput: VariationSearchInput) {
+        return await this.variationService.search(variationSearchInput);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -61,6 +64,18 @@ export class VariationResolver {
     @ResolveField(() => VariationInitialData)
     async initialData(@Parent() variation: Variation) {
         const {id} = variation;
-        return this.variationService.getVariationJob(id);
+        return await this.variationService.getVariationInitialData(id);
+    }
+
+    @ResolveField(() => [VariationImage])
+    async images(@Parent() variation: Variation) {
+        const {id} = variation;
+        return await this.variationService.getVariationImages(id);
+    }
+
+    @ResolveField(() => [VariationResource])
+    async resources(@Parent() variation: Variation) {
+        const {id} = variation;
+        return await this.variationService.getVariationResources(id);
     }
 }

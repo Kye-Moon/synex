@@ -1,19 +1,10 @@
 import {useEffect, useState} from "react";
 import {useFormContext} from "react-hook-form";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Primitives/Table";
+import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/Primitives/Table";
 import {Checkbox} from "@/Primitives/Checkbox";
-import {useSuspenseQuery} from "@apollo/client";
-import {getUserCrew} from "@/Services/userCrewService";
 import Badge from "@/Primitives/Badge/Badge";
 import {enumToSentenceCase, getUserTypeBadgeVariant} from "@/Lib/utils";
+
 export interface OrgMemberTableRowsProps {
     id: string;
     name: string;

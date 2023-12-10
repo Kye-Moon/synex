@@ -32,14 +32,14 @@ export default function JobsList({jobs}: JobListProps) {
                     <HStack style={styles.row}>
                         <VStack>
                             <Text size="md">{item.title}</Text>
-                            {/*<Text size={'2xs'}>{truncate(item.description, 25)}</Text>*/}
+                            <Text size={'2xs'}>{truncate(item.description, 25)}</Text>
                         </VStack>
-                        {/*<Link asChild={true}>*/}
+                        <Link asChild={true}  href={{pathname: "/(application)/job/[id]", params: {id: item.id, jobTitle: item.title}}}>
                             <Button size={'xs'} width={'$20'}>
                                 <ButtonText>View </ButtonText>
                                 <ButtonIcon as={EyeIcon}/>
                             </Button>
-                        {/*</Link>*/}
+                        </Link>
                     </HStack>
                     <Divider my={'$2'}/>
                 </Box>

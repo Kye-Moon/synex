@@ -9,7 +9,10 @@ export class RequestService {
   }
 
   get organisationId(): any {
-    console.log(this.request.req.user.organisationId);
     return this.request.req.user.organisationId;
   }
+
+    get role(): any {
+        return this.request.req.user.role;
+    }
 }

@@ -3,6 +3,7 @@ import {BaseSearchInput} from "../../../common/base/base.searchInput";
 
 @InputType()
 export class VariationSearchInput extends BaseSearchInput {
+
     @Field(() => String, {nullable: true})
     jobId?: string;
 

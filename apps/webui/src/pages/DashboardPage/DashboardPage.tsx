@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import React, {JSX, Suspense} from "react";
 import JobListSection from "@/Components/Dashboard/JobListSection/JobsListSection";
 import PageHeadingWithMetaAndActions from "@/Components/PageHeadingWithMetaAndActions/PageHeadingWithMetaAndActions";
 import PageContentSection from "@/Components/PageContentSection";
@@ -17,7 +17,9 @@ export function DashboardPage(): JSX.Element {
 					</div>
 					{/*		/!* Right column *!/*/}
 					<div className="grid grid-cols-1 gap-4 lg:col-span-1">
-						<NotificationListSection />
+						<Suspense fallback={<div>Loading...</div>}>
+							<NotificationListSection />
+						</Suspense>
 					</div>
 				</div>
 			</PageContentSection>

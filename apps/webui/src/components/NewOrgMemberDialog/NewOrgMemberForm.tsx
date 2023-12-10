@@ -76,11 +76,6 @@ export default function NewOrgMemberForm({
 		await createOrgMember({variables: {input: {...values}}})
 	}
 
-	// helper function to set the value of a field in the form
-	const onValueChange = (fieldName: string, value: string | Date | undefined) => {
-		form.setValue(fieldName, value);
-	};
-
 
 	return (
 		<Form {...form}>
@@ -128,7 +123,7 @@ export default function NewOrgMemberForm({
 								<FormInputWrapper label={"Role"}
 												  description={"The role you want the user to have"}>
 									<DropSelect
-										options={[...roleSelectOptions, ...(hasRole(userInfo, 'OWNER') ? [{label: "Admin", value: "ADMIN"}] : [])]}
+										options={[...roleSelectOptions, ...(hasRole(userInfo, 'OWNER') ? [{label: "Admin", value: "ADMIN"},{label: "Owner", value: "OWNER"}] : [])]}
 										defaultValue={field.value}
 										onChange={field.onChange}
 										placeholder={"Role"}

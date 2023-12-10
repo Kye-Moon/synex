@@ -1,33 +1,25 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, EditIcon, EyeIcon, NewspaperIcon, TrashIcon } from "lucide-react";
-import ActionsDropMenu, { Action } from "@/Components/ActionsDropMenu/ActionsDropMenu";
+import {ColumnDef} from "@tanstack/react-table";
+import {ArrowUpDown, EyeIcon} from "lucide-react";
+import ActionsDropMenu, {Action} from "@/Components/ActionsDropMenu/ActionsDropMenu";
 import moment from "moment";
-import { useNavigate } from "@tanstack/react-router";
+import {useNavigate} from "@tanstack/react-router";
+import Badge from "@/Primitives/Badge/Badge";
+import {enumToSentenceCase, getVariationStatusBadgeVariant} from "@/Lib/utils";
 
 export interface VariationTableColumn {
 	id: string;
-	jobId: string;
 	jobName: string;
 	description: string;
 	title: string;
 	submittedBy: string;
 	createdAt: string;
-	updatedAt: string;
-	flag: string;
-	estimatedCost: number;
-	estimatedTime: number;
+	estimatedPeople?: string | null;
+	estimatedTime?: string | null;
+	material?: string | null;
+	equipment?: string | null;
 }
 
-const getStatusBadgeVariant = (status: string) => {
-	switch (status) {
-		case "IN_PROGRESS":
-			return "blue";
-		case "DONE":
-			return "green";
-		case "OPEN":
-			return "yellow";
-	}
-};
+
 
 const getPriorityBadgeVariant = (priority: string) => {
 	switch (priority) {
@@ -77,10 +69,35 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 		header: "Est. hours",
 	},
 	{
-		accessorKey: "estimatedCost",
-		header: "Est. cost",
+		accessorKey: "estimatedPeople",
+		header: "Est. Crew",
 		cell: ({ row }) => {
-			return `$${row.getValue("estimatedCost")}`;
+			return `${row.getValue("estimatedPeople")}`;
+		}
+	},
+	{
+		accessorKey: "material",
+		header: "Material",
+		cell: ({ row }) => {
+			const material = row.getValue("material");
+			return <Badge text={material ? "Yes" : "No"} size={'sm'} variant={material ? 'green' : 'red'}/>
+		}
+	},
+	{
+		accessorKey: "equipment",
+		header: "Equipment",
+		cell: ({ row }) => {
+			const equip =  row.getValue("equipment");
+			return <Badge text={equip ? "Yes" : "No"} size={'sm'} variant={equip ? 'green' : 'red'}/>
+
+		}
+	},
+	{
+		accessorKey: "status",
+		header: "Status",
+		cell: ({ row }) => {
+			const status =  String(row.getValue("status"));
+			return <Badge text={enumToSentenceCase(status)} size={'sm'} variant={getVariationStatusBadgeVariant(status)}/>
 		}
 	},
 	{
@@ -94,14 +111,6 @@ export const variationTableColumns: ColumnDef<VariationTableColumn>[] = [
 					onClick: async () => {
 						await navigate({to: '/variations/$variationId/edit', params:{variationId: row.original.id}})
 					},
-				},
-				{
-					label: "Confirm",
-					icon: <NewspaperIcon className={"h-4 text-primary/50"} />,
-				},
-				{
-					label: "Archive",
-					icon: <TrashIcon className={"h-4 text-destructive/50"} />,
 				},
 			];
 			return <ActionsDropMenu actions={JobsTableColumnActions} />;

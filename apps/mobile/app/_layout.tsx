@@ -1,5 +1,5 @@
-import {Navigator, Stack} from "expo-router";
-import {GluestackUIProvider, Spinner} from "@gluestack-ui/themed"
+import {Stack} from "expo-router";
+import {GluestackUIProvider} from "@gluestack-ui/themed"
 import {RecoilRoot} from "recoil";
 import React, {Suspense} from "react";
 import {ApolloWrapper} from "../context/ApolloWrapper";
@@ -36,11 +36,10 @@ export default function RootLayout() {
 const AppWrapper = () => {
     return (
         <ApolloWrapper>
-                <Stack initialRouteName={'/(application)/(home)/variations'}>
-                    <Stack.Screen name="sign-in" options={{headerShown: false, presentation: 'modal'}}/>
+                <Stack initialRouteName={'(application)'}>
                     <Stack.Screen name="(application)" options={{headerShown: false}}/>
+                    <Stack.Screen name="sign-in" options={{headerShown: false}}/>
                 </Stack>
-                {/*<Spinner style={styles.spinner} color={'#fff'} size="large" />*/}
         </ApolloWrapper>
     )
 }

@@ -2,29 +2,15 @@ import {createColumnHelper} from "@tanstack/react-table";
 import EditableTableCell from "@/Components/EditableTable/EditableTableCell";
 import EditCell from "@/Components/EditableTable/EditCell";
 import EditableTable from "@/Components/EditableTable/EditableTable";
+import {useParams} from "@tanstack/react-router";
+import useVariationResources from "@/Hooks/useVariationResources";
+import {useEffect, useState} from "react";
 
 type MaterialResource = {
 	description: string;
-	units: string;
-	cpu: string;
+	quantity: string;
+	unitPrice: string;
 };
-const defaultData: MaterialResource[] = [
-	{
-		description: "Steel",
-		units: "8",
-		cpu: "50",
-	},
-	{
-		description: "Steel",
-		units: "8",
-		cpu: "50",
-	},
-	{
-		description: "Steel",
-		units: "8",
-		cpu: "50",
-	},
-];
 
 const columnHelper = createColumnHelper<MaterialResource>();
 const columns = [
@@ -35,18 +21,18 @@ const columns = [
 			type: "text",
 		},
 	}),
-	columnHelper.accessor("units", {
+	columnHelper.accessor("quantity", {
 		header: "Units",
 		cell: EditableTableCell,
 		meta: {
 			type: "text",
 		},
 	}),
-	columnHelper.accessor("cpu", {
-		header: "Cost per unit",
+	columnHelper.accessor("unitPrice", {
+		header: "Cost per unit ($)",
 		cell: EditableTableCell,
 		meta: {
-			type: "text",
+			type: "dollars",
 		},
 	}),
 	columnHelper.display({
@@ -56,7 +42,28 @@ const columns = [
 ];
 
 export default function EditableMaterialsResourcesTable() {
+	const params = useParams({from: "/layout/variations/$variationId/edit"});
+	const {materialResources, addResource, updateResource,removeResource} = useVariationResources({variationId: params.variationId});
+	const [_data, setData] = useState(() => materialResources ? [...materialResources] : []);
+	const [originalData, setOriginalData] = useState(() => materialResources ? [...materialResources] : []);
+
+	useEffect(() => {
+		setData(() => materialResources ? [...materialResources] : []);
+		setOriginalData(() => materialResources ? [...materialResources] : []);
+	}, [materialResources]);
+
+
 	return (
-		<EditableTable columns={columns} data={defaultData}/>
+		<EditableTable
+			columns={columns}
+			data={_data}
+			originalData={originalData}
+			setData={setData}
+			setOriginalData={setOriginalData}
+			updateRow={updateResource}
+			addRow={addResource}
+			deleteRow={removeResource}
+			resourceType={"MATERIAL"}
+		/>
 	)
 }

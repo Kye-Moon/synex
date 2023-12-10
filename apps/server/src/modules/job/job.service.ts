@@ -15,6 +15,7 @@ export class JobService {
         private readonly jobCrewService: JobCrewService,
     ) {
     }
+
     async create(createJobInput: CreateJobInput) {
         const job = await this.jobRepository.createJob({
             ...createJobInput,
@@ -32,13 +33,20 @@ export class JobService {
      * @param searchInput
      */
     async search(searchInput: JobSearchInput): Promise<Job[]> {
+        const userRole = this.request.role;
         searchInput.ownerId = this.request.userId;
-        const result =  await this.jobRepository.search(searchInput);
-        return result.map((job) => {
-            return {
-                ...job.job,
-            }
-        })
+        let jobs: Job[] = [];
+        if (userRole === 'OWNER') {
+            jobs = await this.jobRepository.ownerSearch({orgId: this.request.organisationId});
+        } else {
+            const result = await this.jobRepository.search(searchInput);
+            jobs = result.map((job) => {
+                return {
+                    ...job.job,
+                }
+            })
+        }
+        return jobs;
     }
 
     async findOne(id: string) {

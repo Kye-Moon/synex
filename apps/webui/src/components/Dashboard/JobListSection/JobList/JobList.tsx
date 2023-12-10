@@ -1,25 +1,14 @@
-import React, {useEffect} from "react";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Primitives/Table";
+import React from "react";
+import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/Primitives/Table";
 
 import JobDetailsCell from "@/Components/Dashboard/JobListSection/JobList/JobDetailsCell";
 import JobActionsCell from "@/Components/Dashboard/JobListSection/JobList/JobActionsCell";
-import {useQuery, useSuspenseQuery} from "@apollo/client";
+import {useSuspenseQuery} from "@apollo/client";
 import {dashboardSearchJobs} from "@/Services/jobService";
 import {Job} from "gql-types/gql/graphql";
-import {useRouter} from "@tanstack/react-router";
 
 export default function JobList() {
-    const {data} = useSuspenseQuery(dashboardSearchJobs, {variables: {input: {}}});
-	const router = useRouter();
-	router.state.location
+    const {data} = useSuspenseQuery(dashboardSearchJobs, {variables: {input: {limit: 15}}});
     return (
         <>
             <Table>

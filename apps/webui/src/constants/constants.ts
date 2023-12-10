@@ -1,23 +1,18 @@
 import { DropSelectOption } from "@/Components/DropSelect/DropSelect";
 
 export enum JobStatus {
-	NOT_STARTED = "NOT_STARTED",
-	IN_PROGRESS = "IN_PROGRESS",
-	FINISHED = "FINISHED",
+	OPEN = "OPEN",
+	CLOSED = "CLOSED",
 	ARCHIVED = "ARCHIVED",
 }
 export const JobStatusSelectOptions: DropSelectOption[] = [
 	{
-		label: "Not Started",
-		value: JobStatus.NOT_STARTED,
+		label: "Open",
+		value: JobStatus.OPEN,
 	},
 	{
-		label: "In Progress",
-		value: JobStatus.IN_PROGRESS,
-	},
-	{
-		label: "Completed",
-		value: JobStatus.FINISHED,
+		label: "Closed",
+		value: JobStatus.CLOSED,
 	},
 	{
 		label: "Archived",

@@ -39,6 +39,9 @@ export const jobTableSearchJobs = graphql(`
 			status
 			customerName
 			dueDate
+			variations {
+				id
+			}
 		}
 	}
 `);
@@ -103,7 +106,7 @@ export const convertJobsToJobsTableColumns = (
 			title: job.title,
 			status: job.status || "-",
 			customer: job.customerName || "-",
-			numVariations: 20,
+			numVariations: job.variations?.length || 0,
 			dueDate: job.dueDate || "-",
 		};
 		return column;

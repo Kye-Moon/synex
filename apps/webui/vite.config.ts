@@ -15,6 +15,7 @@ export default defineConfig((configEnv) => {
 				{ find: "@/State", replacement: "/src/state" },
 				{ find: "@/Constants", replacement: "/src/constants" },
 				{ find: "@/Context", replacement: "/src/context" },
+				{ find: "@/Hooks", replacement: "/src/hooks" },
 			],
 		},
 	};

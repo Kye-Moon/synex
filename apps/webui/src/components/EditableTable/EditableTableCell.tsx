@@ -1,5 +1,7 @@
 import {ChangeEvent, useEffect, useState} from "react";
+import {Input} from "@/Primitives/Input";
 
+// @ts-ignore
 export default function EditableTableCell({getValue, row, column, table}) {
 	const initialValue = getValue()
 	const columnMeta = column.columnDef.meta
@@ -17,13 +19,17 @@ export default function EditableTableCell({getValue, row, column, table}) {
 	}
 	if (tableMeta?.editedRows[row.id]) {
 		return (
-			<input
+			<Input
+				size={1}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				onBlur={onBlur}
 				type={column.columnDef.meta?.type || "text"}
 			/>
 		)
+	}else if (columnMeta?.type === "dollars") {
+		return <span>${value}</span>
+	}else {
+		return <span>{value}</span>
 	}
-	return <span>{value}</span>
 }

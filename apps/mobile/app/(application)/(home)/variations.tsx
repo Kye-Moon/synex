@@ -16,6 +16,7 @@ export default function VariationsScreen() {
             <View style={styles.buttonContainer}>
                 <Link asChild={true} href={{pathname: '/new-variation/VariationDetails'}}>
                     <Button
+                        variant={'outline'}
                         width={'90%'}
                         size="xl"
                     >

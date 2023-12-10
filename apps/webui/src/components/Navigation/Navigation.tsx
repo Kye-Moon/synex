@@ -1,18 +1,19 @@
-import {CircleStackIcon, HomeIcon} from "@heroicons/react/24/outline";
+import {HomeIcon} from "@heroicons/react/24/outline";
+import {BriefcaseIcon, FileTextIcon, UserCogIcon, UsersIcon} from "lucide-react";
 
 export interface NavigationItemProps {
-	label: string;
-	icon: any;
-	route: string;
+    label: string;
+    icon: any;
+    route: string;
 }
 
 export const sideBarMenuItems: NavigationItemProps[] = [
-	{ label: "Dashboard", route: "/dashboard", icon: HomeIcon },
-	{ label: "Jobs", route: "/jobs", icon: CircleStackIcon },
-	{ label: "Variations", route: "/variations", icon: CircleStackIcon },
-	{ label: "Supervisors / Crew", route: "/crew", icon: CircleStackIcon },
+    {label: "Dashboard", route: "/dashboard", icon: HomeIcon},
+    {label: "Jobs", route: "/jobs", icon: BriefcaseIcon},
+    {label: "Variations", route: "/variations", icon: FileTextIcon},
+    {label: "Supervisors / Crew", route: "/crew", icon: UsersIcon},
 ];
 
 export const adminMenuItems: NavigationItemProps[] = [
-	{label: "Admins", route: '/admins', icon: CircleStackIcon}
+    {label: "Admins", route: '/admins', icon: UserCogIcon}
 ]

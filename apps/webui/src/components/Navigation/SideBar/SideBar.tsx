@@ -15,7 +15,6 @@ export default function SideBar() {
 
     const handleLogout = async () => {
         setTokenState('');
-        await router.navigate({to: '/login'})
     }
 
     return (

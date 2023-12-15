@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "mobile-app2",
+    "name": "varify",
     "slug": "varify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Logo.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/logo.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

@@ -20,8 +20,6 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signInSchema} from "./signinSchema";
 import FormInputWrapper from "../components/FormInputWrapper";
-// @ts-ignore
-import Logo from "../assets/images/Logo.png";
 
 export const loginMutationMobile = graphql(`
     mutation LoginMutationMobile($input: LoginInput!) {
@@ -76,7 +74,7 @@ export default function SignIn() {
                 style={{flex: 1}}
             >
                 <Center style={styles.content}>
-                    <Image alt={'logo'} source={Logo} style={styles.logo}/>
+                    {/*<Image alt={'logo'} source={'Logo'} style={styles.logo}/>*/}
                     <Controller
                         control={form.control}
                         name="email"

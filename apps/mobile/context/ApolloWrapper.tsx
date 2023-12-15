@@ -18,7 +18,7 @@ export function ApolloWrapper({children}: React.PropsWithChildren) {
     });
 
     const httpLink = new HttpLink({
-        uri: 'http://localhost:4000/graphql',
+        uri: 'https://varify-server.onrender.com/graphql',
         headers: {
             authorization: authToken ? `Bearer ${authToken}` : "",
         },

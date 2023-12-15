@@ -16,10 +16,19 @@ type UserAuth {
   orgId: String!
 }
 
+type VerificationTokenResponse {
+  msg: String!
+  phone: String!
+  email: String!
+}
+
+type VerifiedCodeResponse {
+  reset_password_token: String!
+}
+
 type Organisation {
   id: String!
   name: String!
-  createdBy: String!
 }
 
 type User {
@@ -160,6 +169,9 @@ input VariationSearchInput {
 type Mutation {
   login(loginUserInput: LoginInput!): LoginResponse!
   signup(signupInput: SignUpInput!): LoginResponse!
+  requestVerificationCode(email: String!): VerificationTokenResponse!
+  verifyOTP(input: VerifyCodeInput!): VerifiedCodeResponse!
+  resetPassword(input: ResetPasswordInput!): LoginResponse!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
@@ -188,6 +200,16 @@ input SignUpInput {
   lastName: String!
   organisationName: String!
   email: String!
+  password: String!
+}
+
+input VerifyCodeInput {
+  email: String!
+  code: String!
+}
+
+input ResetPasswordInput {
+  token: String!
   password: String!
 }
 

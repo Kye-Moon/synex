@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mobile-app2",
-    "slug": "mobile-app2",
+    "slug": "varify",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Logo.png",
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.synex.varify"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,6 +30,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7b3fa9dc-6e0b-4945-99f5-6564fae037c8"
+      }
+    },
+    "owner": "kyemoon"
   }
 }

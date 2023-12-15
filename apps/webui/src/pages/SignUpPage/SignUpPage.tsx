@@ -12,6 +12,9 @@ import {Input} from "@/Primitives/Input";
 import {graphql} from "../../../../../packages/gql-types";
 import {signupMutation} from "@/Services/authService";
 import {useRouter} from "@tanstack/react-router";
+import Logo from "@/Assets/Logo.png";
+import LoginForm from "@/Pages/LoginPage/LoginForm";
+import SignUpForm from "@/Pages/SignUpPage/SignUpForm";
 
 const signUpSchema = z.object({
 	firstName: z.string(),
@@ -23,113 +26,24 @@ const signUpSchema = z.object({
 type SignUpInput = InferType<typeof signUpSchema>;
 
 export default function Signup() {
-	const router = useRouter();
-	const form = useForm<SignUpInput>({
-		resolver: zodResolver(signUpSchema),
-		defaultValues: {
-			firstName: "",
-			lastName: "",
-			organisationName: "",
-			email: "",
-			password: "",
-		},
-	});
-
-	const [signup] = useMutation(signupMutation, {
-		onCompleted: async (data) => {
-			toast("Signed up successfully");
-			await router.navigate({to: '/dashboard'})
-		},
-		onError: (error) => {
-			toast.error(error.message);
-		},
-	});
-
-	const onSubmit = async (values: SignUpInput) => {
-		await signup({variables: {input: values}});
-	};
-
 	return (
 		<div className="flex  min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-			<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-						<div className={'flex space-x-2 w-full justify-between'}>
-							<div className="mt-2">
-								<FormField
-									control={form.control}
-									name="firstName"
-									render={({field}) => (
-										<FormInputWrapper label={"First name"}>
-											<Input {...field} />
-										</FormInputWrapper>
-									)}
-								/>
-							</div>
-							<div className="mt-2">
-								<FormField
-									control={form.control}
-									name="lastName"
-									render={({field}) => (
-										<FormInputWrapper label={"Last name"}>
-											<Input {...field} />
-										</FormInputWrapper>
-									)}
-								/>
-							</div>
-						</div>
-						<div>
-							<div className="mt-2">
-								<FormField
-									control={form.control}
-									name="organisationName"
-									render={({field}) => (
-										<FormInputWrapper label={"Organisation name"}
-														  description={"A unique name for your organisation"}>
-											<Input {...field} />
-										</FormInputWrapper>
-									)}
-								/>
-							</div>
-						</div>
-						<div>
-							<div className="mt-2">
-								<FormField
-									control={form.control}
-									name="email"
-									render={({field}) => (
-										<FormInputWrapper label={"Work email"}>
-											<Input {...field} />
-										</FormInputWrapper>
-									)}
-								/>
-							</div>
-						</div>
-						<div>
-							<div className="mt-2">
-								<FormField
-									control={form.control}
-									name="password"
-									render={({field}) => (
-										<FormInputWrapper label={"Your password"}
-														  description={"Min 8 Characters"}>
-											<Input type={"password"} {...field} />
-										</FormInputWrapper>
-									)}
-								/>
-							</div>
-						</div>
-						<div>
-							<button
-								type="submit"
-								className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-							>
-								Sign up
-							</button>
-						</div>
-					</form>
-				</Form>
+			<div className={'flex justify-center'}>
+				<img
+					className="h-16 w-auto"
+					src={Logo}
+					alt="Workflow"
+				/>
 			</div>
+			<div>
+				<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+					Sign up as an organisation
+				</h2>
+			</div>
+			<SignUpForm/>
+			<h2 className="mt-6 text-center text-sm font-semibold text-gray-900">
+				Already have an account? <a href={'/login'} className={'text-blue-500'}>Login</a>
+			</h2>
 		</div>
 	);
 }

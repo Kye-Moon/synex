@@ -5,7 +5,7 @@ import PageHeadingWithMetaAndActions
 import React, {Suspense} from "react";
 import PageContentSection from "@/Components/PageContentSection";
 import NewOrgMemberDialog from "@/Components/NewOrgMemberDialog/NewOrgMemberDialog";
-import AdminPageTableSection from "@/Pages/SupervisorPage/AdminPageTableSection";
+import AdminPageTableSection from "@/Pages/AdminPage/AdminPageTableSection";
 
 const crewPageActions: PageHeadingActionButtonProps[] = [
 	{

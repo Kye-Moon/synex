@@ -16,141 +16,180 @@ import EditVariationPage from "@/Pages/EditVariationPage/EditVariationPage";
 import ScrollToTop from "./ScrollToTop";
 import Login from "@/Pages/LoginPage/LoginPage";
 import {userState} from "@/State/state";
-import AdminPage from "@/Pages/SupervisorPage/AdminPage";
+import AdminPage from "@/Pages/AdminPage/AdminPage";
 import {useRecoilValue} from "recoil";
+import PasswordResetPage from "@/Pages/PasswordResetPage/PasswordResetPage";
 
 const rootRoute = new RootRoute({
-    component: () => (
-        <>
-            <Toaster/>
-			<ScrollToTop />
-            <Outlet/>
-        </>
-    ),
+	component: () => (
+		<>
+			<Toaster/>
+			<ScrollToTop/>
+			<Outlet/>
+		</>
+	),
 });
 
 async function Index() {
-    const router = useRouter();
-    const userInfo = useRecoilValue(userState);
-    if (userInfo) {
-        await router.navigate({to: "/dashboard"});
-    } else {
-        await router.navigate({to: "/login"});
-    }
-    return null;
+	const router = useRouter();
+	const userInfo = useRecoilValue(userState);
+	if (userInfo) {
+		await router.navigate({to: "/dashboard"});
+	} else {
+		await router.navigate({to: "/login"});
+	}
+	return null;
 }
+
+function UnAuthenticatedIndex() {
+	const router = useRouter();
+	const userInfo = useRecoilValue(userState);
+
+
+	useEffect(() => {
+		async function checkUser() {
+			if (userInfo) {
+				await router.navigate({to: "/dashboard"});
+			} else {
+				await router.navigate({to: "/login"});
+			}
+		}
+		checkUser();
+	}, [userInfo]);
+	return (
+		<>
+			<Toaster/>
+			<Outlet/>
+		</>
+	);
+}
+
+const unAuthenticatedLayoutRoute = new Route({
+	getParentRoute: () => rootRoute,
+	id: "unAuthenticatedLayout",
+	component: UnAuthenticatedIndex,
+});
 
 
 const indexRoute = new Route({
-    getParentRoute: () => rootRoute,
-    path: "/",
-    component: Index,
+	getParentRoute: () => rootRoute,
+	path: "/",
+	component: Index,
 });
 
 
 const signupRoute = new Route({
-    getParentRoute: () => rootRoute,
-    path: "/signup",
-    component: Signup,
+	getParentRoute: () => unAuthenticatedLayoutRoute,
+	path: "/signup",
+	component: Signup,
 });
 
 const loginRoute = new Route({
-    getParentRoute: () => rootRoute,
-    path: "/login",
-    component: Login,
+	getParentRoute: () => unAuthenticatedLayoutRoute,
+	path: "/login",
+	component: Login,
+});
+
+const passwordResetRoute = new Route({
+	getParentRoute: () => unAuthenticatedLayoutRoute,
+	path: "/reset-password",
+	component: PasswordResetPage,
 });
 
 const layoutRoute = new Route({
-    getParentRoute: () => rootRoute,
-    id: "layout",
-    component: AppLayout,
+	getParentRoute: () => rootRoute,
+	id: "layout",
+	component: AppLayout,
 });
 
 const dashboardRoute = new Route({
-    getParentRoute: () => layoutRoute,
-    path: "dashboard",
-    component: DashboardPage,
+	getParentRoute: () => layoutRoute,
+	path: "dashboard",
+	component: DashboardPage,
 });
 
 const jobsRoute = new Route({
-    getParentRoute: () => layoutRoute,
-    path: "jobs",
+	getParentRoute: () => layoutRoute,
+	path: "jobs",
 });
 
 const jobIndexRoute = new Route({
-    getParentRoute: () => jobsRoute,
-    path: "/",
-    component: JobsPage,
+	getParentRoute: () => jobsRoute,
+	path: "/",
+	component: JobsPage,
 });
 
 const jobRoute = new Route({
-    getParentRoute: () => jobsRoute,
-    path: "$jobId",
-    component: JobPage,
+	getParentRoute: () => jobsRoute,
+	path: "$jobId",
+	component: JobPage,
 });
 
 const editJobRoute = new Route({
-    getParentRoute: () => jobsRoute,
-    path: "$jobId/edit",
-    component: EditJobPage,
+	getParentRoute: () => jobsRoute,
+	path: "$jobId/edit",
+	component: EditJobPage,
 });
 
 
 const variationsRoute = new Route({
-    getParentRoute: () => layoutRoute,
-    path: "variations",
+	getParentRoute: () => layoutRoute,
+	path: "variations",
 });
 
 const variationIndexRoute = new Route({
-    getParentRoute: () => variationsRoute,
-    path: "/",
-    component: VariationsPage,
+	getParentRoute: () => variationsRoute,
+	path: "/",
+	component: VariationsPage,
 });
 
 const variationRoute = new Route({
-    getParentRoute: () => variationsRoute,
-    path: "$variationId",
-    component: VariationPage,
+	getParentRoute: () => variationsRoute,
+	path: "$variationId",
+	component: VariationPage,
 });
 
 const editVariationRoute = new Route({
-    getParentRoute: () => variationsRoute,
-    path: "$variationId/edit",
-    component: EditVariationPage,
+	getParentRoute: () => variationsRoute,
+	path: "$variationId/edit",
+	component: EditVariationPage,
 });
 
 const crewRoute = new Route({
-    getParentRoute: () => layoutRoute,
-    path: "/crew",
-    component: CrewPage,
+	getParentRoute: () => layoutRoute,
+	path: "/crew",
+	component: CrewPage,
 });
 
 const adminRoute = new Route({
-    getParentRoute: () => layoutRoute,
-    path: "/admins",
-    component: AdminPage,
+	getParentRoute: () => layoutRoute,
+	path: "/admins",
+	component: AdminPage,
 });
 
 const routeTree = rootRoute.addChildren([
-    indexRoute,
-     signupRoute,
-     loginRoute,
-    layoutRoute.addChildren([
-        dashboardRoute,
-        jobsRoute.addChildren([jobIndexRoute, jobRoute, editJobRoute]),
-        variationsRoute.addChildren([variationIndexRoute, variationRoute, editVariationRoute]),
-        crewRoute,
-        adminRoute,
-    ]),
+	indexRoute,
+	unAuthenticatedLayoutRoute.addChildren([
+		signupRoute,
+		loginRoute,
+		passwordResetRoute,
+	]),
+	layoutRoute.addChildren([
+		dashboardRoute,
+		jobsRoute.addChildren([jobIndexRoute, jobRoute, editJobRoute]),
+		variationsRoute.addChildren([variationIndexRoute, variationRoute, editVariationRoute]),
+		crewRoute,
+		adminRoute,
+	]),
 ]);
 const router = new Router({
-    routeTree,
+	routeTree,
 });
 
 declare module "@tanstack/react-router" {
-    interface Register {
-        router: typeof router;
-    }
+	interface Register {
+		router: typeof router;
+	}
 }
 
 export {router};

@@ -6,8 +6,9 @@ import {
 import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
 import {variationsTableQuery} from "@/Services/variationService";
-import {useMemo} from "react";
+import React, {useMemo} from "react";
 import {da} from "date-fns/locale";
+import TableEmptyState from "@/Components/TableEmptyState";
 
 interface VariationTableProps {
 	filterType?: 'ACTION' | 'CONFIRMED' | 'ARCHIVED';
@@ -33,6 +34,11 @@ export default function VariationTable({}: VariationTableProps) {
 		})
 	},[])
 
+
+	//Empty state
+	if (variationRows.length === 0) {
+		return (<TableEmptyState mainText={"No variations found"} subText={"Variations will appear here when submitted by a crew member or supervisor"}/>)
+	}
 	return (
 		<div>
 			<DataTable

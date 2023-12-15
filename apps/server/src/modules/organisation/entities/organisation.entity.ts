@@ -8,7 +8,4 @@ export class Organisation {
 
   @Field(() => String)
   name: string;
-
-  @Field(() => String)
-  createdBy: string;
 }

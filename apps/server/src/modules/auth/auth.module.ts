@@ -9,6 +9,7 @@ import {JwtStrategy} from './jwt.strategy';
 import {LocalStrategy} from './local.stratedgy';
 import {OrganisationModule} from "../organisation/organisation.module";
 import {EmailModule} from "../email/email.module";
+import {SmsModule} from "../sms/sms.module";
 
 @Module({
     providers: [
@@ -20,7 +21,7 @@ import {EmailModule} from "../email/email.module";
         LocalStrategy,
 
     ],
-    imports: [UserModule, PassportModule, ConfigModule, OrganisationModule, EmailModule],
+    imports: [UserModule, PassportModule, ConfigModule, OrganisationModule, EmailModule,SmsModule],
     exports: [AuthService],
 })
 export class AuthModule {

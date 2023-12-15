@@ -25,11 +25,14 @@ const documents = {
     "\n    mutation UpdateVariation($input: UpdateVariationInput!) {\n        updateVariation(updateVariationInput: $input) {\n            id\n        }\n    }\n": types.UpdateVariationDocument,
     "\n    mutation CreateVariationInitialData($input: CreateVariationInitialDataInput!) {\n        createVariationInitialData(createVariationInitialDataInput: $input) {\n            id\n        }\n    }\n": types.CreateVariationInitialDataDocument,
     "\n\tmutation CreateOrgUser($input: CreateUserInput!) {\n\t\tcreateUser(createUserInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\temail\n\t\t}\n\t}\n": types.CreateOrgUserDocument,
+    "\n\tquery AdminPageTableSection($input: SearchUserInput!) {\n\t\tsearchUsers(userSearchInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\trole\n\t\t}\n\t}\n": types.AdminPageTableSectionDocument,
     "\n    query CrewPageTableSection($input: SearchUserInput!) {\n        searchUsers(userSearchInput: $input) {\n            id\n            name\n            phone\n            role\n        }\n    }\n": types.CrewPageTableSectionDocument,
     "\n    mutation DeleteJob($input: String!) {\n        deleteJob(id: $input)\n    }\n": types.DeleteJobDocument,
-    "\n\tquery AdminPageTableSection($input: SearchUserInput!) {\n\t\tsearchUsers(userSearchInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\trole\n\t\t}\n\t}\n": types.AdminPageTableSectionDocument,
     "\n\tmutation LoginMutation($input: LoginInput!) {\n\t\tlogin(loginUserInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n": types.LoginMutationDocument,
     "\n\tmutation SignUpMutation($input: SignUpInput!) {\n\t\tsignup(signupInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n": types.SignUpMutationDocument,
+    "\n    mutation GetOTP($email: String!) {\n        requestVerificationCode(email: $email) {\n            msg\n            phone\n\t\t\temail\n        }\n    }\n": types.GetOtpDocument,
+    "\n\tmutation VerifyOTP($input: VerifyCodeInput!) {\n\t\tverifyOTP(input: $input) {\n\t\t\treset_password_token\n\t\t}\n\t}\n": types.VerifyOtpDocument,
+    "\n\tmutation ResetPassword($input: ResetPasswordInput!) {\n\t\tresetPassword(input: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n": types.ResetPasswordDocument,
     "\n\tmutation CreateJobMutation($input: CreateJobInput!) {\n\t\tcreateJob(createJobInput: $input) {\n\t\t\tid\n\t\t\ttitle\n\t\t}\n\t}\n": types.CreateJobMutationDocument,
     "\n    mutation UpdateJob($input: UpdateJobInput!) {\n        updateJob(updateJobInput: $input){\n            id\t\n        }\n    }\n": types.UpdateJobDocument,
     "\n\tquery DashboardSearchJobs($input: JobSearchInput!) {\n\t\tsearchJobs(jobSearchInput: $input) {\n\t\t\tid\n\t\t\ttitle\n\t\t\tcustomerName\n\t\t\tstatus\n\t\t\tdueDate\n\t\t\tdescription\n\t\t}\n\t}\n": types.DashboardSearchJobsDocument,
@@ -111,6 +114,10 @@ export function graphql(source: "\n\tmutation CreateOrgUser($input: CreateUserIn
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n\tquery AdminPageTableSection($input: SearchUserInput!) {\n\t\tsearchUsers(userSearchInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\trole\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery AdminPageTableSection($input: SearchUserInput!) {\n\t\tsearchUsers(userSearchInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\trole\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n    query CrewPageTableSection($input: SearchUserInput!) {\n        searchUsers(userSearchInput: $input) {\n            id\n            name\n            phone\n            role\n        }\n    }\n"): (typeof documents)["\n    query CrewPageTableSection($input: SearchUserInput!) {\n        searchUsers(userSearchInput: $input) {\n            id\n            name\n            phone\n            role\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -119,15 +126,23 @@ export function graphql(source: "\n    mutation DeleteJob($input: String!) {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery AdminPageTableSection($input: SearchUserInput!) {\n\t\tsearchUsers(userSearchInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\trole\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery AdminPageTableSection($input: SearchUserInput!) {\n\t\tsearchUsers(userSearchInput: $input) {\n\t\t\tid\n\t\t\tname\n\t\t\tphone\n\t\t\trole\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n\tmutation LoginMutation($input: LoginInput!) {\n\t\tlogin(loginUserInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation LoginMutation($input: LoginInput!) {\n\t\tlogin(loginUserInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation SignUpMutation($input: SignUpInput!) {\n\t\tsignup(signupInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation SignUpMutation($input: SignUpInput!) {\n\t\tsignup(signupInput: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation GetOTP($email: String!) {\n        requestVerificationCode(email: $email) {\n            msg\n            phone\n\t\t\temail\n        }\n    }\n"): (typeof documents)["\n    mutation GetOTP($email: String!) {\n        requestVerificationCode(email: $email) {\n            msg\n            phone\n\t\t\temail\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation VerifyOTP($input: VerifyCodeInput!) {\n\t\tverifyOTP(input: $input) {\n\t\t\treset_password_token\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation VerifyOTP($input: VerifyCodeInput!) {\n\t\tverifyOTP(input: $input) {\n\t\t\treset_password_token\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation ResetPassword($input: ResetPasswordInput!) {\n\t\tresetPassword(input: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation ResetPassword($input: ResetPasswordInput!) {\n\t\tresetPassword(input: $input) {\n\t\t\taccess_token\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

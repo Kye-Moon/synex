@@ -3,17 +3,15 @@ import {LoginInput} from './dto/login.input';
 import * as bcrypt from 'bcrypt';
 import {User} from '../user/entities/user.entity';
 import {ConfigService} from '@nestjs/config';
-import {CreateUserInput} from '../user/dto/create-user.input';
 
 import * as jwt from 'jsonwebtoken';
-import {RefreshTokenInput} from './dto/refreshTokenInput';
 import {LoginResponse} from './dto/login-response';
 import {UserRepository} from '../user/user.repository';
 import {SignUpInput} from "./dto/signUp.input";
 import {OrganisationService} from "../organisation/organisation.service";
-import {organisation} from "../../drizzle/schema";
 import {Organisation} from "../organisation/entities/organisation.entity";
-import {EmailService} from "../email/email.service";
+import {SmsService} from "../sms/sms.service";
+import {use} from "passport";
 
 
 @Injectable()
@@ -22,6 +20,7 @@ export class AuthService {
         private userRepository: UserRepository,
         private organisationService: OrganisationService,
         private readonly configService: ConfigService,
+        private readonly smsService: SmsService
     ) {
     }
 
@@ -31,8 +30,7 @@ export class AuthService {
         if (!user) {
             throw new Error('User with this email does not exist');
         }
-        const hash = await bcrypt.hash(password, 10);
-        const isMatch = bcrypt.compare(password, hash);
+        const isMatch = await bcrypt.compare(password, user.user.password);
         if (!isMatch) {
             throw new Error('Password is invalid');
         }
@@ -47,7 +45,6 @@ export class AuthService {
             role: user.user.role,
             orgId: user.organisation.id,
         };
-
         return {
             access_token: jwt.sign(payload, this.configService.get('JWT_SECRET'), {
                 expiresIn: '1d',
@@ -76,9 +73,8 @@ export class AuthService {
         if (user) {
             throw new Error('User already exists, login instead');
         }
-        await this.checkOrganisationName(payload.organisationName);
 
-        const hash = await bcrypt.hash("123", 10); // Change to payload.password
+        const hash = await bcrypt.hash(password, 10); // Change to payload.password
 
         const organisation = await this.organisationService.create({name: payload.organisationName});
         const newUser = await this.userRepository.createUser({
@@ -104,11 +100,47 @@ export class AuthService {
         };
     }
 
-    async checkOrganisationName(name: string) {
-        const org = await this.organisationService.findOneByName(name);
-        if (org) {
-            throw new Error('Organisation already exists, please choose another name or contact your admin to be invited to the organisation');
+    async requestVerification(email: string) {
+        const user = await this.userRepository.findOneByEmail(email);
+        if (!user) {
+            throw new Error('User with this email does not exist');
         }
-        return true;
+        const result = await this.smsService.sendOtp(user.phone);
+        return {
+            msg: result.msg,
+            phone: user.phone,
+            email: user.email
+        }
+    }
+
+    async verifyOTP(code: string, email: string) {
+        const user = await this.userRepository.findOneByEmail(email);
+        if (!user) {
+            throw new Error('User with this email does not exist');
+        }
+        const result = await this.smsService.verifyOtp(user.phone, code);
+        if (result.msg === "approved") {
+            return {
+                reset_password_token: jwt.sign({sub: user.id}, this.configService.get('JWT_SECRET'), {
+                    expiresIn: '10m',
+                })
+            }
+        } else {
+            throw new Error('Invalid verification code');
+        }
+    }
+
+
+    async resetPassword(token: string, password: string) {
+        console.log(password);
+        const decoded = jwt.verify(token, this.configService.get('JWT_SECRET'));
+        const user = await this.userRepository.findOneById(decoded.sub as string);
+        if (!user) {
+            throw new Error('User with this email does not exist');
+        }
+        const hash = await bcrypt.hash(password, 10);
+        await this.userRepository.updateUser(user.id, {password: hash});
+        const userOrg = await this.userRepository.findOneByEmailWithOrganisation(user.email);
+        return this.login({user: userOrg.user, organisation: userOrg.organisation});
     }
 }

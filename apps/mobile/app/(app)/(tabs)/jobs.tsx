@@ -1,7 +1,7 @@
-import React, {Suspense} from 'react';
-import {Box, Text, View} from "@gluestack-ui/themed";
+import {Text, View} from "@gluestack-ui/themed";
 import {StyleSheet} from "react-native";
-import JobsCell from "../../../components/home/JobsCell/JobsCell";
+import JobsCell from "../../..//components/home/JobsCell/JobsCell";
+import React, {Suspense} from "react";
 
 
 export default function Jobs() {

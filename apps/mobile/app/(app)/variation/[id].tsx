@@ -2,7 +2,6 @@ import React, {Suspense} from "react";
 import {Text} from "@gluestack-ui/themed";
 import {useLocalSearchParams} from "expo-router";
 import Header from "../../../components/Header";
-import JobCell from "../../../components/JobCell/JobCell";
 import VariationCell from "../../../components/VariationCell";
 
 export default function Variation() {
@@ -12,7 +11,7 @@ export default function Variation() {
         <>
             <Header title={variationTitle}/>
             <Suspense fallback={<Text>Loading...</Text>}>
-                <VariationCell variationId={id}/>
+                <VariationCell variationId={id ?? ""}/>
             </Suspense>
         </>
 

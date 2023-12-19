@@ -1,56 +1,50 @@
-import {Stack} from "expo-router";
-import {GluestackUIProvider} from "@gluestack-ui/themed"
+import {Slot, SplashScreen} from "expo-router";
+import {GluestackUIProvider, Text} from "@gluestack-ui/themed"
 import {RecoilRoot} from "recoil";
-import React, {Suspense} from "react";
+import React, {Suspense, useEffect} from "react";
 import {ApolloWrapper} from "../context/ApolloWrapper";
 import {config} from "../config/gluestack-ui.config";
-import {StyleSheet} from 'react-native';
 import {loadDevMessages, loadErrorMessages} from "@apollo/client/dev";
+
+import {registerRootComponent} from "expo";
 
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
 } from 'expo-router';
-
 export const unstable_settings = {
-    // Ensure any route can link back to `/`
-    initialRouteName: '/(application)/(home)/variations',
+    // Ensure that reloading on `/modal` keeps a back button present.
+    initialRouteName: '(tabs)',
 };
+const {App} = require('expo-router/_app');
+registerRootComponent(App);
 
 if (__DEV__) {  // Adds messages only in a dev environment
     loadDevMessages();
     loadErrorMessages();
+
+    const reactotron = require("../reactotron-config").default;
+    reactotron.initiate()
 }
-export default function RootLayout() {
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+export default function Root() {
+
+
+    useEffect(() => {
+        SplashScreen.hideAsync();
+    }, []);
+
+
     return (
         <GluestackUIProvider config={config}>
             <RecoilRoot>
-                <Suspense>
-                    <AppWrapper/>
+                <Suspense fallback={<Text>Loading...</Text>}>
+                    <ApolloWrapper>
+                            <Slot/>
+                    </ApolloWrapper>
                 </Suspense>
             </RecoilRoot>
         </GluestackUIProvider>
     )
 }
-
-const AppWrapper = () => {
-    return (
-        <ApolloWrapper>
-                <Stack initialRouteName={'(application)'}>
-                    <Stack.Screen name="(application)" options={{headerShown: false}}/>
-                    <Stack.Screen name="sign-in" options={{headerShown: false}}/>
-                </Stack>
-        </ApolloWrapper>
-    )
-}
-const styles = StyleSheet.create({
-    spinner: {
-        position: 'absolute',
-        width: '100%',
-        zIndex: 1000,
-        height: '100%',
-        backgroundColor: '#000',
-        opacity: 0.5,
-    }
-});
-

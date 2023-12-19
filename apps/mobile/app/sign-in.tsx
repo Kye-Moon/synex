@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Box,
     Button,
@@ -8,20 +8,19 @@ import {
     Image,
     Input,
     InputField,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Pressable
 } from "@gluestack-ui/themed";
-import {Platform, StyleSheet} from "react-native";
+import {Alert, Platform, StyleSheet} from "react-native";
 import {useMutation} from "@apollo/client";
 import {graphql} from "gql-types";
-import {useRecoilState} from "recoil";
-import {accessTokenState} from "../state/atoms";
 import {useRouter} from "expo-router";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signInSchema} from "./signinSchema";
 import FormInputWrapper from "../components/FormInputWrapper";
-// @ts-ignore
-import Logo from "../assets/images/Logo.png";
+import {accessTokenState, API_URLS, apiUrlState} from "../state/atoms";
+import {useRecoilState, useRecoilStateLoadable} from "recoil";
 
 export const loginMutationMobile = graphql(`
     mutation LoginMutationMobile($input: LoginInput!) {
@@ -36,9 +35,35 @@ export const loginMutationMobile = graphql(`
 `);
 
 export default function SignIn() {
-    const [accessToken, setAccess] = useRecoilState(accessTokenState)
-
     const router = useRouter();
+    const [logoPressCount, setLogoPressCount] = useState(0);
+    const [api,setApi] = useRecoilStateLoadable(apiUrlState);
+    const  [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+
+    useEffect(() => {
+        if (accessToken) {
+            router.push('/(app)/(tabs)')
+        }
+    }, [accessToken]);
+    const handlePressLogo = () => {
+        if (logoPressCount === 4) {
+            Alert.alert(
+                'Select Server',
+                'Select the server you’d like to use',
+                Object.entries(API_URLS).map(([key, value]) => ({
+                    text: key.toUpperCase(),
+                    onPress: () => {
+                        setApi(value);
+                    },
+                })),
+            );
+            setLogoPressCount(0);
+        } else {
+            setLogoPressCount(prev => prev + 1);
+        }
+    };
+
+
     const form = useForm({
         mode: 'onBlur',
         resolver: zodResolver(signInSchema),
@@ -53,7 +78,7 @@ export default function SignIn() {
             console.log(error);
         },
         onCompleted: async (data) => {
-            setAccess(data.login.access_token)
+            setAccessToken(data.login.access_token);
         }
     })
 
@@ -66,7 +91,7 @@ export default function SignIn() {
                 },
             }
         })
-        router.push('/(application)/(home)/variations')
+        router.push('/(app)/(tabs)')
     }
 
     return (
@@ -76,7 +101,9 @@ export default function SignIn() {
                 style={{flex: 1}}
             >
                 <Center style={styles.content}>
-                    <Image alt={'logo'} source={Logo} style={styles.logo}/>
+                    <Pressable onPress={handlePressLogo}>
+                        <Image alt={'logo'} source={require('../assets/images/Logo.png')} style={styles.logo}/>
+                    </Pressable>
                     <Controller
                         control={form.control}
                         name="email"

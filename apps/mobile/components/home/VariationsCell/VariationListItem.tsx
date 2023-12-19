@@ -26,7 +26,7 @@ export default function VariationListItem({variation}: VariationListItemProps) {
                     <Text size={'2xs'}>{`Submitted by - ${variation.submittedBy.name}`}</Text>
                 </VStack>
                 <Link asChild={true}
-                      href={{pathname: "/(application)/variation/[id]", params: {id: variation.id, variationTitle: variation.title}}}>
+                      href={{pathname: "/(app)/variation/[id]", params: {id: variation.id, variationTitle: variation.title}}}>
                     <Button size={'xs'} width={'$20'}>
                         <ButtonText>View </ButtonText>
                         <ButtonIcon as={EyeIcon}/>

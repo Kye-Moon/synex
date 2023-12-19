@@ -1,10 +1,8 @@
 import {JobsCellQuery} from "gql-types";
 import {Box, Button, ButtonIcon, ButtonText, Divider, FlatList, HStack, Text, VStack} from "@gluestack-ui/themed";
-import VariationListItem from "../VariationsCell/VariationListItem";
 import React from "react";
 import {truncate} from "../../../lib/utils";
 import {StyleSheet} from "react-native";
-import {it} from "node:test";
 import {EyeIcon} from "lucide-react-native";
 import {Link} from "expo-router";
 
@@ -34,7 +32,7 @@ export default function JobsList({jobs}: JobListProps) {
                             <Text size="md">{item.title}</Text>
                             <Text size={'2xs'}>{truncate(item.description, 25)}</Text>
                         </VStack>
-                        <Link asChild={true}  href={{pathname: "/(application)/job/[id]", params: {id: item.id, jobTitle: item.title}}}>
+                        <Link asChild={true}  href={{pathname: "/(app)/job/[id]", params: {id: item.id, jobTitle: item.title}}}>
                             <Button size={'xs'} width={'$20'}>
                                 <ButtonText>View </ButtonText>
                                 <ButtonIcon as={EyeIcon}/>

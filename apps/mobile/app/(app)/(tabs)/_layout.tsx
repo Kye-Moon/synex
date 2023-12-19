@@ -1,11 +1,22 @@
-import {Tabs} from "expo-router";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {Tabs} from 'expo-router';
+import React from 'react';
 import {ClipboardListIcon, KanbanIcon, SettingsIcon} from "lucide-react-native";
-import React from "react";
 
-export default function ApplicationLayout() {
+/**
+ * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+ */
+function TabBarIcon(props: {
+    name: React.ComponentProps<typeof FontAwesome>['name'];
+    color: string;
+}) {
+    return <FontAwesome size={28} style={{marginBottom: -3}} {...props} />;
+}
+
+export default function TabLayout() {
+
     return (
         <Tabs
-            initialRouteName="variations"
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: '#000',
@@ -17,13 +28,13 @@ export default function ApplicationLayout() {
                 options={{
                     title: 'Jobs',
                     tabBarActiveTintColor: '#fff',
-                    tabBarIcon: ({ color}) => (
+                    tabBarIcon: ({color}) => (
                         <KanbanIcon color={color}/>
                     ),
                 }}
             />
             <Tabs.Screen
-                name="variations"
+                name="index"
                 options={{
                     title: 'Variations',
                     tabBarActiveTintColor: '#fff',

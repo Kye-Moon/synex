@@ -1,5 +1,6 @@
 import {Stack, useRouter} from "expo-router";
 import {ArrowLeftIcon, Icon, Pressable} from "@gluestack-ui/themed";
+import React from "react";
 
 export default function NewVariationLayout() {
     const router = useRouter();

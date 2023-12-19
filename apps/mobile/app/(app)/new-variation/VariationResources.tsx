@@ -33,7 +33,7 @@ export default function VariationResources() {
         await saveInitialData({
             variables: {
                 input: {
-                    variationId: id,
+                    variationId: id ?? "",
                     hours: data.estimatedHours,
                     numPeople: data.numPeople,
                     who: data.who,
@@ -43,7 +43,7 @@ export default function VariationResources() {
             }
         })
         showSuccessToast({message: 'Variation details saved', toast})
-        router.replace(`/(application)/(home)/variations`)
+        router.push(`../(tabs)/index`)
     };
 
     return (

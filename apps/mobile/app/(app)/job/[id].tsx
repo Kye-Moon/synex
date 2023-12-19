@@ -1,9 +1,8 @@
-import {Button, ButtonIcon, Center, HStack, Box, Pressable, Text, View} from "@gluestack-ui/themed";
+import {Text} from "@gluestack-ui/themed";
 import {useLocalSearchParams} from "expo-router";
 import JobCell from "../../../components/JobCell/JobCell";
 import React, {Suspense} from "react";
 import {StyleSheet} from "react-native";
-import {ChevronLeftIcon, SkipBackIcon} from "lucide-react-native";
 import Header from "../../../components/Header";
 
 export default function Job() {
@@ -12,7 +11,7 @@ export default function Job() {
         <>
             <Header title={jobTitle}/>
             <Suspense fallback={<Text>Loading...</Text>}>
-                <JobCell jobId={id}/>
+                <JobCell jobId={id ?? ''}/>
             </Suspense>
         </>
 

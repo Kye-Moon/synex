@@ -4,6 +4,9 @@
     "apps/*",
     "packages/*"
   ],
+  "nohoist": [
+    "**"
+  ],
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",

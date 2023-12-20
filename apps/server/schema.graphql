@@ -75,7 +75,7 @@ type Variation {
   status: String!
   job: Job!
   submittedBy: User!
-  initialData: VariationInitialData!
+  initialData: VariationInitialData
   images: [VariationImage!]!
   createdAt: DateTime!
   updatedAt: DateTime!

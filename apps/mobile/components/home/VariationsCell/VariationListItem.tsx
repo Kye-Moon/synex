@@ -20,7 +20,7 @@ export default function VariationListItem({variation}: VariationListItemProps) {
         >
             <HStack style={styles.row}>
                 <VStack>
-                    <Text size="md">{variation.title}</Text>
+                    <Text fontWeight={'700'} size="md">{variation.title}</Text>
                     <Text size={'2xs'}>{truncate(variation.description, 25)}</Text>
                     <Text size={'2xs'}>{`Job - ${variation.job.title}`}</Text>
                     <Text size={'2xs'}>{`Submitted by - ${variation.submittedBy.name}`}</Text>

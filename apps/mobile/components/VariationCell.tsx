@@ -20,6 +20,13 @@ const query = graphql(`
             submittedBy {
                 name
             }
+            initialData {
+                hours
+                numPeople
+                who
+                materials
+                equipment
+            }
             images {
                 id
                 url
@@ -42,17 +49,17 @@ export default function VariationCell({variationId}: { variationId: string }) {
                 </ScreenContentSection>
                 <ScreenContentSection heading={"Initial Information"}>
                     <View style={styles.container}>
-                        <LabelAndValue label={'Est. hours'} value={"TODO"}/>
-                        <LabelAndValue label={'Num people'} value={'TODO'}/>
+                        <LabelAndValue label={'Est. hours'} value={data.variation.initialData?.hours}/>
+                        <LabelAndValue label={'Num people'} value={data.variation.initialData?.numPeople}/>
                     </View>
                     <View style={styles.container}>
-                        <LabelAndValue label={'Who?'} value={"TODO"}/>
+                        <LabelAndValue label={'Who?'} value={data.variation.initialData?.who}/>
                     </View>
                     <View style={styles.container}>
-                        <LabelAndValue label={'Material'} value={"TODO"}/>
+                        <LabelAndValue label={'Material'} value={data.variation.initialData?.materials}/>
                     </View>
                     <View style={styles.container}>
-                        <LabelAndValue label={'Equipment'} value={"TODO"}/>
+                        <LabelAndValue label={'Equipment'} value={data.variation.initialData?.equipment}/>
                     </View>
                 </ScreenContentSection>
                 <ScreenContentSection heading={"Images"}>

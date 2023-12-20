@@ -10,7 +10,7 @@ export default function Variation() {
         <>
             <Header title={variationTitle}/>
             <Suspense fallback={<Text>Loading...</Text>}>
-                <VariationCell variationId={id ?? ""}/>
+                <VariationCell variationId={id}/>
             </Suspense>
         </>
     )

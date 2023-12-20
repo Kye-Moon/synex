@@ -4,7 +4,10 @@
     "strict": true,
     "jsx": "react",
     "target": "ES6",
-    "module": "esnext" // 👈️ set to esn
+    "module": "esnext", // 👈️ set to esn
+    "declaration": true,
+    "declarationMap": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "**/*.ts",

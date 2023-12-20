@@ -10,6 +10,7 @@ interface ToastProps {
 interface ErrorToastProps extends ToastProps {
     error: ApolloError
 }
+
 interface SuccessToastProps extends ToastProps {
     message: string
 }
@@ -17,7 +18,7 @@ interface SuccessToastProps extends ToastProps {
 
 export function showErrorToast({error, toast, placement = "top right"}: ErrorToastProps) {
     return toast.show({
-        placement: "top right",
+        placement: placement,
         render: ({id}: { id: string }) => {
             return (
                 <Toast
@@ -39,7 +40,7 @@ export function showErrorToast({error, toast, placement = "top right"}: ErrorToa
 
 export const showSuccessToast = ({message, toast, placement = "top right"}: SuccessToastProps) => {
     return toast.show({
-        placement: "top right",
+        placement: placement,
         render: ({id}: { id: string }) => {
             return (
                 <Toast

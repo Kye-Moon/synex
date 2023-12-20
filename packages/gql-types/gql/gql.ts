@@ -18,6 +18,9 @@ const documents = {
     "\n    query Settings {\n        currentUser {\n            name\n            email\n            role\n            organisation {\n                name\n            }\n        }\n    }\n": types.SettingsDocument,
     "\n    query JobCell($jobId: String!) {\n        job(id: $jobId) {\n            id\n            title\n            description\n            status\n            customerName\n            dueDate\n            variations {\n                id\n                title\n                description\n            }\n        }\n    }\n": types.JobCellDocument,
     "\n    query JobSelect($input: JobSearchInput!) {\n        searchJobs(jobSearchInput: $input) {\n            id\n            title\n        }\n    }\n": types.JobSelectDocument,
+    "\n    mutation GetOTP($email: String!) {\n        requestVerificationCode(email: $email) {\n            msg\n            phone\n            email\n        }\n    }\n": types.GetOtpDocument,
+    "\n    mutation ResetPassword($input: ResetPasswordInput!) {\n        resetPassword(input: $input) {\n            access_token\n        }\n    }\n": types.ResetPasswordDocument,
+    "\n    mutation VerifyOTP($input: VerifyCodeInput!) {\n        verifyOTP(input: $input) {\n            reset_password_token\n        }\n    }\n": types.VerifyOtpDocument,
     "\n    query VariationCell($variationId: String!) {\n        variation(id: $variationId) {\n            id\n            title\n            description\n            job {\n                customerName\n            }\n            submittedBy {\n                name\n            }\n            images {\n                id\n                url\n            }\n        }\n    }\n": types.VariationCellDocument,
     "\n    query JobsCell($input: JobSearchInput!) {\n        searchJobs(jobSearchInput: $input) {\n            id\n            title\n            customerName\n            status\n            dueDate\n            description\n        }\n    }\n": types.JobsCellDocument,
     "\n    query VariationsCell($input: VariationSearchInput!) {\n        searchVariations(variationSearchInput: $input) {\n            id\n            title\n            description\n            job {\n                title\n            }\n            submittedBy {\n                name\n            }\n        }\n    }\n": types.VariationsCellDocument,
@@ -83,6 +86,18 @@ export function graphql(source: "\n    query JobCell($jobId: String!) {\n       
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    query JobSelect($input: JobSearchInput!) {\n        searchJobs(jobSearchInput: $input) {\n            id\n            title\n        }\n    }\n"): (typeof documents)["\n    query JobSelect($input: JobSearchInput!) {\n        searchJobs(jobSearchInput: $input) {\n            id\n            title\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation GetOTP($email: String!) {\n        requestVerificationCode(email: $email) {\n            msg\n            phone\n            email\n        }\n    }\n"): (typeof documents)["\n    mutation GetOTP($email: String!) {\n        requestVerificationCode(email: $email) {\n            msg\n            phone\n            email\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation ResetPassword($input: ResetPasswordInput!) {\n        resetPassword(input: $input) {\n            access_token\n        }\n    }\n"): (typeof documents)["\n    mutation ResetPassword($input: ResetPasswordInput!) {\n        resetPassword(input: $input) {\n            access_token\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation VerifyOTP($input: VerifyCodeInput!) {\n        verifyOTP(input: $input) {\n            reset_password_token\n        }\n    }\n"): (typeof documents)["\n    mutation VerifyOTP($input: VerifyCodeInput!) {\n        verifyOTP(input: $input) {\n            reset_password_token\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

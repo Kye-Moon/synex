@@ -1,19 +1,19 @@
-import {Button, ButtonText, View} from "@gluestack-ui/themed";
+import {Button, ButtonText, View, Text} from "@gluestack-ui/themed";
 import {useSetRecoilState} from "recoil";
 import {accessTokenState} from "../../../state/atoms";
-import React from "react";
+import React, {Suspense} from "react";
 import {StyleSheet} from "react-native";
 import ScreenSection from "../../../components/ScreenSection";
-
+import AccountDetailsCell from "../../../components/AccountDetailsCell";
 
 export default function Settings() {
     const setToken = useSetRecoilState(accessTokenState)
     return (
         <ScreenSection>
             <View style={styles.content}>
-                {/*<Suspense fallback={<Text>Loading...</Text>}>*/}
-                {/*    /!*<AccountDetailsCell/>*!/*/}
-                {/*</Suspense>*/}
+                <Suspense fallback={<Text>Loading...</Text>}>
+                    <AccountDetailsCell/>
+                </Suspense>
                 <View style={styles.bottom}>
                     <Button variant={'outline'} onPress={() => setToken('')}>
                         <ButtonText>Logout</ButtonText>
@@ -23,6 +23,7 @@ export default function Settings() {
         </ScreenSection>
     );
 }
+
 const styles = StyleSheet.create({
     content: {
         flex: 1,

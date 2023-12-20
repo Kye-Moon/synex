@@ -6,7 +6,6 @@ import {Form, FormField} from "@/Primitives/Form";
 import FormInputWrapper from "@/Components/FormInputWrapper/FormInputWrapper";
 import {Input} from "@/Primitives/Input";
 import React from "react";
-import {ResetPasswordStates} from "@/Pages/PasswordResetPage/PasswordResetPage";
 import {useMutation} from "@apollo/client";
 import {getOTP} from "@/Services/authService";
 
@@ -16,12 +15,11 @@ const enterPhoneSchema = z.object({
 });
 export type EnterPhoneNum = InferType<typeof enterPhoneSchema>;
 
-interface EnterPhoneNumberProps {
-	setState: (state: ResetPasswordStates) => void
+interface EnterEmailProps {
 	onSubmit?: (values: EnterPhoneNum) => void
 }
 
-export const EnterPhoneNumber = ({setState, onSubmit}: EnterPhoneNumberProps) => {
+export const EnterEmailForReset = ({onSubmit}: EnterEmailProps) => {
 	const [getOTPMutation] = useMutation(getOTP)
 	const form = useForm<EnterPhoneNum>({
 		resolver: zodResolver(enterPhoneSchema),

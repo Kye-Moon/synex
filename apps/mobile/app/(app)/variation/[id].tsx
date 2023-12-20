@@ -6,7 +6,6 @@ import VariationCell from "../../../components/VariationCell";
 
 export default function Variation() {
     const {id, variationTitle} = useLocalSearchParams<{ id: string, variationTitle: string }>();
-
     return (
         <>
             <Header title={variationTitle}/>
@@ -14,6 +13,5 @@ export default function Variation() {
                 <VariationCell variationId={id ?? ""}/>
             </Suspense>
         </>
-
     )
 }

@@ -1,11 +1,12 @@
 import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
 import ScreenSection from "./ScreenSection";
-import {Image, ScrollView, View} from "@gluestack-ui/themed";
+import {ScrollView, View} from "@gluestack-ui/themed";
 import ScreenContentSection from "./ScreenContentSection";
 import LabelAndValue from "./LabelAndValue";
 import React from "react";
 import {StyleSheet} from "react-native";
+import {ImageGrid} from "./ImageGridPreview";
 
 const query = graphql(`
     query VariationCell($variationId: String!) {
@@ -30,7 +31,7 @@ export default function VariationCell({variationId}: { variationId: string }) {
     const {data} = useSuspenseQuery(query, {variables: {variationId: variationId}})
     return (
         <ScreenSection>
-            <ScrollView >
+            <ScrollView>
                 <ScreenContentSection heading={"Details"}>
                     <View style={styles.details}>
                         <LabelAndValue label={'Job'} value={data.variation.title}/>
@@ -55,20 +56,7 @@ export default function VariationCell({variationId}: { variationId: string }) {
                     </View>
                 </ScreenContentSection>
                 <ScreenContentSection heading={"Images"}>
-                    <View style={styles.imageContainer}>
-                        {data.variation.images.map((image: any) => {
-                            return (
-                                <Image
-                                    size="lg"
-                                    alt={'Image of the variation'}
-                                    borderRadius={8}
-                                    source={{
-                                        uri: image.url,
-                                    }}
-                                />
-                            )
-                        })}
-                    </View>
+                    <ImageGrid images={data.variation.images} size={4}/>
                 </ScreenContentSection>
                 <View padding={'$10'}></View>
             </ScrollView>

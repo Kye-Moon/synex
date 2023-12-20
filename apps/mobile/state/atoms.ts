@@ -7,9 +7,7 @@ export const accessTokenState = atom({
     effects: [
         ({onSet, setSelf}) => {
             onSet(async (newValue: any, _: any, isReset: any) => {
-                if (newValue) {
-                    await SecureStore.setItemAsync('access_token', JSON.stringify(newValue));
-                }
+                await SecureStore.setItemAsync('access_token', JSON.stringify(newValue));
             });
             setSelf(SecureStore.getItemAsync('access_token').then((value) =>
                 value != null ? JSON.parse(value) : new DefaultValue()

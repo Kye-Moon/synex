@@ -9,6 +9,7 @@ import {
     VStack
 } from "@gluestack-ui/themed";
 import React from "react";
+import {StyleSheet, Platform, Keyboard, TouchableWithoutFeedback} from "react-native";
 
 interface FormPageTemplateProps {
     children: React.ReactNode
@@ -19,20 +20,33 @@ interface FormPageTemplateProps {
 
 export default function FormPageTemplate({form, children, buttonLabel, onSubmit}: FormPageTemplateProps) {
     return (
-        <KeyboardAvoidingView>
-            <View bg={'white'} w={'100%'} h={'100%'}>
-                <ScrollView>
-                    <VStack space="md" my={'$4'} mx={'$4'} h={'100%'}>
-                        {children}
-                    </VStack>
-                </ScrollView>
-                <Box bg={'transparent'}>
-                    <Button mx={'$8'} mb={"$8"} onPress={form.handleSubmit(onSubmit)}>
-                        <ButtonText>{buttonLabel}</ButtonText>
-                        {form.formState.isSubmitting && <ButtonSpinner/>}
-                    </Button>
-                </Box>
-            </View>
+
+
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View bg={'white'} w={'100%'} h={'100%'}>
+                    <ScrollView>
+                        <VStack space="md" my={'$4'} mx={'$4'} h={'100%'}>
+                            {children}
+                        </VStack>
+                    </ScrollView>
+                    <Box bg={'transparent'}>
+                        <Button mx={'$8'} mb={"$8"} onPress={form.handleSubmit(onSubmit)}>
+                            <ButtonText>{buttonLabel}</ButtonText>
+                            {form.formState.isSubmitting && <ButtonSpinner/>}
+                        </Button>
+                    </Box>
+                </View>
+            </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+});

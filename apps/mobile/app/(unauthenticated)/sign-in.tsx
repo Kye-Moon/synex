@@ -9,7 +9,8 @@ import {
     Input,
     InputField,
     KeyboardAvoidingView,
-    Pressable
+    Pressable,
+    Text
 } from "@gluestack-ui/themed";
 import {Alert, Platform, StyleSheet} from "react-native";
 import {useMutation} from "@apollo/client";
@@ -18,9 +19,9 @@ import {useRouter} from "expo-router";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {signInSchema} from "./signinSchema";
-import FormInputWrapper from "../components/FormInputWrapper";
-import {accessTokenState, API_URLS, apiUrlState} from "../state/atoms";
-import {useRecoilState, useRecoilStateLoadable} from "recoil";
+import FormInputWrapper from "../../components/FormInputWrapper";
+import {accessTokenState, API_URLS, apiUrlState} from "../../state/atoms";
+import {useRecoilState, useSetRecoilState} from "recoil";
 
 export const loginMutationMobile = graphql(`
     mutation LoginMutationMobile($input: LoginInput!) {
@@ -37,8 +38,8 @@ export const loginMutationMobile = graphql(`
 export default function SignIn() {
     const router = useRouter();
     const [logoPressCount, setLogoPressCount] = useState(0);
-    const [api,setApi] = useRecoilStateLoadable(apiUrlState);
-    const  [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+    const  setApi = useSetRecoilState(apiUrlState);
+    const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
     useEffect(() => {
         if (accessToken) {
@@ -65,7 +66,6 @@ export default function SignIn() {
 
 
     const form = useForm({
-        mode: 'onBlur',
         resolver: zodResolver(signInSchema),
         defaultValues: {
             email: '',
@@ -76,6 +76,7 @@ export default function SignIn() {
     const [login] = useMutation(loginMutationMobile, {
         onError: (error) => {
             console.log(error);
+            throw error;
         },
         onCompleted: async (data) => {
             setAccessToken(data.login.access_token);
@@ -102,7 +103,7 @@ export default function SignIn() {
             >
                 <Center style={styles.content}>
                     <Pressable onPress={handlePressLogo}>
-                        <Image alt={'logo'} source={require('../assets/images/Logo.png')} style={styles.logo}/>
+                        <Image alt={'logo'} source={require('../../assets/images/Logo.png')} style={styles.logo}/>
                     </Pressable>
                     <Controller
                         control={form.control}
@@ -111,6 +112,7 @@ export default function SignIn() {
                             <FormInputWrapper title={'Email'} formState={formState} field={field}>
                                 <Input w={'100%'}>
                                     <InputField
+                                        type={'text'}
                                         onBlur={field.onBlur}
                                         value={field.value}
                                         onChange={value => field.onChange(value.nativeEvent.text)}
@@ -135,9 +137,12 @@ export default function SignIn() {
                             </FormInputWrapper>
                         )}
                     />
-                    <Button w={'100%'} mx={'$8'} mb={"$8"} onPress={form.handleSubmit(onSubmit)}>
+                    <Button w={'100%'} mx={'$8'} onPress={form.handleSubmit(onSubmit)}>
                         {form.formState.isSubmitting ? <ButtonSpinner/> : <ButtonText>Sign in</ButtonText>}
                     </Button>
+                    <Pressable onPress={() => router.push('/reset-password')}>
+                        <Text size={'sm'}>Forgot password?</Text>
+                    </Pressable>
                 </Center>
             </KeyboardAvoidingView>
         </Box>

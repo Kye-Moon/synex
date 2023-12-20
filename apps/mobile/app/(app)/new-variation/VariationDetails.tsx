@@ -3,10 +3,7 @@ import {
     Box,
     Button,
     ButtonGroup,
-    ButtonIcon,
-    FlatList,
     HStack,
-    Image,
     Input,
     InputField,
     Text,
@@ -28,6 +25,7 @@ import {uploadImages} from "../../../lib/s3";
 import {useRouter} from "expo-router";
 import {createMutation, updateMutation} from "../../../lib/variationService";
 import JobSelect from "../../../components/JobSelect/JobSelect";
+import {ImageGridPreview} from "../../../components/ImageGridPreview";
 
 
 const preSignedUrlQuery = graphql(`
@@ -166,29 +164,23 @@ export default function NewVariationDetails() {
             <Box>
                 <HStack marginTop={12} width={'$full'} gap={'$4'} justifyContent='space-between' alignItems={'center'}>
                     <Text size={'lg'} bold>Images</Text>
-                    <ButtonGroup space="md">
-                        <Button size={'sm'} w={'$24'} onPress={takePhoto}>
-                            <ButtonIcon as={Camera}/>
+                    <ButtonGroup>
+                        <Button size={'sm'} onPress={takePhoto}>
+                            <Camera color={'white'}/>
                         </Button>
-                        <Button size={'sm'} w={'$24'} onPress={pickImage}>
-                            <ButtonIcon as={ImagePlus}/>
+                        <Button size={'sm'} onPress={pickImage}>
+                            <ImagePlus color={'white'}/>
                         </Button>
                     </ButtonGroup>
                 </HStack>
-                <Text size={'xs'}>Choose or take up to 8 images</Text>
+                <Text py={'$2'} size={'xs'}>Choose or take up to 8 images</Text>
                 <Box>
-                    <FlatList
-                        data={images}
-                        numColumns={4}
-                        renderItem={({item}: { item: any }) => (
-                            <Box key={item.uri} p={'$1'}>
-                                <Image alt={'img'} size={'md'} rounded={'$md'} source={{uri: item.uri}}/>
-                            </Box>
-                        )}
-                    />
+                    <ImageGridPreview images={images} size={4}/>
                 </Box>
             </Box>
         </FormPageTemplate>
     );
 }
+
+
 

@@ -38,17 +38,14 @@ export const Button = createStyle({
       primary: {
         'bg': '$primary500',
         'borderColor': '$primary300',
-
         ':hover': {
           bg: '$primary600',
           borderColor: '$primary400',
         },
-
         ':active': {
           bg: '$primary700',
           borderColor: '$primary700',
         },
-
         '_text': {
           'color': '$primary600',
           ':hover': {
@@ -58,7 +55,6 @@ export const Button = createStyle({
             color: '$primary700',
           },
         },
-
         '_icon': {
           'color': '$primary600',
           ':hover': {

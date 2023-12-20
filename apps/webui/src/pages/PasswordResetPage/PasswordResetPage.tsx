@@ -1,17 +1,8 @@
 import Logo from "@/Assets/Logo.png";
-import LoginForm from "@/Pages/LoginPage/LoginForm";
 import React from "react";
-import * as z from "zod";
-import {InferType} from "prop-types";
-import FormInputWrapper from "@/Components/FormInputWrapper/FormInputWrapper";
-import {Input} from "@/Primitives/Input";
-import {FormField, Form} from "@/Primitives/Form";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {EnterPhoneNumber} from "@/Pages/PasswordResetPage/EnterPhoneNumber";
-import {FetchResult, useMutation} from "@apollo/client";
-import {getOTP, verifyOTP} from "@/Services/authService";
-import {GetOtpMutation, VerifyOtpMutation} from "../../../../../packages/gql-types";
+import {EnterEmailForReset} from "@/Pages/PasswordResetPage/EnterEmailForReset";
+import {FetchResult} from "@apollo/client";
+import {GetOtpMutation, VerifyOtpMutation} from "gql-types";
 import {VerifyOTP} from "@/Pages/PasswordResetPage/VerifyCode";
 import toast from "react-hot-toast";
 import {NewPassword} from "@/Pages/PasswordResetPage/NewPassword";
@@ -55,7 +46,7 @@ export default function PasswordResetPage() {
 				</h2>
 			</div>
 			{state === ResetPasswordStates.PHONE_NUMBER &&
-				<EnterPhoneNumber onSubmit={handleCodeRequestSuccess} setState={setState}/>}
+				<EnterEmailForReset onSubmit={handleCodeRequestSuccess}/>}
 			{state === ResetPasswordStates.OTP &&
 				<VerifyOTP onSuccess={handleVerifySuccess} email={email} phoneNum={phoneNum}
 						   setState={setState}/>}

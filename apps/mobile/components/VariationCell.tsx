@@ -15,6 +15,7 @@ const query = graphql(`
             title
             description
             job {
+                title
                 customerName
             }
             submittedBy {

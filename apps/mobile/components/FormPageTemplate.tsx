@@ -20,8 +20,6 @@ interface FormPageTemplateProps {
 
 export default function FormPageTemplate({form, children, buttonLabel, onSubmit}: FormPageTemplateProps) {
     return (
-
-
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
@@ -35,8 +33,7 @@ export default function FormPageTemplate({form, children, buttonLabel, onSubmit}
                     </ScrollView>
                     <Box bg={'transparent'}>
                         <Button mx={'$8'} mb={"$8"} onPress={form.handleSubmit(onSubmit)}>
-                            <ButtonText>{buttonLabel}</ButtonText>
-                            {form.formState.isSubmitting && <ButtonSpinner/>}
+                            {form.formState.isSubmitting ? <ButtonSpinner/> : <ButtonText>Next</ButtonText>}
                         </Button>
                     </Box>
                 </View>

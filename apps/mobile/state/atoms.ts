@@ -27,9 +27,7 @@ export const apiUrlState = atom({
     effects: [
         ({onSet, setSelf}) => {
             onSet(async (newValue: any, _: any, isReset: any) => {
-                if (newValue) {
                     await SecureStore.setItemAsync('api_url', JSON.stringify(newValue));
-                }
             });
             setSelf(SecureStore.getItemAsync('api_url').then((value) =>
                 value != null ? JSON.parse(value) : new DefaultValue()

@@ -24,11 +24,11 @@ export default function VariationTable({}: VariationTableProps) {
 				title: variation.title,
 				description: variation.description,
 				submittedBy: variation.submittedBy.name,
-				estimatedTime: variation.initialData.hours,
-				estimatedPeople: variation.initialData.numPeople,
-				material: variation.initialData.materials,
+				estimatedTime: variation.initialData?.hours,
+				estimatedPeople: variation.initialData?.numPeople,
+				material: variation.initialData?.materials,
 				status: variation.status,
-				equipment: variation.initialData.equipment,
+				equipment: variation.initialData?.equipment,
 				createdAt: variation.createdAt,
 			}
 		})

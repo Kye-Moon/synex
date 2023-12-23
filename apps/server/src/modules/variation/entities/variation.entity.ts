@@ -24,7 +24,7 @@ export class Variation {
     @Field(() => User)
     submittedBy: User
 
-    @Field(() => VariationInitialData)
+    @Field(() => VariationInitialData, {nullable: true})
     initialData: VariationInitialData
 
     @Field(() => [VariationImage])

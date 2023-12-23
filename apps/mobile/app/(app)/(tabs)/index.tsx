@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import React, {Suspense} from 'react';
 import {AddIcon, Button, ButtonIcon, ButtonText, Text, View} from "@gluestack-ui/themed";
 import VariationsCell from "../../../components/home/VariationsCell/VariationsCell";

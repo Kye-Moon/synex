@@ -29,21 +29,25 @@ export default function VariationResources() {
         onCompleted: (data) => console.log(data)
     })
 
-    const onSubmit = async (data: any) => {
-        await saveInitialData({
-            variables: {
-                input: {
-                    variationId: id ?? "",
-                    hours: data.estimatedHours,
-                    numPeople: data.numPeople,
-                    who: data.who,
-                    materials: data.materials,
-                    equipment: data.equipment
+    const onSubmit = async (data: VariationResourcesFormType) => {
+        console.log(data)
+
+        if (form.formState.isDirty) {
+            await saveInitialData({
+                variables: {
+                    input: {
+                        variationId: id,
+                        hours: data.estimatedHours,
+                        numPeople: data.numPeople,
+                        who: data.who,
+                        materials: data.materials,
+                        equipment: data.equipment
+                    }
                 }
-            }
-        })
+            })
+        }
         showSuccessToast({message: 'Variation details saved', toast})
-        router.push(`../(tabs)/index`)
+        router.replace(`/`)
     };
 
     return (

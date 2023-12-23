@@ -18,7 +18,6 @@ interface VariationListProps {
 export default function VariationList({variations}: VariationListProps) {
     return (
         <>
-
             <FlatList
                 height={'88%'}
                 marginHorizontal={'$4'}

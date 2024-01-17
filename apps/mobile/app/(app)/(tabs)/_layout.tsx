@@ -36,7 +36,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: 'Variations',
+                    title: 'Job Records',
                     tabBarActiveTintColor: '#fff',
                     tabBarIcon: ({ color}) => (
                         <ClipboardListIcon color={color}/>

@@ -10,8 +10,8 @@ export class User {
     @Field(() => String)
     id: string;
 
-    @Field(() => String)
-    phone: string;
+    @Field(() => String,{nullable: true})
+    phone?: string;
 
     @Field(() => String)
     password: string;

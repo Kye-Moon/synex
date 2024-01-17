@@ -8,7 +8,7 @@ import {
     FormControlHelper,
     FormControlHelperText,
     FormControlLabel,
-    FormControlLabelText
+    FormControlLabelText, Text
 } from "@gluestack-ui/themed";
 import {ControllerRenderProps, FieldValues, UseFormStateReturn} from "react-hook-form";
 
@@ -18,9 +18,10 @@ interface FormInputWrapperProps {
     field: ControllerRenderProps<any, any>
     helperText?: string
     title?: string
+    isRequired?: boolean
 }
 
-export default function FormInputWrapper({children, formState, field, helperText, title}: FormInputWrapperProps): JSX.Element {
+export default function FormInputWrapper({children, formState, field, helperText, title, isRequired = false}: FormInputWrapperProps): JSX.Element {
     return (
         <>
             <FormControl
@@ -30,9 +31,10 @@ export default function FormInputWrapper({children, formState, field, helperText
                 {title && (
                     <FormControlLabel mb="$1">
                         <FormControlLabelText>{title}</FormControlLabelText>
+                        {isRequired && <Text ml={2} color={'red'}>*</Text>}
                     </FormControlLabel>
                 )}
-                    {children}
+                {children}
                 {helperText && (
                     <FormControlHelper>
                         <FormControlHelperText>
@@ -43,7 +45,7 @@ export default function FormInputWrapper({children, formState, field, helperText
                 <FormControlError>
                     <FormControlErrorIcon as={AlertCircleIcon}/>
                     <FormControlErrorText>
-                        {formState.errors[`${field.name}`] !== undefined ? formState.errors[`${field.name}`]?.message : ''}
+                        {formState.errors[`${field.name}`] !== undefined ? formState.errors[`${field.name}`]?.message as any : ''}
                     </FormControlErrorText>
                 </FormControlError>
             </FormControl>

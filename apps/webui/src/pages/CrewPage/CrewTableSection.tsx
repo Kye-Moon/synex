@@ -21,7 +21,7 @@ interface CrewTableSectionProps {
     initialSelected?: string[];
 }
 
-export default function CrewTableSection({showSelect, tableCaption,     initialSelected = []}: CrewTableSectionProps) {
+export default function CrewTableSection({showSelect, tableCaption,  initialSelected = []}: CrewTableSectionProps) {
     const {data} = useSuspenseQuery(query, {variables: {input: {role: ["CREW_MEMBER", "SUPERVISOR"]}}})
 
 	//Empty state

@@ -12,7 +12,9 @@
     "build": "turbo build",
     "clean": "turbo clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
-    "codegen": "graphql-codegen --config codegen.ts --watch"
+    "codegen": "graphql-codegen --config codegen.ts --watch",
+    "localDB:start": "cd test/config && docker-compose up -d",
+    "localDB:stop": "cd test/config && docker-compose down"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",

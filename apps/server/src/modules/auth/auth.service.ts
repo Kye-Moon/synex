@@ -11,7 +11,6 @@ import {SignUpInput} from "./dto/signUp.input";
 import {OrganisationService} from "../organisation/organisation.service";
 import {Organisation} from "../organisation/entities/organisation.entity";
 import {SmsService} from "../sms/sms.service";
-import {use} from "passport";
 
 
 @Injectable()
@@ -86,10 +85,16 @@ export class AuthService {
             status: 'ACTIVE',
         });
         return {
-            access_token: jwt.sign(payload, this.configService.get('JWT_SECRET'), {
+            access_token: jwt.sign({
+                ...payload,
+                role: 'OWNER',
+            }, this.configService.get('JWT_SECRET'), {
                 expiresIn: '1d',
             }),
-            refresh_token: jwt.sign(payload, this.configService.get('JWT_SECRET'), {
+            refresh_token: jwt.sign({
+                ...payload,
+                role: 'OWNER',
+            }, this.configService.get('JWT_SECRET'), {
                 expiresIn: '7d',
             }),
             user: {

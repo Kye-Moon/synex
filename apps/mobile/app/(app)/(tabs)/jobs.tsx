@@ -1,13 +1,14 @@
-import {Text, View} from "@gluestack-ui/themed";
+import {View} from "@gluestack-ui/themed";
 import {StyleSheet} from "react-native";
 import JobsCell from "../../..//components/home/JobsCell/JobsCell";
 import React, {Suspense} from "react";
+import LoadingSkeletonRows from "../../../components/Loading/SkeletonRows";
 
 
 export default function Jobs() {
     return (
         <View style={styles.container}>
-            <Suspense fallback={<Text>Loading...</Text>}>
+            <Suspense fallback={<LoadingSkeletonRows rows={6}/>}>
                 <JobsCell/>
             </Suspense>
         </View>

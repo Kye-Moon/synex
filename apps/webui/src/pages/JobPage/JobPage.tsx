@@ -5,9 +5,13 @@ import PageHeadingWithMetaAndActions, {
     PageHeadingActionButtonProps
 } from "@/Components/PageHeadingWithMetaAndActions/PageHeadingWithMetaAndActions";
 import PageContentSection from "@/Components/PageContentSection";
-import {dashboardSearchJobs, jobTableSearchJobs, jobWithCrewAndVariationsQuery} from "@/Services/jobService";
+import {
+    dashboardSearchJobs,
+    jobTableSearchJobs,
+    jobWithCrewAndVariationsQuery
+} from "@/Services/jobService";
 import JobDetails from "@/Pages/JobPage/JobDetails";
-import JobVariations from "@/Pages/JobPage/JobVariations";
+import JobRecords from "@/Pages/JobPage/JobRecords";
 import OrganisationMemberTable, {
     OrgMemberTableRowsProps
 } from "@/Components/OrganisationMemberTable/OrganisationMemberTable";
@@ -15,8 +19,9 @@ import React, {JSX} from "react";
 import {Button} from "@/Primitives/Button/Button";
 import {EditIcon} from "lucide-react";
 import DeleteItemDialog from "@/Components/DeleteItemDialog/DeleteItemDialog";
-import {navigate} from "@storybook/addon-links";
 import toast from "react-hot-toast";
+import BreadCrumb from "@/Components/BreadCrumbs/BreadCrumb";
+import {getJobPageBreadCrumb, getJobPageBreadCrumbWithJobName} from "@/Constants/breadcrumbs";
 
 const deleteJobMutation = graphql(`
     mutation DeleteJob($input: String!) {
@@ -55,7 +60,9 @@ export default function JobPage(): JSX.Element {
 
     return (
         <div className={'overflow-auto'}>
-            <PageHeadingWithMetaAndActions actions={jobPageActions} pageHeading={data?.job.title || ""}/>
+            <PageHeadingWithMetaAndActions actions={jobPageActions} pageHeading={data?.job.title ?? ""}/>
+            <BreadCrumb pages={getJobPageBreadCrumbWithJobName(data?.job.id, data?.job.title)}/>
+
             <PageContentSection>
                 <div className={'grid grid-cols-1 xl:grid-cols-2'}>
                     <div className={'col-span-1 space-y-4 '}>
@@ -78,8 +85,8 @@ export default function JobPage(): JSX.Element {
             <PageContentSection>
                 <div className={'grid grid-cols-1 xl:grid-cols-2'}>
                     <div className={'col-span-2 '}>
-                        <h1 className={'text-xl font-semibold'}>Variations</h1>
-                        <JobVariations variations={data?.searchVariations}/>
+                        <h1 className={'text-xl font-semibold'}>Records</h1>
+                        <JobRecords jobId={data?.job.id}/>
                     </div>
                 </div>
             </PageContentSection>

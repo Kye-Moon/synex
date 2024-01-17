@@ -22,17 +22,9 @@ export class VariationResourceRepository {
 
     async findVariationResources(id: string) {
         return await this.db.query.variationResource.findMany({
-            where: eq(variationResource.variationId, id)
+            where: eq(variationResource.jobRecordId, id)
         })
     }
-
-    // async findGroupedVariationResources(id: string) {
-    //     const result = await this.db.select({
-    //         type: variationResource.type,
-    //         variationId: variationResource.variationId,
-    //     }).from(variationResource).where(eq(variationResource.variationId, id)).groupBy(variationResource.type, variationResource.variationId)
-    //     console.log(result)
-    // }
 
      async delete(id: string) {
          const result = await this.db.delete(variationResource).where(eq(variationResource.id, id)).returning();

@@ -8,17 +8,17 @@ import Signup from "@/Pages/SignUpPage/SignUpPage";
 import JobsPage from "@/Pages/JobsPage/JobsPage";
 import {Toaster} from "react-hot-toast";
 import JobPage from "@/Pages/JobPage/JobPage";
-import VariationsPage from "@/Pages/VariationsPage/VariationsPage";
+import JobRecordsPage from "@/Pages/JobRecordsPage/JobRecordsPage";
 import EditJobPage from "@/Pages/EditJobPage/EditJobPage";
 import CrewPage from "@/Pages/CrewPage/CrewPage";
-import VariationPage from "@/Pages/VariationPage/VariationPage";
-import EditVariationPage from "@/Pages/EditVariationPage/EditVariationPage";
+import JobRecordPage from "@/Pages/JobRecordPage.tsx/JobRecordPage";
 import ScrollToTop from "./ScrollToTop";
 import Login from "@/Pages/LoginPage/LoginPage";
 import {userState} from "@/State/state";
 import AdminPage from "@/Pages/AdminPage/AdminPage";
 import {useRecoilValue} from "recoil";
 import PasswordResetPage from "@/Pages/PasswordResetPage/PasswordResetPage";
+import SettingsPage from "@/Pages/SettingsPage/SettingsPage";
 
 const rootRoute = new RootRoute({
 	component: () => (
@@ -45,15 +45,13 @@ function UnAuthenticatedIndex() {
 	const router = useRouter();
 	const userInfo = useRecoilValue(userState);
 
-
 	useEffect(() => {
 		async function checkUser() {
 			if (userInfo) {
 				await router.navigate({to: "/dashboard"});
-			} else {
-				await router.navigate({to: "/login"});
 			}
 		}
+
 		checkUser();
 	}, [userInfo]);
 	return (
@@ -132,27 +130,21 @@ const editJobRoute = new Route({
 });
 
 
-const variationsRoute = new Route({
+const jobRecordsRoute = new Route({
 	getParentRoute: () => layoutRoute,
-	path: "variations",
+	path: "job-records",
 });
 
 const variationIndexRoute = new Route({
-	getParentRoute: () => variationsRoute,
+	getParentRoute: () => jobRecordsRoute,
 	path: "/",
-	component: VariationsPage,
-});
-
-const variationRoute = new Route({
-	getParentRoute: () => variationsRoute,
-	path: "$variationId",
-	component: VariationPage,
+	component: JobRecordsPage,
 });
 
 const editVariationRoute = new Route({
-	getParentRoute: () => variationsRoute,
-	path: "$variationId/edit",
-	component: EditVariationPage,
+	getParentRoute: () => jobRecordsRoute,
+	path: "$jobRecordId/edit",
+	component: JobRecordPage,
 });
 
 const crewRoute = new Route({
@@ -166,6 +158,12 @@ const adminRoute = new Route({
 	path: "/admins",
 	component: AdminPage,
 });
+const settingsRoute = new Route({
+	getParentRoute: () => layoutRoute,
+	path: "/settings",
+	component: SettingsPage,
+});
+
 
 const routeTree = rootRoute.addChildren([
 	indexRoute,
@@ -177,9 +175,10 @@ const routeTree = rootRoute.addChildren([
 	layoutRoute.addChildren([
 		dashboardRoute,
 		jobsRoute.addChildren([jobIndexRoute, jobRoute, editJobRoute]),
-		variationsRoute.addChildren([variationIndexRoute, variationRoute, editVariationRoute]),
+		jobRecordsRoute.addChildren([variationIndexRoute, editVariationRoute]),
 		crewRoute,
 		adminRoute,
+		settingsRoute
 	]),
 ]);
 const router = new Router({

@@ -16,9 +16,9 @@ function RootLayoutNav() {
     return (
         <Stack>
             <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-            <Stack.Screen name="new-variation" options={{headerShown:false}}/>
+            <Stack.Screen name="new-job-record" options={{headerShown:false}}/>
             <Stack.Screen name="job/[id]" options={{headerShown:false}}/>
-            <Stack.Screen name="variation/[id]" options={{headerShown:false}}/>
+            <Stack.Screen name="job-record/[id]" options={{headerShown:false}}/>
         </Stack>
     );
 }

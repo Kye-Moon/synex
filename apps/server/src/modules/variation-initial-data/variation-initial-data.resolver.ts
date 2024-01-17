@@ -1,8 +1,7 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { VariationInitialDataService } from './variation-initial-data.service';
-import { VariationInitialData } from './entities/variation-initial-data.entity';
-import { CreateVariationInitialDataInput } from './dto/create-variation-initial-data.input';
-import { UpdateVariationInitialDataInput } from './dto/update-variation-initial-data.input';
+import {Args, Mutation, Resolver} from '@nestjs/graphql';
+import {VariationInitialDataService} from './variation-initial-data.service';
+import {VariationInitialData} from './entities/variation-initial-data.entity';
+import {CreateVariationInitialDataInput} from './dto/create-variation-initial-data.input';
 
 @Resolver(() => VariationInitialData)
 export class VariationInitialDataResolver {
@@ -10,7 +9,7 @@ export class VariationInitialDataResolver {
 
   @Mutation(() => VariationInitialData)
   createVariationInitialData(@Args('createVariationInitialDataInput') createVariationInitialDataInput: CreateVariationInitialDataInput) {
-    return this.variationInitialDataService.create(createVariationInitialDataInput);
+    return this.variationInitialDataService.create(createVariationInitialDataInput, "");
   }
 
   // @Query(() => [VariationInitialData], { name: 'variationInitialData' })

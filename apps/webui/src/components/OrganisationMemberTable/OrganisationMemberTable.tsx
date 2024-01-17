@@ -8,7 +8,7 @@ import {enumToSentenceCase, getUserTypeBadgeVariant} from "@/Lib/utils";
 export interface OrgMemberTableRowsProps {
     id: string;
     name: string;
-    phone: string;
+    phone?: string | null;
     role: string;
 }
 

@@ -1,9 +1,7 @@
 import StackedLabelAndValue from "@/Components/StackedLabelAndValue";
-import {Job} from "../../../../../packages/gql-types";
-import {parseISO} from "date-fns";
+import {isValid, parseISO} from "date-fns";
 import Badge from "@/Primitives/Badge/Badge";
-import {enumToSentenceCase, getStatusBadgeVariant} from "@/Lib/utils";
-import {Label} from "@/Primitives/Label";
+import {enumToSentenceCase, getJobStatusBadgeVariant} from "@/Lib/utils";
 import React from "react";
 
 interface JobDetailsProps {
@@ -24,17 +22,17 @@ export default function JobDetails({title, customerName, dueDate, status, descri
                 <StackedLabelAndValue label={'Customer Name'} value={customerName}/>
             </div>
             <div className="sm:col-span-3">
-                <StackedLabelAndValue label={'Due Date'} value={parseISO(dueDate).toDateString()}/>
+                <StackedLabelAndValue label={'Due Date'} value={isValid(dueDate) ? parseISO(dueDate).toDateString() : '-'}/>
             </div>
             <div className="sm:col-span-3 ">
                 <StackedLabelAndValue label={'Status'}
                                       value={
                                           <Badge text={status ? enumToSentenceCase(status) : '-'} size={"sm"}
-                                                 variant={status ? getStatusBadgeVariant(status) : 'default'}/>
+                                                 variant={status ? getJobStatusBadgeVariant(status) : 'default'}/>
                                       }/>
             </div>
-            <div className="sm:col-span-6">
-                <StackedLabelAndValue label={'Description'} value={description}/>
+            <div className="sm:col-span-6 mb-6">
+                <StackedLabelAndValue label={'Description'} value={description ? description : '-'}/>
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import {ColumnDef} from "@tanstack/react-table";
 import Badge from "@/Primitives/Badge/Badge";
-import {enumToSentenceCase} from "@/Lib/utils";
+import {enumToSentenceCase, getJobStatusBadgeVariant} from "@/Lib/utils";
 import {ArrowUpDown} from "lucide-react";
 import JobsTableActionCell from "@/Components/Jobs/JobsTable/JobsTableActionCell";
 
@@ -8,32 +8,12 @@ export interface JobsTableColumn {
     id: string;
     title: string;
     status: string;
-    dueDate: string;
     customer: string;
     numVariations: number;
+    qa: number;
+    safety: number;
+    notes: number;
 }
-
-const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-        case "IN_PROGRESS":
-            return "blue";
-        case "COMPLETE":
-            return "green";
-        case "NOT_STARTED":
-            return "yellow";
-    }
-};
-
-const getPriorityBadgeVariant = (priority: string) => {
-    switch (priority) {
-        case "LOW":
-            return "green";
-        case "MEDIUM":
-            return "yellow";
-        case "HIGH":
-            return "red";
-    }
-};
 
 export const jobsTableColumns: ColumnDef<JobsTableColumn>[] = [
     {
@@ -52,7 +32,7 @@ export const jobsTableColumns: ColumnDef<JobsTableColumn>[] = [
                     className={"flex items-center"}
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Status
+                    Job Status
                     <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </button>
             );
@@ -61,15 +41,67 @@ export const jobsTableColumns: ColumnDef<JobsTableColumn>[] = [
             return (
                 <Badge
                     size={"sm"}
-                    variant={getStatusBadgeVariant(row.getValue("status"))}
-                    text={enumToSentenceCase(row.getValue("status"))}
+                    variant={getJobStatusBadgeVariant(row.getValue("status"))}
+                    text={row.getValue("status") ? enumToSentenceCase(row.getValue("status")) : '-'}
                 />
             );
         },
     },
     {
+        accessorKey: "qa",
+        header: ({column}) => {
+            return (
+                <button
+                    className={"flex items-center"}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    # QA
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
+                </button>
+            );
+        }
+    },
+    {
+        accessorKey: "notes",
+        header: ({column}) => {
+            return (
+                <button
+                    className={"flex items-center"}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    # Notes
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
+                </button>
+            );
+        }
+    },
+    {
         accessorKey: "numVariations",
-        header: "Variations",
+        header: ({column}) => {
+            return (
+                <button
+                    className={"flex items-center"}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    # Variations
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
+                </button>
+            );
+        }
+    },
+    {
+        accessorKey: "safety",
+        header: ({column}) => {
+            return (
+                <button
+                    className={"flex items-center"}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    # Safety
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
+                </button>
+            );
+        }
     },
     {
         id: "actions",

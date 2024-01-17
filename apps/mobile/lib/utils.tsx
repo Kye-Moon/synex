@@ -25,3 +25,13 @@ export const getStatusBadgeVariant = (status: string) => {
             return "yellow";
     }
 };
+
+export const stripEmptyValues = (obj: any) => {
+    const newObj: any = {};
+    Object.entries(obj).forEach(([key, value]) => {
+        if (value) {
+            newObj[key] = value;
+        }
+    });
+    return newObj;
+}

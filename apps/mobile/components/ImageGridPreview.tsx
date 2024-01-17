@@ -26,7 +26,7 @@ export const ImageGridPreview = ({images, size, handleRemoveImage}: ImageGridPre
                     {row.map((item, index) => (
                         <View key={index} style={{padding: 8, width: '25%'}}>
                             <Image
-                                alt={'Image of the variation'}
+                                alt={'Image of the job-record'}
                                 source={{uri: item.uri}}
                                 style={{width: '100%', aspectRatio: 1, borderRadius: 10}}
                             />
@@ -62,7 +62,7 @@ export const ImageGrid = ({images, size}: { images: { id: string, url: string }[
                     {row.map((item, index) => (
                         <View key={index} style={{padding: 8, width: '25%'}}>
                             <Image
-                                alt={'Image of the variation'}
+                                alt={'Image of the job-record'}
                                 source={{uri: item.url}}
                                 style={{width: '100%', aspectRatio: 1, borderRadius: 10}}
                             />

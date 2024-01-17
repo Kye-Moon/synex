@@ -1,13 +1,15 @@
 import {graphql} from "gql-types";
 
 export const variationsTableQuery = graphql(`
-    query VariationTableSearchVariations($input: VariationSearchInput!) {
-        searchVariations(variationSearchInput: $input) {
+    query VariationTableSearchVariations($input: JobRecordSearchInput!) {
+		searchJobRecords(jobRecordSearchInput: $input) {
             id
             title
             description
 			createdAt
             status,
+            type,
+            flag,
             initialData {
                 id
                 numPeople
@@ -26,12 +28,14 @@ export const variationsTableQuery = graphql(`
 `)
 
 export const dashboardNotificationsQuery = graphql(`
-    query DashboardSearchVariations($input: VariationSearchInput!) {
-        searchVariations(variationSearchInput: $input) {
+    query DashboardSearchVariations($input: JobRecordSearchInput!) {
+		searchJobRecords(jobRecordSearchInput: $input) {
             id
             title
             description
             status,
+            flag,
+            type
             job {
                 title
             }
@@ -42,13 +46,15 @@ export const dashboardNotificationsQuery = graphql(`
     }
 `)
 
-export const variationQuery = graphql(`
+export const jobRecordQuery = graphql(`
     query Variation($id: String!) {
-        variation(id: $id) {
+		jobRecord(id: $id) {
             id
             title
             description
             status
+            type
+            flag
             createdAt
             initialData {
                 id
@@ -56,8 +62,10 @@ export const variationQuery = graphql(`
                 hours
                 materials
                 equipment
+				who
             }
             job {
+                id 
                 title
                 customerName
             }
@@ -72,3 +80,10 @@ export const variationQuery = graphql(`
     }
 `)
 
+export const jobRecordUpdateMutation = graphql(`
+    mutation UpdateJobRecord($input: UpdateJobRecordInput!) {
+        updateJobRecord(updateJobRecordInput: $input) {
+            id
+        }
+    }
+`);

@@ -46,7 +46,6 @@ export default function NewOrgMemberForm({
 											 defaultRole
 										 }: NewCrewMemberFormProps) {
 	const userInfo = useRecoilValue(userState);
-	console.log(defaultRole)
 	// The form hook for the NewProjectForm
 	const form = useForm<NewOrgMemberFormType>({
 		resolver: zodResolver(newOrgMemberFormSchema),
@@ -58,7 +57,7 @@ export default function NewOrgMemberForm({
 		},
 	});
 
-	const [createOrgMember] = useMutation(createOrganisationUser, {
+	const [createOrgMember,{loading}] = useMutation(createOrganisationUser, {
 		onCompleted: () => {
 			toast.success("New crew member invited");
 			onFormSubmitComplete?.();
@@ -98,7 +97,7 @@ export default function NewOrgMemberForm({
 							name="phone"
 							render={({field}) => (
 								<FormInputWrapper label={"Phone Number"}
-												  description={"eg. 0412345678"}>
+												  description={"eg. 0412345678: Please ensure this is correct as we will send them a temporary password via SMS"}>
 									<Input type={'text'} {...field} />
 								</FormInputWrapper>
 							)}
@@ -134,7 +133,7 @@ export default function NewOrgMemberForm({
 					</div>
 				</div>
 				<div className={"flex justify-end"}>
-					<LoadingButton label={"Submit"} loadingStatus={false} type={"submit"}/>
+					<LoadingButton label={"Submit"} loadingStatus={loading} type={"submit"}/>
 				</div>
 			</form>
 		</Form>

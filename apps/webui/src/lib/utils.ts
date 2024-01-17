@@ -19,30 +19,77 @@ export function enumToSentenceCase(enumValue: string) {
     return sentenceCaseWords.join(" ");
 }
 
-export const getStatusBadgeVariant = (status: string) => {
+export const getJobStatusBadgeVariant = (status?: string | null) => {
     switch (status) {
         case "IN_PROGRESS":
             return "blue";
-        case "FINISHED":
+        case "COMPLETED":
             return "green";
-        case "NOT_STARTED":
+        case "ON_HOLD":
             return "yellow";
+        case "CANCELLED":
+            return "red";
+        default:
+            return null;
+    }
+}
+
+export const getJobRecordTypeBadgeVariant = (type?: string | null) => {
+    switch (type) {
+        case "NOTE":
+            return "green";
+        case "VARIATION":
+            return "yellow";
+        case "QA":
+            return "red";
+        case "SAFETY":
+            return "blue";
+        default:
+            return null;
     }
 };
 
-export const getVariationStatusBadgeVariant = (status: string) => {
+export const getJobRecordStatusBadgeVariant = (status?: string | null) => {
     switch (status) {
-        case "OPEN":
+        case "IN_REVIEW":
+            return "purple";
+        case "SUBMITTED":
+            return "pink";
+        case "APPROVED":
             return "green";
-        case "CLOSED":
+        case "REJECTED":
             return "red";
+        case "NO_ACTION":
+            return "blue";
         case "ARCHIVED":
             return "yellow";
+        default:
+            return null;
     }
 };
 
+export const getJobRecordFlagBadgeVariant = (status?: string | null) => {
+    switch (status) {
+        case "POTENTIAL":
+            return "purple";
+        case "CONFIRMED":
+            return "green";
+        case "IN_PROGRESS":
+            return "yellow";
+        case "COMPLETED":
+            return "green";
+        case "HIGH_RISK":
+            return "red";
+        case "MEDIUM_RISK":
+            return "blue";
+        case "LOW_RISK":
+            return "green";
+        default:
+            return null;
+    }
+};
 
-export const getUserTypeBadgeVariant = (status: string) => {
+export const getUserTypeBadgeVariant = (status?: string | null) => {
     switch (status) {
         case "CREW_MEMBER":
             return "blue";

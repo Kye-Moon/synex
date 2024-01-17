@@ -41,6 +41,8 @@ export const jobTableSearchJobs = graphql(`
 			dueDate
 			variations {
 				id
+				type
+				flag
 			}
 		}
 	}
@@ -83,7 +85,7 @@ export const jobWithCrewAndVariationsQuery = graphql(`
 			phone
 			role
 		},
-		searchVariations(variationSearchInput: {jobId: $jobId}) {
+		searchJobRecords(jobRecordSearchInput: {jobId: $jobId}) {
 			id
 			title
 			description
@@ -100,14 +102,24 @@ export const jobWithCrewAndVariationsQuery = graphql(`
 export const convertJobsToJobsTableColumns = (
 	jobs: JobsTableSearchJobsQuery
 ): JobsTableColumn[] => {
+
+
+
 	return jobs.searchJobs.map((job) => {
+		const numVariations = job.variations?.filter((v) => v.type === "VARIATION").length || 0;
+		const numQA = job.variations?.filter((v) => v.type === "QA").length || 0;
+		const numSafety = job.variations?.filter((v) => v.type === "SAFETY").length || 0;
+		const numNotes = job.variations?.filter((v) => v.type === "NOTE").length || 0;
+
 		const column: JobsTableColumn = {
 			id: job.id,
 			title: job.title,
 			status: job.status || "-",
 			customer: job.customerName || "-",
-			numVariations: job.variations?.length || 0,
-			dueDate: job.dueDate || "-",
+			numVariations: numVariations,
+			qa: numQA,
+			safety: numSafety,
+			notes: numNotes,
 		};
 		return column;
 	});

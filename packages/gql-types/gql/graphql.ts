@@ -27,6 +27,22 @@ export type CreateJobInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateJobRecordInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  equipment?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['String']['input']>;
+  hours?: InputMaybe<Scalars['String']['input']>;
+  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
+  jobId: Scalars['String']['input'];
+  materials?: InputMaybe<Scalars['String']['input']>;
+  numPeople?: InputMaybe<Scalars['String']['input']>;
+  scopeRef?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+  who?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateOrganisationInput = {
   name: Scalars['String']['input'];
 };
@@ -45,27 +61,19 @@ export type CreateVariationInitialDataInput = {
   hours?: InputMaybe<Scalars['String']['input']>;
   materials?: InputMaybe<Scalars['String']['input']>;
   numPeople?: InputMaybe<Scalars['String']['input']>;
-  variationId: Scalars['String']['input'];
   who?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateVariationInput = {
-  description: Scalars['String']['input'];
-  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
-  jobId: Scalars['String']['input'];
-  title: Scalars['String']['input'];
 };
 
 export type CreateVariationResourceInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   hours?: InputMaybe<Scalars['String']['input']>;
+  jobRecordId: Scalars['String']['input'];
   numPeople?: InputMaybe<Scalars['String']['input']>;
   quantity?: InputMaybe<Scalars['String']['input']>;
   rate?: InputMaybe<Scalars['String']['input']>;
   type: Scalars['String']['input'];
   unit?: InputMaybe<Scalars['String']['input']>;
   unitPrice?: InputMaybe<Scalars['String']['input']>;
-  variationId: Scalars['String']['input'];
 };
 
 export type Job = {
@@ -79,7 +87,7 @@ export type Job = {
   status?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  variations?: Maybe<Array<Variation>>;
+  variations?: Maybe<Array<JobRecord>>;
 };
 
 export type JobCrewMember = {
@@ -88,6 +96,40 @@ export type JobCrewMember = {
   name: Scalars['String']['output'];
   phone: Scalars['String']['output'];
   role: Scalars['String']['output'];
+};
+
+export type JobRecord = {
+  __typename?: 'JobRecord';
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  flag?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  images: Array<JobRecordImage>;
+  initialData?: Maybe<VariationInitialData>;
+  job: Job;
+  resources: Array<VariationResource>;
+  scopeRef?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  submittedBy: User;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type JobRecordImage = {
+  __typename?: 'JobRecordImage';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  jobRecordId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  url: Scalars['String']['output'];
+};
+
+export type JobRecordSearchInput = {
+  filter?: InputMaybe<Scalars['String']['input']>;
+  jobId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type JobSearchInput = {
@@ -114,24 +156,24 @@ export type LoginResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   createJob: Job;
+  createJobRecord: JobRecord;
   createOrganisation: Organisation;
   createUser: User;
-  createVariation: Variation;
   createVariationInitialData: VariationInitialData;
   createVariationResource: VariationResource;
   deleteJob: Scalars['Boolean']['output'];
   login: LoginResponse;
   removeOrganisation: Organisation;
   removeUser: User;
-  removeVariation: Variation;
+  removeVariation: JobRecord;
   removeVariationResource: VariationResource;
   requestVerificationCode: VerificationTokenResponse;
   resetPassword: LoginResponse;
   signup: LoginResponse;
   updateJob: Job;
+  updateJobRecord: JobRecord;
   updateOrganisation: Organisation;
   updateUser: User;
-  updateVariation: Variation;
   updateVariationResource: VariationResource;
   verifyOTP: VerifiedCodeResponse;
 };
@@ -142,6 +184,11 @@ export type MutationCreateJobArgs = {
 };
 
 
+export type MutationCreateJobRecordArgs = {
+  createJobRecordInput: CreateJobRecordInput;
+};
+
+
 export type MutationCreateOrganisationArgs = {
   createOrganisationInput: CreateOrganisationInput;
 };
@@ -149,11 +196,6 @@ export type MutationCreateOrganisationArgs = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput;
-};
-
-
-export type MutationCreateVariationArgs = {
-  createVariationInput: CreateVariationInput;
 };
 
 
@@ -217,6 +259,11 @@ export type MutationUpdateJobArgs = {
 };
 
 
+export type MutationUpdateJobRecordArgs = {
+  updateJobRecordInput: UpdateJobRecordInput;
+};
+
+
 export type MutationUpdateOrganisationArgs = {
   updateOrganisationInput: UpdateOrganisationInput;
 };
@@ -224,11 +271,6 @@ export type MutationUpdateOrganisationArgs = {
 
 export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
-};
-
-
-export type MutationUpdateVariationArgs = {
-  updateVariationInput: UpdateVariationInput;
 };
 
 
@@ -252,13 +294,13 @@ export type Query = {
   currentUser: User;
   job: Job;
   jobCrew: Array<JobCrewMember>;
+  jobRecord: JobRecord;
   organisation: Organisation;
   presignedUrl: Scalars['String']['output'];
+  searchJobRecords: Array<JobRecord>;
   searchJobs: Array<Job>;
   searchUsers: Array<User>;
-  searchVariations: Array<Variation>;
   user: User;
-  variation: Variation;
   variationResource: VariationResource;
   variationResourceSummary: VariationResourceSummary;
   variationResources: Array<VariationResource>;
@@ -275,6 +317,11 @@ export type QueryJobCrewArgs = {
 };
 
 
+export type QueryJobRecordArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryOrganisationArgs = {
   id: Scalars['String']['input'];
 };
@@ -282,6 +329,11 @@ export type QueryOrganisationArgs = {
 
 export type QueryPresignedUrlArgs = {
   key: Scalars['String']['input'];
+};
+
+
+export type QuerySearchJobRecordsArgs = {
+  jobRecordSearchInput: JobRecordSearchInput;
 };
 
 
@@ -295,17 +347,7 @@ export type QuerySearchUsersArgs = {
 };
 
 
-export type QuerySearchVariationsArgs = {
-  variationSearchInput: VariationSearchInput;
-};
-
-
 export type QueryUserArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type QueryVariationArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -355,6 +397,23 @@ export type UpdateJobInput = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateJobRecordInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  equipment?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['String']['input']>;
+  hours?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
+  jobId?: InputMaybe<Scalars['String']['input']>;
+  materials?: InputMaybe<Scalars['String']['input']>;
+  numPeople?: InputMaybe<Scalars['String']['input']>;
+  scopeRef?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  who?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateOrganisationInput = {
   id: Scalars['Int']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
@@ -370,25 +429,17 @@ export type UpdateUserInput = {
   status?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateVariationInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
-  jobId?: InputMaybe<Scalars['String']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type UpdateVariationResourceInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   hours?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
+  jobRecordId?: InputMaybe<Scalars['String']['input']>;
   numPeople?: InputMaybe<Scalars['String']['input']>;
   quantity?: InputMaybe<Scalars['String']['input']>;
   rate?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
   unit?: InputMaybe<Scalars['String']['input']>;
   unitPrice?: InputMaybe<Scalars['String']['input']>;
-  variationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -400,7 +451,7 @@ export type User = {
   organisation: Organisation;
   organisationId: Scalars['String']['output'];
   password: Scalars['String']['output'];
-  phone: Scalars['String']['output'];
+  phone?: Maybe<Scalars['String']['output']>;
   role: Scalars['String']['output'];
   status: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -413,30 +464,6 @@ export type UserAuth = {
   name: Scalars['String']['output'];
   orgId: Scalars['String']['output'];
   role: Scalars['String']['output'];
-};
-
-export type Variation = {
-  __typename?: 'Variation';
-  createdAt: Scalars['DateTime']['output'];
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  images: Array<VariationImage>;
-  initialData?: Maybe<VariationInitialData>;
-  job: Job;
-  resources: Array<VariationResource>;
-  status: Scalars['String']['output'];
-  submittedBy: User;
-  title: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
-};
-
-export type VariationImage = {
-  __typename?: 'VariationImage';
-  createdAt: Scalars['DateTime']['output'];
-  id: Scalars['String']['output'];
-  updatedAt: Scalars['DateTime']['output'];
-  url: Scalars['String']['output'];
-  variationId: Scalars['String']['output'];
 };
 
 export type VariationInitialData = {
@@ -456,6 +483,7 @@ export type VariationResource = {
   description?: Maybe<Scalars['String']['output']>;
   hours?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
+  jobRecordId: Scalars['String']['output'];
   numPeople?: Maybe<Scalars['String']['output']>;
   quantity?: Maybe<Scalars['String']['output']>;
   rate?: Maybe<Scalars['String']['output']>;
@@ -463,7 +491,6 @@ export type VariationResource = {
   unit?: Maybe<Scalars['String']['output']>;
   unitPrice?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
-  variationId: Scalars['String']['output'];
 };
 
 export type VariationResourceSummary = {
@@ -474,13 +501,6 @@ export type VariationResourceSummary = {
   otherTotal: Scalars['String']['output'];
   total: Scalars['String']['output'];
   variationId: Scalars['String']['output'];
-};
-
-export type VariationSearchInput = {
-  filter?: InputMaybe<Scalars['String']['input']>;
-  jobId?: InputMaybe<Scalars['String']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type VerificationTokenResponse = {
@@ -517,14 +537,14 @@ export type LoginMutationMobileMutation = { __typename?: 'Mutation', login: { __
 export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SettingsQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', name: string, email: string, role: string, organisation: { __typename?: 'Organisation', name: string } } };
+export type SettingsQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', name: string, email: string, role: string, phone?: string | null, organisation: { __typename?: 'Organisation', name: string } } };
 
 export type JobCellQueryVariables = Exact<{
   jobId: Scalars['String']['input'];
 }>;
 
 
-export type JobCellQuery = { __typename?: 'Query', job: { __typename?: 'Job', id: string, title: string, description?: string | null, status?: string | null, customerName?: string | null, dueDate?: any | null, variations?: Array<{ __typename?: 'Variation', id: string, title: string, description: string }> | null } };
+export type JobCellQuery = { __typename?: 'Query', job: { __typename?: 'Job', id: string, title: string, description?: string | null, status?: string | null, customerName?: string | null, dueDate?: any | null, variations?: Array<{ __typename?: 'JobRecord', id: string, title: string, description?: string | null }> | null } };
 
 export type JobSelectQueryVariables = Exact<{
   input: JobSearchInput;
@@ -559,7 +579,7 @@ export type VariationCellQueryVariables = Exact<{
 }>;
 
 
-export type VariationCellQuery = { __typename?: 'Query', variation: { __typename?: 'Variation', id: string, title: string, description: string, job: { __typename?: 'Job', title: string, customerName?: string | null }, submittedBy: { __typename?: 'User', name: string }, initialData?: { __typename?: 'VariationInitialData', hours?: string | null, numPeople?: string | null, who?: string | null, materials?: string | null, equipment?: string | null } | null, images: Array<{ __typename?: 'VariationImage', id: string, url: string }> } };
+export type VariationCellQuery = { __typename?: 'Query', jobRecord: { __typename?: 'JobRecord', id: string, title: string, description?: string | null, job: { __typename?: 'Job', title: string, customerName?: string | null }, submittedBy: { __typename?: 'User', name: string }, initialData?: { __typename?: 'VariationInitialData', hours?: string | null, numPeople?: string | null, who?: string | null, materials?: string | null, equipment?: string | null } | null, images: Array<{ __typename?: 'JobRecordImage', id: string, url: string }> } };
 
 export type JobsCellQueryVariables = Exact<{
   input: JobSearchInput;
@@ -569,25 +589,25 @@ export type JobsCellQueryVariables = Exact<{
 export type JobsCellQuery = { __typename?: 'Query', searchJobs: Array<{ __typename?: 'Job', id: string, title: string, customerName?: string | null, status?: string | null, dueDate?: any | null, description?: string | null }> };
 
 export type VariationsCellQueryVariables = Exact<{
-  input: VariationSearchInput;
+  input: JobRecordSearchInput;
 }>;
 
 
-export type VariationsCellQuery = { __typename?: 'Query', searchVariations: Array<{ __typename?: 'Variation', id: string, title: string, description: string, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name: string } }> };
+export type VariationsCellQuery = { __typename?: 'Query', searchJobRecords: Array<{ __typename?: 'JobRecord', id: string, title: string, description?: string | null, type: string, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name: string } }> };
 
-export type SaveVariationDetailsMutationVariables = Exact<{
-  input: CreateVariationInput;
+export type CreateJobRecordMutationVariables = Exact<{
+  input: CreateJobRecordInput;
 }>;
 
 
-export type SaveVariationDetailsMutation = { __typename?: 'Mutation', createVariation: { __typename?: 'Variation', id: string } };
+export type CreateJobRecordMutation = { __typename?: 'Mutation', createJobRecord: { __typename?: 'JobRecord', id: string } };
 
-export type UpdateVariationMutationVariables = Exact<{
-  input: UpdateVariationInput;
+export type UpdateJobRecordMutationVariables = Exact<{
+  input: UpdateJobRecordInput;
 }>;
 
 
-export type UpdateVariationMutation = { __typename?: 'Mutation', updateVariation: { __typename?: 'Variation', id: string } };
+export type UpdateJobRecordMutation = { __typename?: 'Mutation', updateJobRecord: { __typename?: 'JobRecord', id: string } };
 
 export type CreateVariationInitialDataMutationVariables = Exact<{
   input: CreateVariationInitialDataInput;
@@ -601,21 +621,21 @@ export type CreateOrgUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrgUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, phone: string, email: string } };
+export type CreateOrgUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, phone?: string | null, email: string } };
 
 export type AdminPageTableSectionQueryVariables = Exact<{
   input: SearchUserInput;
 }>;
 
 
-export type AdminPageTableSectionQuery = { __typename?: 'Query', searchUsers: Array<{ __typename?: 'User', id: string, name: string, phone: string, role: string }> };
+export type AdminPageTableSectionQuery = { __typename?: 'Query', searchUsers: Array<{ __typename?: 'User', id: string, name: string, phone?: string | null, role: string }> };
 
 export type CrewPageTableSectionQueryVariables = Exact<{
   input: SearchUserInput;
 }>;
 
 
-export type CrewPageTableSectionQuery = { __typename?: 'Query', searchUsers: Array<{ __typename?: 'User', id: string, name: string, phone: string, role: string }> };
+export type CrewPageTableSectionQuery = { __typename?: 'Query', searchUsers: Array<{ __typename?: 'User', id: string, name: string, phone?: string | null, role: string }> };
 
 export type DeleteJobMutationVariables = Exact<{
   input: Scalars['String']['input'];
@@ -664,7 +684,7 @@ export type JobsTableSearchJobsQueryVariables = Exact<{
 }>;
 
 
-export type JobsTableSearchJobsQuery = { __typename?: 'Query', searchJobs: Array<{ __typename?: 'Job', id: string, title: string, status?: string | null, customerName?: string | null, dueDate?: any | null, variations?: Array<{ __typename?: 'Variation', id: string }> | null }> };
+export type JobsTableSearchJobsQuery = { __typename?: 'Query', searchJobs: Array<{ __typename?: 'Job', id: string, title: string, status?: string | null, customerName?: string | null, dueDate?: any | null, variations?: Array<{ __typename?: 'JobRecord', id: string, type: string, flag?: string | null }> | null }> };
 
 export type JobWithCrewQueryVariables = Exact<{
   jobId: Scalars['String']['input'];
@@ -678,21 +698,21 @@ export type JobWithCrewAndVariationsQueryVariables = Exact<{
 }>;
 
 
-export type JobWithCrewAndVariationsQuery = { __typename?: 'Query', job: { __typename?: 'Job', id: string, title: string, description?: string | null, ownerId: string, status?: string | null, customerName?: string | null, createdAt?: any | null, dueDate?: any | null }, jobCrew: Array<{ __typename?: 'JobCrewMember', id: string, name: string, phone: string, role: string }>, searchVariations: Array<{ __typename?: 'Variation', id: string, title: string, description: string, submittedBy: { __typename?: 'User', id: string, name: string } }> };
+export type JobWithCrewAndVariationsQuery = { __typename?: 'Query', job: { __typename?: 'Job', id: string, title: string, description?: string | null, ownerId: string, status?: string | null, customerName?: string | null, createdAt?: any | null, dueDate?: any | null }, jobCrew: Array<{ __typename?: 'JobCrewMember', id: string, name: string, phone: string, role: string }>, searchJobRecords: Array<{ __typename?: 'JobRecord', id: string, title: string, description?: string | null, submittedBy: { __typename?: 'User', id: string, name: string } }> };
 
 export type CreateVariationResourceMutationVariables = Exact<{
   input: CreateVariationResourceInput;
 }>;
 
 
-export type CreateVariationResourceMutation = { __typename?: 'Mutation', createVariationResource: { __typename?: 'VariationResource', id: string, variationId: string, createdAt: any } };
+export type CreateVariationResourceMutation = { __typename?: 'Mutation', createVariationResource: { __typename?: 'VariationResource', id: string, jobRecordId: string, createdAt: any } };
 
 export type UpdateVariationResourceMutationVariables = Exact<{
   input: UpdateVariationResourceInput;
 }>;
 
 
-export type UpdateVariationResourceMutation = { __typename?: 'Mutation', updateVariationResource: { __typename?: 'VariationResource', id: string, variationId: string } };
+export type UpdateVariationResourceMutation = { __typename?: 'Mutation', updateVariationResource: { __typename?: 'VariationResource', id: string, jobRecordId: string } };
 
 export type VariationResourcesQueryVariables = Exact<{
   variationId: Scalars['String']['input'];
@@ -716,40 +736,40 @@ export type ResourceSummaryQueryVariables = Exact<{
 export type ResourceSummaryQuery = { __typename?: 'Query', variationResourceSummary: { __typename?: 'VariationResourceSummary', labourTotal: string, materialTotal: string, equipmentTotal: string, otherTotal: string, total: string } };
 
 export type VariationTableSearchVariationsQueryVariables = Exact<{
-  input: VariationSearchInput;
+  input: JobRecordSearchInput;
 }>;
 
 
-export type VariationTableSearchVariationsQuery = { __typename?: 'Query', searchVariations: Array<{ __typename?: 'Variation', id: string, title: string, description: string, createdAt: any, status: string, initialData?: { __typename?: 'VariationInitialData', id: string, numPeople?: string | null, hours?: string | null, materials?: string | null, equipment?: string | null } | null, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name: string } }> };
+export type VariationTableSearchVariationsQuery = { __typename?: 'Query', searchJobRecords: Array<{ __typename?: 'JobRecord', id: string, title: string, description?: string | null, createdAt: any, status?: string | null, type: string, flag?: string | null, initialData?: { __typename?: 'VariationInitialData', id: string, numPeople?: string | null, hours?: string | null, materials?: string | null, equipment?: string | null } | null, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name: string } }> };
 
 export type DashboardSearchVariationsQueryVariables = Exact<{
-  input: VariationSearchInput;
+  input: JobRecordSearchInput;
 }>;
 
 
-export type DashboardSearchVariationsQuery = { __typename?: 'Query', searchVariations: Array<{ __typename?: 'Variation', id: string, title: string, description: string, status: string, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name: string } }> };
+export type DashboardSearchVariationsQuery = { __typename?: 'Query', searchJobRecords: Array<{ __typename?: 'JobRecord', id: string, title: string, description?: string | null, status?: string | null, flag?: string | null, type: string, job: { __typename?: 'Job', title: string }, submittedBy: { __typename?: 'User', name: string } }> };
 
 export type VariationQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type VariationQuery = { __typename?: 'Query', variation: { __typename?: 'Variation', id: string, title: string, description: string, status: string, createdAt: any, initialData?: { __typename?: 'VariationInitialData', id: string, numPeople?: string | null, hours?: string | null, materials?: string | null, equipment?: string | null } | null, job: { __typename?: 'Job', title: string, customerName?: string | null }, submittedBy: { __typename?: 'User', name: string }, images: Array<{ __typename?: 'VariationImage', id: string, url: string }> } };
+export type VariationQuery = { __typename?: 'Query', jobRecord: { __typename?: 'JobRecord', id: string, title: string, description?: string | null, status?: string | null, type: string, flag?: string | null, createdAt: any, initialData?: { __typename?: 'VariationInitialData', id: string, numPeople?: string | null, hours?: string | null, materials?: string | null, equipment?: string | null, who?: string | null } | null, job: { __typename?: 'Job', id: string, title: string, customerName?: string | null }, submittedBy: { __typename?: 'User', name: string }, images: Array<{ __typename?: 'JobRecordImage', id: string, url: string }> } };
 
 
 export const PreSignedUrlDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreSignedUrl"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"presignedUrl"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}]}}]} as unknown as DocumentNode<PreSignedUrlQuery, PreSignedUrlQueryVariables>;
 export const LoginMutationMobileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LoginMutationMobile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"loginUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"access_token"}},{"kind":"Field","name":{"kind":"Name","value":"refresh_token"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutationMobileMutation, LoginMutationMobileMutationVariables>;
-export const SettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Settings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"organisation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<SettingsQuery, SettingsQueryVariables>;
+export const SettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Settings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"organisation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<SettingsQuery, SettingsQueryVariables>;
 export const JobCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobCell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"job"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"variations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]}}]} as unknown as DocumentNode<JobCellQuery, JobCellQueryVariables>;
 export const JobSelectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobSelect"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<JobSelectQuery, JobSelectQueryVariables>;
 export const GetOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GetOTP"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestVerificationCode"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"msg"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]} as unknown as DocumentNode<GetOtpMutation, GetOtpMutationVariables>;
 export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ResetPasswordInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"access_token"}}]}}]}}]} as unknown as DocumentNode<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const VerifyOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"VerifyOTP"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerifyCodeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyOTP"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reset_password_token"}}]}}]}}]} as unknown as DocumentNode<VerifyOtpMutation, VerifyOtpMutationVariables>;
-export const VariationCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationCell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"variation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"initialData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"who"}},{"kind":"Field","name":{"kind":"Name","value":"materials"}},{"kind":"Field","name":{"kind":"Name","value":"equipment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<VariationCellQuery, VariationCellQueryVariables>;
+export const VariationCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationCell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"jobRecord"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"initialData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"who"}},{"kind":"Field","name":{"kind":"Name","value":"materials"}},{"kind":"Field","name":{"kind":"Name","value":"equipment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<VariationCellQuery, VariationCellQueryVariables>;
 export const JobsCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobsCell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<JobsCellQuery, JobsCellQueryVariables>;
-export const VariationsCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationsCell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VariationSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchVariations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"variationSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<VariationsCellQuery, VariationsCellQueryVariables>;
-export const SaveVariationDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveVariationDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateVariationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createVariation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createVariationInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SaveVariationDetailsMutation, SaveVariationDetailsMutationVariables>;
-export const UpdateVariationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateVariation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateVariationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateVariation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateVariationInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateVariationMutation, UpdateVariationMutationVariables>;
+export const VariationsCellDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationsCell"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobRecordSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobRecords"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobRecordSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<VariationsCellQuery, VariationsCellQueryVariables>;
+export const CreateJobRecordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateJobRecord"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateJobRecordInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createJobRecord"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createJobRecordInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateJobRecordMutation, CreateJobRecordMutationVariables>;
+export const UpdateJobRecordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateJobRecord"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateJobRecordInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateJobRecord"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateJobRecordInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateJobRecordMutation, UpdateJobRecordMutationVariables>;
 export const CreateVariationInitialDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateVariationInitialData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateVariationInitialDataInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createVariationInitialData"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createVariationInitialDataInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateVariationInitialDataMutation, CreateVariationInitialDataMutationVariables>;
 export const CreateOrgUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOrgUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]} as unknown as DocumentNode<CreateOrgUserMutation, CreateOrgUserMutationVariables>;
 export const AdminPageTableSectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AdminPageTableSection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]} as unknown as DocumentNode<AdminPageTableSectionQuery, AdminPageTableSectionQueryVariables>;
@@ -760,14 +780,14 @@ export const SignUpMutationDocument = {"kind":"Document","definitions":[{"kind":
 export const CreateJobMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateJobMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateJobInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createJob"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createJobInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<CreateJobMutationMutation, CreateJobMutationMutationVariables>;
 export const UpdateJobDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateJob"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateJobInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateJob"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateJobInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateJobMutation, UpdateJobMutationVariables>;
 export const DashboardSearchJobsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DashboardSearchJobs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<DashboardSearchJobsQuery, DashboardSearchJobsQueryVariables>;
-export const JobsTableSearchJobsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobsTableSearchJobs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"variations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<JobsTableSearchJobsQuery, JobsTableSearchJobsQueryVariables>;
+export const JobsTableSearchJobsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobsTableSearchJobs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"variations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"flag"}}]}}]}}]}}]} as unknown as DocumentNode<JobsTableSearchJobsQuery, JobsTableSearchJobsQueryVariables>;
 export const JobWithCrewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobWithCrew"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"job"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"ownerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"jobCrew"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<JobWithCrewQuery, JobWithCrewQueryVariables>;
-export const JobWithCrewAndVariationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobWithCrewAndVariations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"job"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"ownerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"jobCrew"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"searchVariations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"variationSearchInput"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"jobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<JobWithCrewAndVariationsQuery, JobWithCrewAndVariationsQueryVariables>;
-export const CreateVariationResourceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateVariationResource"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateVariationResourceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createVariationResource"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createVariationResourceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"variationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateVariationResourceMutation, CreateVariationResourceMutationVariables>;
-export const UpdateVariationResourceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateVariationResource"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateVariationResourceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateVariationResource"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateVariationResourceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"variationId"}}]}}]}}]} as unknown as DocumentNode<UpdateVariationResourceMutation, UpdateVariationResourceMutationVariables>;
+export const JobWithCrewAndVariationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"JobWithCrewAndVariations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"job"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"ownerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"jobCrew"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"searchJobRecords"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobRecordSearchInput"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"jobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"jobId"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<JobWithCrewAndVariationsQuery, JobWithCrewAndVariationsQueryVariables>;
+export const CreateVariationResourceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateVariationResource"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateVariationResourceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createVariationResource"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createVariationResourceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"jobRecordId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateVariationResourceMutation, CreateVariationResourceMutationVariables>;
+export const UpdateVariationResourceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateVariationResource"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateVariationResourceInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateVariationResource"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateVariationResourceInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"jobRecordId"}}]}}]}}]} as unknown as DocumentNode<UpdateVariationResourceMutation, UpdateVariationResourceMutationVariables>;
 export const VariationResourcesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationResources"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"variationResources"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"variationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"unit"}},{"kind":"Field","name":{"kind":"Name","value":"unitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<VariationResourcesQuery, VariationResourcesQueryVariables>;
 export const DeleteVariationResourceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteVariationResource"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeVariationResource"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteVariationResourceMutation, DeleteVariationResourceMutationVariables>;
 export const ResourceSummaryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ResourceSummary"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"variationResourceSummary"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"variationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"variationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"labourTotal"}},{"kind":"Field","name":{"kind":"Name","value":"materialTotal"}},{"kind":"Field","name":{"kind":"Name","value":"equipmentTotal"}},{"kind":"Field","name":{"kind":"Name","value":"otherTotal"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]} as unknown as DocumentNode<ResourceSummaryQuery, ResourceSummaryQueryVariables>;
-export const VariationTableSearchVariationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationTableSearchVariations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VariationSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchVariations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"variationSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"initialData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"materials"}},{"kind":"Field","name":{"kind":"Name","value":"equipment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<VariationTableSearchVariationsQuery, VariationTableSearchVariationsQueryVariables>;
-export const DashboardSearchVariationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DashboardSearchVariations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VariationSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchVariations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"variationSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<DashboardSearchVariationsQuery, DashboardSearchVariationsQueryVariables>;
-export const VariationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Variation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"variation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"initialData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"materials"}},{"kind":"Field","name":{"kind":"Name","value":"equipment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<VariationQuery, VariationQueryVariables>;
+export const VariationTableSearchVariationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VariationTableSearchVariations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobRecordSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobRecords"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobRecordSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"flag"}},{"kind":"Field","name":{"kind":"Name","value":"initialData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"materials"}},{"kind":"Field","name":{"kind":"Name","value":"equipment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<VariationTableSearchVariationsQuery, VariationTableSearchVariationsQueryVariables>;
+export const DashboardSearchVariationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DashboardSearchVariations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobRecordSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchJobRecords"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"jobRecordSearchInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"flag"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<DashboardSearchVariationsQuery, DashboardSearchVariationsQueryVariables>;
+export const VariationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Variation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"jobRecord"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"flag"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"initialData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"numPeople"}},{"kind":"Field","name":{"kind":"Name","value":"hours"}},{"kind":"Field","name":{"kind":"Name","value":"materials"}},{"kind":"Field","name":{"kind":"Name","value":"equipment"}},{"kind":"Field","name":{"kind":"Name","value":"who"}}]}},{"kind":"Field","name":{"kind":"Name","value":"job"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"customerName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"submittedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]} as unknown as DocumentNode<VariationQuery, VariationQueryVariables>;

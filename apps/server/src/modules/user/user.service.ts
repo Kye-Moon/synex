@@ -19,11 +19,18 @@ export class UserService {
 
     async create(createUserInput: CreateUserInput): Promise<User> {
         createUserInput.email = createUserInput.email.toLowerCase();
-        return await this.userRepository.createUser({
-            ...createUserInput,
-            organisationId: this.request.organisationId,
-            status: createUserInput.status || "ACTIVE"
-        });
+        try {
+            return await this.userRepository.createUser({
+                ...createUserInput,
+                organisationId: this.request.organisationId,
+                status: createUserInput.status || "ACTIVE"
+            });
+        }catch(e) {
+            if (e.code === '23505') {
+                throw new Error('Email already exists');
+            }
+            throw e;
+        }
     }
 
     async inviteUser(createUserInput: CreateUserInput): Promise<User> {

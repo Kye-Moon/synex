@@ -19,7 +19,7 @@ export default function EditJobDetails(){
 					name="title"
 					render={({ field }) => (
 						<FormInputWrapper label={"Title"}>
-							<Input {...field} />
+							<Input onChange={field.onChange} value={field.value} />
 						</FormInputWrapper>
 					)}
 				/>

@@ -7,7 +7,7 @@ export class VariationResource {
   id: string;
 
   @Field(() => String)
-  variationId: string;
+  jobRecordId: string;
 
   @Field(() => String)
   type: VariationResourceType;

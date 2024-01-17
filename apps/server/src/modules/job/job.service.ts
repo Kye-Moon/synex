@@ -59,7 +59,7 @@ export class JobService {
         const existingJob = await this.jobRepository.findOne(id);
         if (!existingJob) throw new Error('Job not found');
         const job = await this.jobRepository.update(id, updateJobInput);
-        if (updateJobInput.crew.length > 0) {
+        if (updateJobInput.crew?.length > 0) {
             await this.jobCrewService.update(job.id, updateJobInput.crew);
         }
         return job;

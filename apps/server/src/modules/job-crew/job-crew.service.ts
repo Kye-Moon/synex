@@ -38,6 +38,7 @@ export class JobCrewService {
     }
 
     async update(jobId: string, crewIds: string[]) {
+        console.log('update job crew', jobId, crewIds);
         const existingCrew = await this.jobCrewRepository.findJobCrewByJobId(jobId);
         const existingCrewMemberIds = existingCrew.map((jobCrew) => jobCrew.crewMemberId);
 

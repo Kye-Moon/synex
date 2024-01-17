@@ -4,6 +4,6 @@ export default {
   schema: './src/drizzle/schema.ts',
   driver: 'pg',
   dbCredentials: {
-    connectionString: `postgresql://postgres:0WFCzc3YgNe0VSXAvJtW@containers-us-west-91.railway.app:7695/railway`,
+    connectionString: `postgresql://postgres:3bCAcffbgEgGgCbAd6fFGfc4-Aa-5fC*@monorail.proxy.rlwy.net:19113/railway`,
   },
 } as Config;

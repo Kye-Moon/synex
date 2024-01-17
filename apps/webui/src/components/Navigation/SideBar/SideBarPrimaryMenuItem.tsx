@@ -10,7 +10,7 @@ interface SideBarPrimaryMenuItemProps {
 }
 
 const linkVariants = cva(
-	"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:text-accent  transition-colors",
+	"group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold hover:bg-primary/5  transition-colors",
 	{
 		variants: {
 			variant: {
@@ -34,7 +34,7 @@ export const SideBarPrimaryMenuItem = ({ item, showText = true }: SideBarPrimary
 				}}
 				to={item.route}
 			>
-				<item.icon className={"h-6 w-6 shrink-0 group-hover:text-accent"} aria-hidden="true" />
+				<item.icon className={"h-6 w-6 shrink-0 "} aria-hidden="true" />
 				{showText && item.label}
 			</Link>
 		</li>

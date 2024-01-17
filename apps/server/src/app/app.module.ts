@@ -10,12 +10,12 @@ import {DrizzleModule} from '../drizzle/drizzle.module';
 import {JobModule} from '../modules/job/job.module';
 import {RequestModule} from '../modules/request/request.module';
 import {JobCrewModule} from "../modules/job-crew/job-crew.module";
-import {VariationModule} from "../modules/variation/variation.module";
+import {JobRecordModule} from "../modules/job-record/job-record.module";
 import {EmailModule} from "../modules/email/email.module";
 import {SmsModule} from "../modules/sms/sms.module";
 import {S3Module} from "../modules/s3/s3.module";
 import {ConfigModule} from "@nestjs/config";
-import {VariationImageModule} from "../modules/variation-image/variation-image.module";
+import {JobRecordImageModule} from "../modules/job-record-image/job-record-image.module";
 import {VariationInitialDataModule} from "../modules/variation-initial-data/variation-initial-data.module";
 import {VariationResourceModule} from "../modules/variation-resource/variation-resource.module";
 
@@ -42,8 +42,8 @@ import {VariationResourceModule} from "../modules/variation-resource/variation-r
         UserModule,
         JobModule,
         JobCrewModule,
-        VariationModule,
-        VariationImageModule,
+        JobRecordModule,
+        JobRecordImageModule,
         VariationInitialDataModule,
         VariationResourceModule,
         DrizzleModule,

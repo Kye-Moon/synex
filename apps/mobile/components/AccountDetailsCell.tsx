@@ -12,6 +12,7 @@ const query = graphql(`
             name
             email
             role
+            phone
             organisation {
                 name
             }
@@ -30,6 +31,7 @@ export default function AccountDetailsCell(){
                 <View gap={'$2'}>
                     <LabelAndValue label={'Name'} value={data.currentUser.name}/>
                     <LabelAndValue label={'Email'} value={data.currentUser.email}/>
+                    <LabelAndValue label={'Phone'} value={data.currentUser.phone}/>
                     <LabelAndValue label={'Organisation'} value={data.currentUser.organisation.name}/>
                     <LabelAndValue label={'Role'} value={enumToSentenceCase(data.currentUser?.role ?? '')}/>
                 </View>

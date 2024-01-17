@@ -23,6 +23,7 @@ export default function JobsList({jobs}: JobListProps) {
             renderItem={({item}: any) => (
                 <Box
                     p={2}
+                    pt={12}
                     rounded="$lg"
                     overflow="hidden"
                     m={2}
@@ -30,7 +31,7 @@ export default function JobsList({jobs}: JobListProps) {
                     <HStack style={styles.row}>
                         <VStack>
                             <Text fontWeight={'700'} size="md">{item.title}</Text>
-                            <Text size={'2xs'}>{truncate(item.description, 25)}</Text>
+                            <Text size={'2xs'}>{item.description ? truncate(item.description, 45) : '-'}</Text>
                         </VStack>
                         <Link asChild={true}  href={{pathname: "/(app)/job/[id]", params: {id: item.id, jobTitle: item.title}}}>
                             <Button size={'xs'} width={'$20'}>

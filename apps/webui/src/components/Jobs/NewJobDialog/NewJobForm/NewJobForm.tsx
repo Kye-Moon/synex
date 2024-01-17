@@ -3,20 +3,19 @@ import {Form, FormField} from "@/Primitives/Form";
 import {Input} from "@/Primitives/Input";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as React from "react";
+import {Suspense} from "react";
 import FormInputWrapper from "@/Components/FormInputWrapper/FormInputWrapper";
-import DatePicker from "@/Components/DatePicker/DatePicker";
 import DropSelect from "@/Components/DropSelect/DropSelect";
 import LoadingButton from "@/Components/Loading/LoadingButton/LoadingButton";
 import {
 	newJobFormSchema,
 	NewJobFormType,
 } from "@/Components/Jobs/NewJobDialog/NewJobForm/NewJobFormSchema";
-import {useMutation, useSuspenseQuery} from "@apollo/client";
+import {useMutation} from "@apollo/client";
 import {createNewJob} from "@/Services/jobService";
 import toast from "react-hot-toast";
 import {JobStatus, JobStatusSelectOptions} from "@/Constants/constants";
 import {Textarea} from "@/Primitives/TextArea";
-import OrganisationMemberTable from "@/Components/OrganisationMemberTable/OrganisationMemberTable";
 import CrewTableSection from "@/Pages/CrewPage/CrewTableSection";
 
 /**
@@ -53,7 +52,7 @@ export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) 
 	const form = useForm<NewJobFormType>({
 		resolver: zodResolver(newJobFormSchema),
 		defaultValues: {
-			status: JobStatus.OPEN,
+			status: JobStatus.UPCOMING,
 		}
 	});
 
@@ -100,32 +99,18 @@ export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) 
 									)}
 								/>
 							</div>
-							<div className="sm:col-span-2">
-								<FormField
-									control={form.control}
-									name="dueDate"
-									render={({field}) => (
-										<FormInputWrapper label={"Due date"}>
-											<DatePicker
-												onChange={(value) => onValueChange(field.name, value)}
-												value={field.value}
-											/>
-										</FormInputWrapper>
-									)}
-								/>
-							</div>
 							<div className="sm:col-span-1">
 								<FormField
 									control={form.control}
 									name="status"
 									render={({field}) => (
 										<FormInputWrapper label={"Status"}>
-											<DropSelect
-												options={JobStatusSelectOptions}
-												defaultValue={field.value}
-												onChange={field.onChange}
-												placeholder={"Status"}
-											/>
+												<DropSelect
+													options={JobStatusSelectOptions}
+													defaultValue={field.value}
+													onChange={field.onChange}
+													placeholder={"Status"}
+												/>
 										</FormInputWrapper>
 									)}
 								/>
@@ -150,7 +135,10 @@ export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) 
 								name="crew"
 								render={({field}) => (
 									<FormInputWrapper label={"Select Crew"}>
-										<CrewTableSection showSelect={true} tableCaption={"Available Crew"}/>
+										<Suspense>
+											<CrewTableSection showSelect={true}
+															  tableCaption={"Available Crew"}/>
+										</Suspense>
 									</FormInputWrapper>
 								)}
 							/>
@@ -159,7 +147,7 @@ export default function NewJobForm({onFormSubmitComplete}: NewProjectFormProps) 
 				</div>
 
 				<div className={"flex justify-end"}>
-					<LoadingButton label={"Submit"} loadingStatus={false} type={"submit"}/>
+					<LoadingButton label={"Submit"} loadingStatus={loading} type={"submit"}/>
 				</div>
 			</form>
 		</Form>

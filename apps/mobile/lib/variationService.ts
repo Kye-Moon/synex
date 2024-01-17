@@ -1,15 +1,15 @@
 import {graphql}  from 'gql-types'
 export const createMutation = graphql(`
-    mutation SaveVariationDetails($input: CreateVariationInput!) {
-        createVariation(createVariationInput: $input) {
+    mutation CreateJobRecord($input: CreateJobRecordInput!) {
+        createJobRecord(createJobRecordInput: $input) {
             id
         }
     }
 `)
 
 export const updateMutation = graphql(`
-    mutation UpdateVariation($input: UpdateVariationInput!) {
-        updateVariation(updateVariationInput: $input) {
+    mutation UpdateJobRecord($input: UpdateJobRecordInput!) {
+        updateJobRecord(updateJobRecordInput: $input) {
             id
         }
     }

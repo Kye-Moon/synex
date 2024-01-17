@@ -1,15 +1,11 @@
 import {useMutation, useSuspenseQuery} from "@apollo/client";
 import {
-    createVariationResource, deleteVariationResource,
-    updateVariationResource,
-    variationResources
+	createVariationResource,
+	deleteVariationResource,
+	updateVariationResource,
+	variationResources
 } from "@/Services/variationResourceService";
-import {
-    CreateVariationResourceInput,
-    CreateVariationResourceMutationVariables,
-    UpdateVariationResourceInput,
-    VariationResource
-} from "gql-types";
+import {CreateVariationResourceInput, UpdateVariationResourceInput} from "gql-types";
 import {useMemo} from "react";
 
 interface VariationResourceHookProps {
@@ -73,18 +69,18 @@ export default function useVariationResources({variationId}: VariationResourceHo
 
 
     const [create] = useMutation(createVariationResource, {
-        refetchQueries: ['VariationResources','ResourceSummary'],
+        refetchQueries: ['VariationResources',],
     })
     const [update] = useMutation(updateVariationResource, {
-        refetchQueries: ['VariationResources','ResourceSummary'],
+        refetchQueries: ['VariationResources'],
     })
 
     const [deleteResource] = useMutation(deleteVariationResource, {
-        refetchQueries: ['VariationResources','ResourceSummary'],
+        refetchQueries: ['VariationResources'],
     })
 
     const addResource = async (resource: Omit<CreateVariationResourceInput, 'variationId'>) => {
-        await create({variables: {input: {...resource, variationId: variationId}}})
+        await create({variables: {input: {...resource, jobRecordId: variationId}}})
     }
 
     const updateResource = async (id: string, resource: UpdateVariationResourceInput) => {

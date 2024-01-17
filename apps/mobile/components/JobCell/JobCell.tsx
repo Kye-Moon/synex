@@ -54,9 +54,9 @@ export default function JobCell({jobId}: { jobId: string }) {
                         <LabelAndValue label={'Description'} value={data.job?.description}/>
                     </View>
                 </ScreenContentSection>
-                <ScreenContentSection heading={"Variations"}>
+                <ScreenContentSection heading={"Job Records"}>
                     {data.job?.variations?.length === 0 && (
-                        <Text>No variations</Text>
+                        <Text>No job records yet</Text>
                     )}
                     {data.job?.variations?.map((variation: any) => {
                         return (

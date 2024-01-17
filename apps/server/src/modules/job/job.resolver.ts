@@ -6,14 +6,14 @@ import {UpdateJobInput} from './dto/update-job.input';
 import {JwtAuthGuard} from '../auth/jwt-auth.guards';
 import {UseGuards} from '@nestjs/common';
 import {JobSearchInput} from './dto/search-job.input';
-import {Variation} from "../variation/entities/variation.entity";
-import {VariationService} from "../variation/variation.service";
+import {JobRecord} from "../job-record/entities/job-record.entity";
+import {JobRecordService} from "../job-record/job-record.service";
 
 @Resolver(() => Job)
 export class JobResolver {
     constructor(
         private readonly jobService: JobService,
-        private readonly variationService: VariationService,
+        private readonly variationService: JobRecordService,
     ) {
     }
 
@@ -46,7 +46,7 @@ export class JobResolver {
     }
 
 
-    @ResolveField(() => [Variation])
+    @ResolveField(() => [JobRecord])
     variations(@Parent() job: Job) {
         const {id} = job;
         return this.variationService.findJobVariations(id);

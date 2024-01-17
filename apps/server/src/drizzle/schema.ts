@@ -5,7 +5,8 @@ import {InferInsertModel, InferSelectModel, relations, sql,} from 'drizzle-orm';
 // noinspection TypeScriptValidateTypes
 export const user = pgTable('user', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
     name: text('full_name').notNull(),
     phone: varchar('phone', {length: 20}),
@@ -31,7 +32,8 @@ export const userRelations = relations(user, ({one, many}) => ({
 // ###################### ORGANISATION TABLE ######################
 export const organisation = pgTable('organisation', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
     name: text('name').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -49,18 +51,18 @@ const organisationRelations = relations(organisation, ({one, many}) => ({
 // ###################### JOB TABLE ######################
 export const job = pgTable('job', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
     title: text('title').notNull(),
     description: text('description'),
     customerName: text('customer_name'),
     status: varchar('status', {
-        enum: ['OPEN', 'CLOSED', "ARCHIVED"],
+        enum: ['UPCOMING', 'IN_PROGRESS', 'COMPLETED', 'ARCHIVED'],
     }),
     ownerId: uuid('owner_id')
         .references(() => user.id)
         .notNull(),
-    dueDate: timestamp('due_date'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
         .default(sql`CURRENT_TIMESTAMP`)
@@ -71,12 +73,38 @@ export type Job = InferSelectModel<typeof job>;
 export type NewJob = InferInsertModel<typeof job>;
 export type UpdateJob = Partial<NewJob>
 
+
+export const jobScopeItem = pgTable('job_scope_item', {
+    id: uuid('id')
+        .default(sql`gen_random_uuid
+        ()`)
+        .primaryKey(),
+    jobId: uuid('job_id')
+        .references(() => job.id, {onDelete: 'cascade'})
+        .notNull(),
+    scopeItemTitle: text('scope_item_title').notNull(),
+    scopeItemDescription: text('scope_item_description'),
+});
+
+export const jobScopeItemRelations = relations(jobScopeItem, ({one}) => ({
+    job: one(job, {
+        fields: [jobScopeItem.jobId],
+        references: [job.id],
+    }),
+}));
+
+export type JobScopeItem = InferSelectModel<typeof jobScopeItem>;
+export type NewJobScopeItem = InferInsertModel<typeof jobScopeItem>;
+export type UpdateJobScopeItem = Partial<NewJobScopeItem>
+
+
 export const jobRelations = relations(job, ({one, many}) => ({
     owner: one(user, {
         fields: [job.ownerId],
         references: [user.id],
     }),
-    variations: many(variation),
+    jobRecords: many(jobRecord),
+    scopeItems: many(jobScopeItem),
     crew: many(user)
 }));
 
@@ -84,7 +112,8 @@ export const jobRelations = relations(job, ({one, many}) => ({
 
 export const jobCrew = pgTable('job_crew', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
     jobId: uuid('job_id')
         .references(() => job.id, {onDelete: 'cascade'})
@@ -109,19 +138,22 @@ export const jobCrewRelations = relations(jobCrew, ({one}) => ({
 }));
 
 // ###################### VARIATION TABLE ######################
-export const variation = pgTable('variation', {
+export const jobRecord = pgTable('job_record', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
     jobId: uuid('job_id')
         .references(() => job.id)
         .notNull(),
+    scopeRef: text('scope_ref'),
     title: text('title').notNull(),
     description: text('description'),
+    type: varchar('type', {enum: ['VARIATION', 'NOTE', "QA", "SAFETY"]}),
     status: varchar('status', {
-        enum: ['OPEN', 'CLOSED', "ARCHIVED"],
-    }).default('OPEN'),
-    flag: varchar('flag', {enum: ['EARLY_WARNING', 'POTENTIAL', 'ACTIONED']}),
+        enum: ["IN_REVIEW", "SUBMITTED", 'APPROVED', 'REJECTED', "NO_ACTION", 'ARCHIVED']
+    }),
+    flag: varchar('flag', {enum: ['POTENTIAL', "CONFIRMED", 'IN_PROGRESS', 'COMPLETED', "HIGH_RISK", "MEDIUM_RISK", "LOW_RISK"]}),
     submittedBy: uuid('submitted_by')
         .references(() => user.id)
         .notNull(),
@@ -131,31 +163,32 @@ export const variation = pgTable('variation', {
         .notNull(),
 });
 
-export type Variation = InferSelectModel<typeof variation>;
-export type NewVariation = InferInsertModel<typeof variation>;
-export type UpdateVariation = Partial<NewVariation>
+export type JobRecord = InferSelectModel<typeof jobRecord>;
+export type NewJobRecord = InferInsertModel<typeof jobRecord>;
+export type UpdateJobRecord = Partial<NewJobRecord>
 
-export const variationRelations = relations(variation, ({one, many}) => ({
+export const jobRecordRelations = relations(jobRecord, ({one, many}) => ({
     job: one(job, {
-        fields: [variation.jobId],
+        fields: [jobRecord.jobId],
         references: [job.id],
     }),
     submittedBy: one(user, {
-        fields: [variation.submittedBy],
+        fields: [jobRecord.submittedBy],
         references: [user.id],
     }),
     resources: many(variationResource),
-    images: many(variationImage),
+    images: many(jobRecordImage),
 
 }));
 
 // ###################### VARIATION RESOURCES TABLE ######################
 export const variationResource = pgTable('variation_resource', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
-    variationId: uuid('variation_id')
-        .references(() => variation.id, {onDelete: 'cascade'})
+    jobRecordId: uuid('job_record_id')
+        .references(() => jobRecord.id, {onDelete: 'cascade'})
         .notNull(),
     type: varchar('type', {enum: ['LABOUR', 'MATERIAL', 'EQUIPMENT', 'OTHER']}),
     description: text('description'),
@@ -175,12 +208,13 @@ export type VariationResource = InferSelectModel<typeof variationResource>;
 export type NewVariationResource = InferInsertModel<typeof variationResource>;
 
 // ###################### VARIATION IMAGE TABLE ######################
-export const variationImage = pgTable('variation_image', {
+export const jobRecordImage = pgTable('job_record_image', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
-    variationId: uuid('variation_id')
-        .references(() => variation.id, {onDelete: 'cascade'})
+    jobRecordId: uuid('job_record_id')
+        .references(() => jobRecord.id, {onDelete: 'cascade'})
         .notNull(),
     url: text('url').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -189,16 +223,16 @@ export const variationImage = pgTable('variation_image', {
         .notNull(),
 });
 
-export type VariationImage = InferSelectModel<typeof variationImage>;
-export type NewVariationImage = InferInsertModel<typeof variationImage>;
+export type JobRecordImage = InferSelectModel<typeof jobRecordImage>;
+export type NewJobRecordImage = InferInsertModel<typeof jobRecordImage>;
 
 export const variationInitialData = pgTable('variation_initial_data', {
     id: uuid('id')
         .default(sql`gen_random_uuid
-            ()`)
+        ()`)
         .primaryKey(),
-    variationId: uuid('variation_id')
-        .references(() => variation.id, {onDelete: 'cascade'})
+    jobRecordId: uuid('job_record_id')
+        .references(() => jobRecord.id, {onDelete: 'cascade'})
         .notNull(),
     hours: numeric('time'),
     numPeople: numeric('num_people'),
@@ -216,12 +250,13 @@ export type NewVariationInitialData = InferInsertModel<typeof variationInitialDa
 // ###################### NOTIFICATION TABLE ######################
 export const notification = pgTable('notification', {
     id: uuid('id')
-        .default(sql`gen_random_uuid ()`)
+        .default(sql`gen_random_uuid
+        ()`)
         .primaryKey(),
     jobId: uuid('job_id')
         .references(() => job.id)
         .notNull(),
-    variationId: uuid('variation_id').references(() => variation.id),
+    jobRecordId: uuid('job_record_id').references(() => jobRecord.id),
     message: text('message').notNull(),
     isRead: boolean('is_read').default(false),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -238,23 +273,8 @@ export const notificationRelations = relations(notification, ({one}) => ({
         fields: [notification.jobId],
         references: [job.id],
     }),
-    variation: one(variation, {
-        fields: [notification.variationId],
-        references: [variation.id],
+    jobRecord: one(jobRecord, {
+        fields: [notification.jobRecordId],
+        references: [jobRecord.id],
     }),
 }));
-
-
-// export const userOrganisationRelations = relations(
-//   userOrganisation,
-//   ({ one }) => ({
-//     user: one(user, {
-//       fields: [userOrganisation.userId],
-//       references: [user.id],
-//     }),
-//     organisation: one(organisation, {
-//       fields: [userOrganisation.organisationId],
-//       references: [organisation.id],
-//     }),
-//   }),
-// );

@@ -3,6 +3,7 @@ import {ChevronLeftIcon} from "lucide-react-native";
 import React from "react";
 import {StyleSheet} from "react-native";
 import {useRouter} from "expo-router";
+import {truncate} from "../lib/utils";
 
 interface Props {
     title?: string
@@ -17,7 +18,7 @@ export default function Header({title}: Props) {
                 </Pressable>
             </Box>
             <Center style={styles.box}>
-                <Text style={styles.text}>{title}</Text>
+                <Text style={styles.text}>{title ? truncate(title,15) : "Job record"}</Text>
             </Center>
             <Box style={styles.box}/>
         </HStack>

@@ -9,7 +9,7 @@ import {
     VStack
 } from "@gluestack-ui/themed";
 import React from "react";
-import {StyleSheet, Platform, Keyboard, TouchableWithoutFeedback} from "react-native";
+import {Keyboard, Platform, StyleSheet, TouchableWithoutFeedback} from "react-native";
 
 interface FormPageTemplateProps {
     children: React.ReactNode
@@ -27,13 +27,13 @@ export default function FormPageTemplate({form, children, buttonLabel, onSubmit}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View bg={'white'} w={'100%'} h={'100%'}>
                     <ScrollView>
-                        <VStack space="md" my={'$4'} mx={'$4'} h={'100%'}>
+                        <VStack space="md" my={'$4'} mb={'$20'} mx={'$4'} h={'100%'}>
                             {children}
                         </VStack>
                     </ScrollView>
                     <Box bg={'transparent'}>
                         <Button mx={'$8'} mb={"$8"} onPress={form.handleSubmit(onSubmit)}>
-                            {form.formState.isSubmitting ? <ButtonSpinner/> : <ButtonText>Next</ButtonText>}
+                            {form.formState.isSubmitting ? <ButtonSpinner/> : <ButtonText>Done</ButtonText>}
                         </Button>
                     </Box>
                 </View>

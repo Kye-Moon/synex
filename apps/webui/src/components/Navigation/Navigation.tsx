@@ -10,7 +10,7 @@ export interface NavigationItemProps {
 export const sideBarMenuItems: NavigationItemProps[] = [
     {label: "Dashboard", route: "/dashboard", icon: HomeIcon},
     {label: "Jobs", route: "/jobs", icon: BriefcaseIcon},
-    {label: "Variations", route: "/variations", icon: FileTextIcon},
+    {label: "Job Records", route: "/job-records", icon: FileTextIcon},
     {label: "Supervisors / Crew", route: "/crew", icon: UsersIcon},
 ];
 

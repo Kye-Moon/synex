@@ -6,12 +6,14 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useMutation} from "@apollo/client";
 import toast from "react-hot-toast";
-import {FormField, Form} from "@/Primitives/Form";
+import {Form, FormField} from "@/Primitives/Form";
 import FormInputWrapper from "@/Components/FormInputWrapper/FormInputWrapper";
 import {Input} from "@/Primitives/Input";
-import {graphql} from "../../../../../packages/gql-types";
 import {signupMutation} from "@/Services/authService";
 import {useRouter} from "@tanstack/react-router";
+import {useSetRecoilState} from "recoil";
+import {tokenState} from "@/State/state";
+import {Button} from "@/Primitives/Button/Button";
 
 const signUpSchema = z.object({
 	firstName: z.string(),
@@ -24,6 +26,8 @@ type SignUpInput = InferType<typeof signUpSchema>;
 
 export default function SignUpForm() {
 	const router = useRouter();
+	const setTokenState =  useSetRecoilState(tokenState)
+
 	const form = useForm<SignUpInput>({
 		resolver: zodResolver(signUpSchema),
 		defaultValues: {
@@ -38,6 +42,7 @@ export default function SignUpForm() {
 	const [signup] = useMutation(signupMutation, {
 		onCompleted: async (data) => {
 			toast("Signed up successfully");
+			setTokenState(data.signup.access_token)
 			await router.navigate({to: '/dashboard'})
 		},
 		onError: (error) => {
@@ -119,16 +124,15 @@ export default function SignUpForm() {
 							</div>
 						</div>
 						<div>
-							<button
+							<Button
 								type="submit"
-								className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+								className="flex w-full justify-center"
 							>
 								Next
-							</button>
+							</Button>
 						</div>
 					</form>
 				</Form>
-
 		</div>
 	);
 }

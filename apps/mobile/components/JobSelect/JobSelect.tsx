@@ -1,15 +1,16 @@
 import {
-    Icon, ScrollView,
+    ScrollView,
     Select,
     SelectBackdrop,
-    SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper,
-    SelectIcon,
-    SelectInput, SelectItem,
+    SelectContent,
+    SelectDragIndicator,
+    SelectDragIndicatorWrapper,
+    SelectInput,
+    SelectItem,
     SelectPortal,
     SelectTrigger
 } from "@gluestack-ui/themed";
 import React from "react";
-import {ChevronDownIcon} from "lucide-react-native";
 import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
 import {StyleSheet} from "react-native";
@@ -35,9 +36,6 @@ export default function JobSelect({onValueChange}:JobSelectProps){
         <Select isRequired onValueChange={onValueChange}>
             <SelectTrigger variant="outline" size="md">
                 <SelectInput placeholder="Select option" />
-                <SelectIcon mr="$3">
-                    <Icon as={ChevronDownIcon} />
-                </SelectIcon>
             </SelectTrigger>
             <SelectPortal >
                 <SelectBackdrop />

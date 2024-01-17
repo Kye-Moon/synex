@@ -5,7 +5,7 @@ export const createVariationResource = graphql(`
     mutation CreateVariationResource($input: CreateVariationResourceInput!) {
         createVariationResource(createVariationResourceInput: $input) {
             id
-            variationId
+            jobRecordId
             createdAt
         }
     }
@@ -15,7 +15,7 @@ export const updateVariationResource = graphql(`
     mutation UpdateVariationResource($input: UpdateVariationResourceInput!) {
         updateVariationResource(updateVariationResourceInput: $input) {
             id
-            variationId
+            jobRecordId
         }
     }
 `)

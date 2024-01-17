@@ -12,6 +12,7 @@ import {loginMutation} from "@/Services/authService";
 import toast from "react-hot-toast";
 import * as z from "zod";
 import {InferType} from "prop-types";
+import {Button} from "@/Primitives/Button/Button";
 
 export default function LoginForm(){
     const router = useRouter();
@@ -33,7 +34,6 @@ export default function LoginForm(){
 
     const [login] = useMutation(loginMutation, {
         onCompleted: async (data) => {
-            toast("Logged in successfully");
             setTokenState(data.login.access_token)
             await router.navigate({to: '/dashboard'})
         },
@@ -77,13 +77,13 @@ export default function LoginForm(){
                         </div>
                     </div>
                     <div>
-                        <button
+                        <Button
                             onClick={form.handleSubmit(onSubmit)}
                             type="submit"
-                            className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+							className="flex w-full justify-center"
                         >
                             Sign in
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </Form>

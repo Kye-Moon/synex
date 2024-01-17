@@ -1,5 +1,5 @@
 import {Field, ObjectType} from '@nestjs/graphql';
-import {Variation} from "../../variation/entities/variation.entity";
+import {JobRecord} from "../../job-record/entities/job-record.entity";
 
 @ObjectType()
 export class Job {
@@ -30,12 +30,13 @@ export class Job {
     @Field(() => Date, {nullable: true})
     updatedAt = new Date();
 
-    @Field(() => [Variation], {nullable: true})
-    variations: Variation[];
+    @Field(() => [JobRecord], {nullable: true})
+    variations: JobRecord[];
 }
 
 export enum JobStatus {
-    OPEN = 'OPEN',
-    CLOSED = 'CLOSED',
+    UPCOMING = 'UPCOMING',
+    IN_PROGRESS = 'IN_PROGRESS',
+    COMPLETED = 'COMPLETED',
     ARCHIVED = 'ARCHIVED',
 }

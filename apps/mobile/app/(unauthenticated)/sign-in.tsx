@@ -46,6 +46,7 @@ export default function SignIn() {
             router.push('/(app)/(tabs)')
         }
     }, [accessToken]);
+
     const handlePressLogo = () => {
         if (logoPressCount === 4) {
             Alert.alert(
@@ -73,7 +74,7 @@ export default function SignIn() {
         }
     })
 
-    const [login] = useMutation(loginMutationMobile, {
+    const [login,{loading}] = useMutation(loginMutationMobile, {
         onError: (error) => {
             console.log(error);
             throw error;
@@ -113,6 +114,7 @@ export default function SignIn() {
                                 <Input w={'100%'}>
                                     <InputField
                                         type={'text'}
+                                        textContentType={'oneTimeCode'}
                                         onBlur={field.onBlur}
                                         value={field.value}
                                         onChange={value => field.onChange(value.nativeEvent.text)}
@@ -138,7 +140,7 @@ export default function SignIn() {
                         )}
                     />
                     <Button w={'100%'} mx={'$8'} onPress={form.handleSubmit(onSubmit)}>
-                        {form.formState.isSubmitting ? <ButtonSpinner/> : <ButtonText>Sign in</ButtonText>}
+                        {loading ? <ButtonSpinner/> : <ButtonText>Sign in</ButtonText>}
                     </Button>
                     <Pressable onPress={() => router.push('/reset-password')}>
                         <Text size={'sm'}>Forgot password?</Text>

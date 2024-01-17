@@ -3,7 +3,7 @@ import {ORM} from '../../drizzle/drizzle.module';
 import {NodePgDatabase} from 'drizzle-orm/node-postgres';
 import * as schema from '../../drizzle/schema';
 import {Job, job, jobCrew, NewJob, UpdateJob, user} from '../../drizzle/schema';
-import {and, asc, eq, inArray, or, sql} from 'drizzle-orm';
+import {and, asc, eq, inArray, or} from 'drizzle-orm';
 import {JobSearchInput} from './dto/search-job.input';
 
 @Injectable()
@@ -47,6 +47,7 @@ export class JobRepository {
                 )
             )
             .as('sq')
+
         return this.db.select()
             .from(job)
             .where(
@@ -66,7 +67,6 @@ export class JobRepository {
             description: updateJobInput.description,
             customerName: updateJobInput.customerName,
             status: updateJobInput.status,
-            dueDate: updateJobInput.dueDate,
         }).where(eq(job.id, id)).returning();
         return _job[0];
     }

@@ -16,7 +16,7 @@ const LoadingButton = ({ label, loadingStatus, type, className, onClick,variant 
 		<Button onClick={onClick} className={className} variant={variant} disabled={loadingStatus} type={type}>
 			{loadingStatus ? (
 				<>
-					<div className={"flex justify-center items-center w-16"}>
+					<div className={"flex justify-center items-center w-14"}>
 						<Spinner />
 					</div>
 				</>

@@ -9,9 +9,9 @@ export default function Job() {
     const {id, jobTitle} = useLocalSearchParams<{ id: string, jobTitle: string }>();
     return (
         <>
-            <Header title={jobTitle}/>
+            <Header title={"Job Details"}/>
             <Suspense fallback={<Text>Loading...</Text>}>
-                <JobCell jobId={id ?? ''}/>
+                <JobCell jobId={id}/>
             </Suspense>
         </>
 

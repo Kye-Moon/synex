@@ -4,14 +4,15 @@ import {parseISO} from 'date-fns'
 
 import {zodResolver} from "@hookform/resolvers/zod";
 import {editJobFormSchema, EditJobFormType} from "@/Pages/EditJobPage/EditJobFormSchema";
-import EditJobDetails from "@/Pages/EditJobPage/EditJobFormComponents/EditJobDetails/EditJobDetails";
-import {Button} from "@/Primitives/Button/Button";
+import EditJobDetails
+	from "@/Pages/EditJobPage/EditJobFormComponents/EditJobDetails/EditJobDetails";
 import {Suspense} from "react";
 import {updateJob} from "@/Services/jobService";
 import {useMutation} from "@apollo/client";
 import toast from "react-hot-toast";
 import {useNavigate} from "@tanstack/react-router";
 import CrewTableSection from "@/Pages/CrewPage/CrewTableSection";
+import LoadingButton from "@/Components/Loading/LoadingButton/LoadingButton";
 
 
 interface EditJobFormProps {
@@ -46,15 +47,22 @@ export default function EditJobForm({jobDetails, jobCrew}: EditJobFormProps) {
         awaitRefetchQueries: true,
     });
 
+	console.log(form.formState.isDirty)
     async function onSubmit(values: EditJobFormType) {
-        await update({
-            variables: {
-                input: {
-                    ...values,
-                    id: jobDetails.id,
-                },
-            }
-        })
+		if(!form.formState.isDirty){
+			console.log("not dirty")
+			await navigate({to: '/jobs/$jobId', params: {jobId: jobDetails.id}})
+			return
+		}else{
+			await update({
+				variables: {
+					input: {
+						...values,
+						id: jobDetails.id,
+					},
+				}
+			})
+		}
     }
 
     return (
@@ -74,9 +82,8 @@ export default function EditJobForm({jobDetails, jobCrew}: EditJobFormProps) {
                     </div>
                 </div>
                 <div className={'flex justify-end pt-12'}>
-                    <Button className={'w-40'} type="submit">Save</Button>
+                    <LoadingButton label={"Save"} loadingStatus={loading} className={'w-40'} type="submit"/>
                 </div>
-
             </form>
         </Form>
     )

@@ -1,10 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {CreateVariationInitialDataInput} from './dto/create-variation-initial-data.input';
 import {UpdateVariationInitialDataInput} from './dto/update-variation-initial-data.input';
-import {VariationService} from "../variation/variation.service";
-import {VariationRepository} from "../variation/variation.repository";
-import {RequestService} from "../request/request.service";
-import {VariationImageService} from "../variation-image/variation-image.service";
 import {VariationInitialDataRepository} from "./variation-initial-data.repository";
 
 @Injectable()
@@ -14,8 +10,11 @@ export class VariationInitialDataService {
     ) {
     }
 
-    create(createVariationInitialDataInput: CreateVariationInitialDataInput) {
-        return this.variationInitialDataRepository.create(createVariationInitialDataInput);
+    create(createVariationInitialDataInput: CreateVariationInitialDataInput, jobRecordId: string) {
+        return this.variationInitialDataRepository.create({
+            ...createVariationInitialDataInput,
+            jobRecordId: jobRecordId
+        });
     }
 
     findAll() {

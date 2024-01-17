@@ -44,7 +44,8 @@ export default function JobCell({jobId}: { jobId: string }) {
             <ScrollView>
                 <ScreenContentSection heading={"Details"}>
                     <View style={styles.container}>
-                        <LabelAndValue label={'Status'} value={<Badge><BadgeText>{enumToSentenceCase(data.job?.status ?? '')}</BadgeText></Badge>}/>
+                        <LabelAndValue label={'Status'} value={
+                            <Badge><BadgeText>{data.job?.status ? enumToSentenceCase(data.job?.status) : "-"}</BadgeText></Badge>}/>
                     </View>
                     <View style={styles.container}>
                         <LabelAndValue label={'Customer'} value={data.job.customerName}/>
@@ -70,7 +71,8 @@ export default function JobCell({jobId}: { jobId: string }) {
                                 <HStack style={styles.row}>
                                     <VStack>
                                         <Text size="md">{variation.title}</Text>
-                                        <Text size={'2xs'}>{truncate(variation.description, 25)}</Text>
+                                        <Text
+                                            size={'2xs'}>{variation.description ? truncate(variation.description, 25) : "-"}</Text>
                                     </VStack>
                                 </HStack>
                                 <Divider my={'$2'}/>

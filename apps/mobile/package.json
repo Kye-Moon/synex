@@ -6,7 +6,7 @@
     "start": "expo start --minify --no-dev",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "dev:ios": "expo start --ios --no-dev --minify",
+    "dev:ios": "expo start --ios",
     "test": "jest --watchAll"
   },
   "jest": {

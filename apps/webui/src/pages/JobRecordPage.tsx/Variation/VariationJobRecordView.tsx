@@ -4,8 +4,7 @@ import {ViewSummary} from "@/Pages/JobRecordPage.tsx/Variation/ViewSummary";
 import {Separator} from "@/Primitives/Seperator";
 import {ViewCostsAndResources} from "@/Pages/JobRecordPage.tsx/Variation/ViewCostsAndResources";
 import {ViewInitialData} from "@/Pages/JobRecordPage.tsx/Variation/ViewInitialData";
-import pdf from "@react-pdf/renderer";
-const {PDFDownloadLink} = pdf
+import {PDFDownloadLink} from "@react-pdf/renderer";
 import {MyDocument} from "@/Assets/pdfTemplate";
 import useVariationResources from "@/Hooks/useVariationResources";
 import {VariationQuery} from "gql-types";

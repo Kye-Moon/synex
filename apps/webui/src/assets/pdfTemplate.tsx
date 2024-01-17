@@ -1,10 +1,10 @@
 import React from 'react';
 import {Document, Image, Page, StyleSheet, Text, View} from "@react-pdf/renderer";
 import {ResourceSummaryQuery, VariationQuery} from "gql-types";
-import logo from "@/Assets/logo.png";
+import logo from "@/Assets/Logo.png";
 
 interface Props {
-	variation: VariationQuery['variation']
+	variation: VariationQuery['jobRecord']
 	labourResources: {
 		id: string,
 		description: string | null | undefined,

@@ -32,9 +32,6 @@ import {ImageGridPreview} from "../../../components/ImageGridPreview";
 import VariationAdditionalFormFields from "./VariationAdditionalFormFields";
 import RiskLevelSelect from "../../../components/RiskLevelSelect/RiskLevelSelect";
 import {stripEmptyValues} from "../../../lib/utils";
-import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import dayjs from "dayjs";
-import {createCrewLogMutation, updateCrewLogMutation} from "../../../lib/crewLogService";
 import {variationsCellQuery} from "../../../components/home/VariationsCell/VariationsCell";
 
 const preSignedUrlQuery = graphql(`

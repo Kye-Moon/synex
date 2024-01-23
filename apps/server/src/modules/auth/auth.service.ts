@@ -84,17 +84,19 @@ export class AuthService {
             role: 'OWNER',
             status: 'ACTIVE',
         });
+
+        const jwtPayload = {
+            sub: String(newUser.id),
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role,
+            orgId: organisation.id,
+        };
         return {
-            access_token: jwt.sign({
-                ...payload,
-                role: 'OWNER',
-            }, this.configService.get('JWT_SECRET'), {
+            access_token: jwt.sign(jwtPayload, this.configService.get('JWT_SECRET'), {
                 expiresIn: '1d',
             }),
-            refresh_token: jwt.sign({
-                ...payload,
-                role: 'OWNER',
-            }, this.configService.get('JWT_SECRET'), {
+            refresh_token: jwt.sign(jwtPayload, this.configService.get('JWT_SECRET'), {
                 expiresIn: '7d',
             }),
             user: {

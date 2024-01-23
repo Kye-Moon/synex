@@ -14,13 +14,15 @@ import {useRouter} from "@tanstack/react-router";
 import {useSetRecoilState} from "recoil";
 import {tokenState} from "@/State/state";
 import {Button} from "@/Primitives/Button/Button";
+import {formatPhoneNumber} from "@/Lib/utils";
 
 const signUpSchema = z.object({
 	firstName: z.string(),
 	lastName: z.string(),
 	organisationName: z.string(),
+	phone: z.string().min(10, "Please provide a valid phone number"),
 	email: z.string(),
-	password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/ , "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"),
+	password: z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}":;'?/<>,.])[a-zA-Z\d!@#$%^&*()_+{}":;'?/<>,.]{8,}$/ , "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"),
 });
 type SignUpInput = InferType<typeof signUpSchema>;
 
@@ -34,6 +36,7 @@ export default function SignUpForm() {
 			firstName: "",
 			lastName: "",
 			organisationName: "",
+			phone: "",
 			email: "",
 			password: "",
 		},
@@ -51,6 +54,7 @@ export default function SignUpForm() {
 	});
 
 	const onSubmit = async (values: SignUpInput) => {
+		values.phone = formatPhoneNumber(values.phone);
 		await signup({variables: {input: values}});
 	};
 
@@ -103,6 +107,19 @@ export default function SignUpForm() {
 									name="email"
 									render={({field}) => (
 										<FormInputWrapper label={"Work email"}>
+											<Input {...field} />
+										</FormInputWrapper>
+									)}
+								/>
+							</div>
+						</div>
+						<div>
+							<div className="mt-2">
+								<FormField
+									control={form.control}
+									name="phone"
+									render={({field}) => (
+										<FormInputWrapper label={"Phone Number"} description={"Required for SMS verification"}>
 											<Input {...field} />
 										</FormInputWrapper>
 									)}

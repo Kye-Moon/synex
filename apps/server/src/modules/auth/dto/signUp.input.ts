@@ -9,6 +9,8 @@ export class SignUpInput {
     @Field(() => String)
     organisationName: string;
     @Field(() => String)
+    phone: string;
+    @Field(() => String)
     email: string;
     @Field(() => String)
     password: string;

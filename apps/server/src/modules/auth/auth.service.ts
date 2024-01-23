@@ -81,6 +81,7 @@ export class AuthService {
             password: hash,
             name: payload.firstName + ' ' + payload.lastName,
             organisationId: organisation.id,
+            phone: payload.phone,
             role: 'OWNER',
             status: 'ACTIVE',
         });

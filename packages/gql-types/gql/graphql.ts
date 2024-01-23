@@ -527,6 +527,7 @@ export type SignUpInput = {
   lastName: Scalars['String']['input'];
   organisationName: Scalars['String']['input'];
   password: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
 };
 
 export type UpdateCrewLogInput = {

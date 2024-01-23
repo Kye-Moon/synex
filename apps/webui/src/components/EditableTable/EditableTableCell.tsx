@@ -17,10 +17,11 @@ export default function EditableTableCell({getValue, row, column, table}) {
 		setValue(e.target.value)
 		tableMeta?.updateData(row.index, column.id, e.target.value)
 	}
+
 	if (tableMeta?.editedRows[row.id]) {
 		return (
 			<Input
-				size={1}
+				size={columnMeta?.size || 1}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				onBlur={onBlur}

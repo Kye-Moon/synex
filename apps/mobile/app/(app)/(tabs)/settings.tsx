@@ -5,13 +5,14 @@ import React, {Suspense} from "react";
 import {StyleSheet} from "react-native";
 import ScreenSection from "../../../components/ScreenSection";
 import AccountDetailsCell from "../../../components/AccountDetailsCell";
+import LoadingSkeletonRows from "../../../components/Loading/SkeletonRows";
 
 export default function Settings() {
     const setToken = useSetRecoilState(accessTokenState)
     return (
         <ScreenSection>
             <View style={styles.content}>
-                <Suspense fallback={<Text>Loading...</Text>}>
+                <Suspense fallback={<LoadingSkeletonRows rows={2}/>}>
                     <AccountDetailsCell/>
                 </Suspense>
                 <View style={styles.bottom}>

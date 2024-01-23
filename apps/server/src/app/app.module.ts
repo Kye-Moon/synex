@@ -18,6 +18,9 @@ import {ConfigModule} from "@nestjs/config";
 import {JobRecordImageModule} from "../modules/job-record-image/job-record-image.module";
 import {VariationInitialDataModule} from "../modules/variation-initial-data/variation-initial-data.module";
 import {VariationResourceModule} from "../modules/variation-resource/variation-resource.module";
+import {JobScopeItemModule} from "../modules/job-scope-item/job-scope-item.module";
+import {JobAttachmentModule} from "../modules/job-attachment/job-attachment.module";
+import {CrewLogModule} from "../modules/crew-log/crew-log.module";
 
 @Module({
     imports: [
@@ -50,6 +53,9 @@ import {VariationResourceModule} from "../modules/variation-resource/variation-r
         RequestModule,
         EmailModule,
         S3Module,
+        JobScopeItemModule,
+        JobAttachmentModule,
+        CrewLogModule,
     ],
     controllers: [AppResolver],
     providers: [AppService],

@@ -37,7 +37,11 @@ export class JobService {
         searchInput.ownerId = this.request.userId;
         let jobs: Job[] = [];
         if (userRole === 'OWNER') {
-            jobs = await this.jobRepository.ownerSearch({orgId: this.request.organisationId});
+            jobs = await this.jobRepository.ownerSearch({
+                orgId: this.request.organisationId,
+                limit: searchInput.limit,
+                offset: searchInput.offset
+            });
         } else {
             const result = await this.jobRepository.search(searchInput);
             jobs = result.map((job) => {
@@ -55,7 +59,6 @@ export class JobService {
     }
 
     async update(id: string, updateJobInput: UpdateJobInput) {
-
         const existingJob = await this.jobRepository.findOne(id);
         if (!existingJob) throw new Error('Job not found');
         const job = await this.jobRepository.update(id, updateJobInput);

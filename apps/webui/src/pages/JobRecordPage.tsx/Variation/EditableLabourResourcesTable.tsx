@@ -69,7 +69,6 @@ export default function EditableLabourResourcesTable() {
             data={_data}
             originalData={originalData}
             setData={setData}
-            setOriginalData={setOriginalData}
             updateRow={updateResource}
             addRow={addResource}
             deleteRow={removeResource}

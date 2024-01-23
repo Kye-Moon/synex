@@ -19,21 +19,22 @@ export const accessTokenState = atom({
 export const API_URLS = {
     local: 'http://localhost:4000/graphql',
     dev: 'https://varify-server.onrender.com/graphql',
+    production: 'https://production-varify-server.onrender.com/graphql'
 };
 
 export const apiUrlState = atom({
     key: 'base_url',
-    default: __DEV__ ? API_URLS.local : API_URLS.dev,
-    effects: [
-        ({onSet, setSelf}) => {
-            onSet(async (newValue: any, _: any, isReset: any) => {
-                    await SecureStore.setItemAsync('api_url', JSON.stringify(newValue));
-            });
-            setSelf(SecureStore.getItemAsync('api_url').then((value) =>
-                value != null ? JSON.parse(value) : new DefaultValue()
-            ));
-        },
-    ],
+    default: __DEV__ ? API_URLS.local : API_URLS.production,
+    // effects: [
+    //     ({onSet, setSelf}) => {
+    //         onSet(async (newValue: any, _: any, isReset: any) => {
+    //                 await SecureStore.setItemAsync('api_url', JSON.stringify(newValue));
+    //         });
+    //         // setSelf(SecureStore.getItemAsync('api_url').then((value) =>
+    //         //     value != null ? JSON.parse(value) : new DefaultValue()
+    //         // ));
+    //     },
+    // ],
 });
 
 //

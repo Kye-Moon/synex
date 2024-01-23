@@ -17,7 +17,9 @@ export const newJobRecordDetailsSchema = z.object({
 
     //
     flag: z.string().optional(),
-});
+    // startTime: z.date().optional(),
+    // endTime: z.date().optional(),
+})
 
 export type NewJobRecordDetailsFormType = InferType<typeof newJobRecordDetailsSchema>;
 

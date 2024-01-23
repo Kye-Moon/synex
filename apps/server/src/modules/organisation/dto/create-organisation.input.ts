@@ -4,4 +4,7 @@ import {Field, InputType} from '@nestjs/graphql';
 export class CreateOrganisationInput {
   @Field(() => String)
   name: string;
+
+    @Field(() => String, { nullable: true })
+    logoUrl?: string;
 }

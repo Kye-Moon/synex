@@ -67,33 +67,12 @@ export const jobWithCrewQuery = graphql(`
 	}
 `);
 
-export const jobWithCrewAndVariationsQuery = graphql(`
-	query JobWithCrewAndVariations($jobId: String!) {
+export const jobPageQuery = graphql(`
+	query JobPage($jobId: String!) {
 		job(id: $jobId) {
 			id
 			title
-			description
-			ownerId
-			status
-			customerName
-			createdAt
-			dueDate
 		},
-		jobCrew(jobId: $jobId) {
-			id
-			name
-			phone
-			role
-		},
-		searchJobRecords(jobRecordSearchInput: {jobId: $jobId}) {
-			id
-			title
-			description
-			submittedBy {
-				id
-				name
-			}
-		}
 	}
 `);
 

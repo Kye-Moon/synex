@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         height: '100%',
         marginHorizontal: 20,
         alignItems: 'center',
+        marginTop: 20,
         gap: 10,
     },
     skeletonRow: {

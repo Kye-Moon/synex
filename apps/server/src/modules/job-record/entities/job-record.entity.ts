@@ -3,6 +3,7 @@ import {Job} from "../../job/entities/job.entity";
 import {User} from "../../user/entities/user.entity";
 import {VariationInitialData} from "../../variation-initial-data/entities/variation-initial-data.entity";
 import {JobRecordImage} from "../../job-record-image/entities/job-record-image.entity";
+import {JobScopeItem} from "../../job-scope-item/entities/job-scope-item.entity";
 
 @ObjectType()
 export class JobRecord {
@@ -39,6 +40,9 @@ export class JobRecord {
     @Field(() => [JobRecordImage])
     images: JobRecordImage[]
 
+    @Field(() => JobScopeItem, {nullable: true})
+    scopeItem: JobScopeItem
+
     @Field(() => Date)
     createdAt: Date
 
@@ -51,6 +55,7 @@ export enum JobRecordType {
     NOTE = 'NOTE',
     QA = 'QA',
     SAFETY = 'SAFETY',
+    CREW_LOG = 'CREW_LOG',
 }
 
 export enum JobRecordFlag {

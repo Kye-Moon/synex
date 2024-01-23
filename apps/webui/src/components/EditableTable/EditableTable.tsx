@@ -22,11 +22,9 @@ interface EditableTableProps<TData, TValue> {
      * The default data to render in the table (must match the column definition)
      */
     originalData: TData[];
-
-    setOriginalData: (data: (old: any) => any) => void;
-    updateRow: (id: string, data: UpdateVariationResourceInput) => void;
-    addRow: (newRow: Omit<CreateVariationResourceInput, 'variationId'>) => void;
-    resourceType: string;
+    updateRow: (id: string, data: any) => void;
+    addRow: (newRow: any) => void;
+    resourceType?: string;
     deleteRow: (id: string) => void;
 }
 
@@ -35,7 +33,6 @@ export default function EditableTable({
                                           columns,
                                           data,
                                           setData,
-                                          setOriginalData,
                                           originalData,
                                           updateRow,
                                           addRow,
@@ -111,12 +108,13 @@ export default function EditableTable({
                 <TableBody>
                     {table.getRowModel().rows.map((row) => (
                         <TableRow key={row.id}>
-                            <TableCell key={row.id}>
+                            <TableCell width={10} key={row.id}>
                                 {row.index + 1}
                             </TableCell>
                             {row.getVisibleCells().map((cell) => (
                                 <>
-                                    <TableCell key={cell.id}>
+									{/*@ts-ignore*/}
+                                    <TableCell width={cell.column.columnDef.meta?.width} key={cell.id}>
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </TableCell>
                                 </>

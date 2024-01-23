@@ -51,7 +51,6 @@ export default function EditableMiscResourcesTable() {
 			data={_data}
 			originalData={originalData}
 			setData={setData}
-			setOriginalData={setOriginalData}
 			updateRow={updateResource}
 			addRow={addResource}
 			deleteRow={removeResource}

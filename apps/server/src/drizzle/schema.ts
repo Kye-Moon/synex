@@ -36,6 +36,7 @@ export const organisation = pgTable('organisation', {
         ()`)
         .primaryKey(),
     name: text('name').notNull(),
+    logoUrl: text('logo_url'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -73,6 +74,32 @@ export type Job = InferSelectModel<typeof job>;
 export type NewJob = InferInsertModel<typeof job>;
 export type UpdateJob = Partial<NewJob>
 
+export const jobAttachment = pgTable('job_attachment', {
+    id: uuid('id')
+        .default(sql`gen_random_uuid
+        ()`)
+        .primaryKey(),
+    jobId: uuid('job_id')
+        .references(() => job.id, {onDelete: 'cascade'})
+        .notNull(),
+    name: text('name').notNull(),
+    url: text('url').notNull(),
+    type: varchar('type'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull(),
+});
+
+export const jobAttachmentRelations = relations(jobAttachment, ({one}) => ({
+    job: one(job, {
+        fields: [jobAttachment.jobId],
+        references: [job.id],
+    }),
+}));
+
+export type JobAttachment = InferSelectModel<typeof jobAttachment>;
+export type NewJobAttachment = InferInsertModel<typeof jobAttachment>;
 
 export const jobScopeItem = pgTable('job_scope_item', {
     id: uuid('id')
@@ -82,8 +109,9 @@ export const jobScopeItem = pgTable('job_scope_item', {
     jobId: uuid('job_id')
         .references(() => job.id, {onDelete: 'cascade'})
         .notNull(),
-    scopeItemTitle: text('scope_item_title').notNull(),
-    scopeItemDescription: text('scope_item_description'),
+    reference: text('reference'),
+    title: text('title'),
+    description: text('description'),
 });
 
 export const jobScopeItemRelations = relations(jobScopeItem, ({one}) => ({
@@ -96,7 +124,6 @@ export const jobScopeItemRelations = relations(jobScopeItem, ({one}) => ({
 export type JobScopeItem = InferSelectModel<typeof jobScopeItem>;
 export type NewJobScopeItem = InferInsertModel<typeof jobScopeItem>;
 export type UpdateJobScopeItem = Partial<NewJobScopeItem>
-
 
 export const jobRelations = relations(job, ({one, many}) => ({
     owner: one(user, {
@@ -149,7 +176,7 @@ export const jobRecord = pgTable('job_record', {
     scopeRef: text('scope_ref'),
     title: text('title').notNull(),
     description: text('description'),
-    type: varchar('type', {enum: ['VARIATION', 'NOTE', "QA", "SAFETY"]}),
+    type: varchar('type', {enum: ['VARIATION', 'NOTE', "QA", "SAFETY", "CREW_LOG"]}),
     status: varchar('status', {
         enum: ["IN_REVIEW", "SUBMITTED", 'APPROVED', 'REJECTED', "NO_ACTION", 'ARCHIVED']
     }),
@@ -278,3 +305,55 @@ export const notificationRelations = relations(notification, ({one}) => ({
         references: [jobRecord.id],
     }),
 }));
+
+////////////////////////// CREW LOG //////////////////////////
+export const crewLog = pgTable('crew_log', {
+    id: uuid('id')
+        .default(sql`gen_random_uuid
+        ()`)
+        .primaryKey(),
+    userId: uuid('crew_member_id')
+        .references(() => user.id)
+        .notNull(),
+    jobId: uuid('job_id')
+        .references(() => job.id)
+        .notNull(),
+    scopeRef: text('scope_ref'),
+    startTime: timestamp('start_time'),
+    endTime: timestamp('end_time'),
+    notes: text('message'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type CrewLog = InferSelectModel<typeof crewLog>;
+export type NewCrewLog = InferInsertModel<typeof crewLog>;
+
+export const crewLogRelations = relations(crewLog, ({one, many}) => ({
+    crewMember: one(user, {
+        fields: [crewLog.userId],
+        references: [user.id],
+    }),
+    job: one(job, {
+        fields: [crewLog.jobId],
+        references: [job.id],
+    }),
+    images: many(crewLogImage),
+}));
+
+
+export const crewLogImage = pgTable('crew_log_image', {
+    id: uuid('id')
+        .default(sql`gen_random_uuid
+        ()`)
+        .primaryKey(),
+    crewLogId: uuid('crew_log_id')
+        .references(() => crewLog.id)
+        .notNull(),
+    url: text('url').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type CrewLogImage = InferSelectModel<typeof crewLogImage>;
+export type NewCrewLogImage = InferInsertModel<typeof crewLogImage>;
+
+

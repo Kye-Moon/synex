@@ -1,4 +1,4 @@
-import {useSuspenseQuery} from "@apollo/client";
+import {useQuery, useSuspenseQuery} from "@apollo/client";
 import {variationResourceSummary} from "@/Services/variationResourceService";
 import {ViewSummary} from "@/Pages/JobRecordPage.tsx/Variation/ViewSummary";
 import {Separator} from "@/Primitives/Seperator";
@@ -7,7 +7,7 @@ import {ViewInitialData} from "@/Pages/JobRecordPage.tsx/Variation/ViewInitialDa
 import {PDFDownloadLink} from "@react-pdf/renderer";
 import {MyDocument} from "@/Assets/pdfTemplate";
 import useVariationResources from "@/Hooks/useVariationResources";
-import {VariationQuery} from "gql-types";
+import {graphql, VariationQuery} from "gql-types";
 import {Button} from "@/Primitives/Button/Button";
 
 
@@ -16,15 +16,31 @@ interface VariationJobRecordViewProps {
 
 }
 
+
+const query = graphql(`
+	query UserOrgExport{
+		currentUser {
+			id
+			organisation {
+				id
+				name
+				logoUrl
+			}
+		}
+	}
+`)
+
+
 export default function VariationJobRecordView({jobRecord}: VariationJobRecordViewProps) {
     const {data: summaryData} = useSuspenseQuery(variationResourceSummary, {variables: {variationId: jobRecord.id}})
-
+	const {data} = useQuery(query)
     const {
         labourResources,
         equipmentResources,
         materialResources,
         otherResources
     } = useVariationResources({variationId: jobRecord.id});
+
     return (
         <div>
             <div className={' pb-4'}>
@@ -44,6 +60,8 @@ export default function VariationJobRecordView({jobRecord}: VariationJobRecordVi
             <div className={'flex justify-end mr-4'}>
                 <PDFDownloadLink document={
                     <MyDocument
+						organisationLogoUrl={data?.currentUser?.organisation?.logoUrl}
+						orgName={data?.currentUser?.organisation?.name}
                         variation={jobRecord}
                         labourResources={labourResources}
                         equipmentResources={equipmentResources}

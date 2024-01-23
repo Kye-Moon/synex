@@ -33,7 +33,8 @@ export function EditDetails({jobRecord, form, onSubmit}: ViewDetailsProps) {
                                 <Input {...field} />
                             </FormInputWrapper>
                         )}
-                    /></div>
+                    />
+				</div>
                 <div className={'col-span-2 '}>
                     <FormField
                         control={form.control}

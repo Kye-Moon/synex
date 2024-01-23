@@ -7,6 +7,7 @@ import {RequestModule} from "../request/request.module";
 import {JobModule} from "../job/job.module";
 import {JobRecordImageModule} from "../job-record-image/job-record-image.module";
 import {VariationInitialDataModule} from "../variation-initial-data/variation-initial-data.module";
+import {JobScopeItemModule} from "../job-scope-item/job-scope-item.module";
 
 @Module({
     providers: [JobRecordResolver, JobRecordService, JobRecordRepository],
@@ -16,6 +17,7 @@ import {VariationInitialDataModule} from "../variation-initial-data/variation-in
         forwardRef(() => JobModule),
         JobRecordImageModule,
         VariationInitialDataModule,
+        JobScopeItemModule
     ],
     exports: [JobRecordService, JobRecordRepository],
 })

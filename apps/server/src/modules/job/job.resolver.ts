@@ -8,12 +8,18 @@ import {UseGuards} from '@nestjs/common';
 import {JobSearchInput} from './dto/search-job.input';
 import {JobRecord} from "../job-record/entities/job-record.entity";
 import {JobRecordService} from "../job-record/job-record.service";
+import {JobScopeItem} from "../job-scope-item/entities/job-scope-item.entity";
+import {JobScopeItemService} from "../job-scope-item/job-scope-item.service";
+import {JobAttachment} from "../job-attachment/entities/job-attachment.entity";
+import {JobAttachmentService} from "../job-attachment/job-attachment.service";
 
 @Resolver(() => Job)
 export class JobResolver {
     constructor(
         private readonly jobService: JobService,
-        private readonly variationService: JobRecordService,
+        private readonly jobRecordService: JobRecordService,
+        private readonly jobScopeItemService: JobScopeItemService,
+        private readonly jobAttachmentService: JobAttachmentService
     ) {
     }
 
@@ -49,6 +55,18 @@ export class JobResolver {
     @ResolveField(() => [JobRecord])
     variations(@Parent() job: Job) {
         const {id} = job;
-        return this.variationService.findJobVariations(id);
+        return this.jobRecordService.findJobRecords(id);
+    }
+
+    @ResolveField(() => [JobScopeItem])
+    scopeItems(@Parent() job: Job) {
+        const {id} = job;
+        return this.jobScopeItemService.findByJobId(id);
+    }
+
+    @ResolveField(() => [JobAttachment])
+    attachments(@Parent() job: Job) {
+        const {id} = job;
+        return this.jobAttachmentService.findAllByJobId(id);
     }
 }

@@ -29,6 +29,7 @@ type VerifiedCodeResponse {
 type Organisation {
   id: String!
   name: String!
+  logoUrl: String
 }
 
 type User {
@@ -62,10 +63,18 @@ type VariationInitialData {
 
 type JobRecordImage {
   id: String!
-  jobRecordId: String!
+  crewLogId: String!
   url: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type JobScopeItem {
+  id: String!
+  jobId: String!
+  reference: String
+  title: String
+  description: String
 }
 
 type JobRecord {
@@ -80,6 +89,7 @@ type JobRecord {
   submittedBy: User!
   initialData: VariationInitialData
   images: [JobRecordImage!]!
+  scopeItem: JobScopeItem
   createdAt: DateTime!
   updatedAt: DateTime!
   resources: [VariationResource!]!
@@ -96,6 +106,18 @@ type Job {
   createdAt: DateTime
   updatedAt: DateTime
   variations: [JobRecord!]
+  scopeItems: [JobScopeItem!]
+  attachments: [JobAttachment!]!
+}
+
+type JobAttachment {
+  id: String!
+  jobId: String!
+  name: String!
+  url: String!
+  type: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type JobCrewMember {
@@ -129,6 +151,17 @@ type VariationResourceSummary {
   total: String!
 }
 
+type CrewLog {
+  id: String!
+  user: User!
+  job: Job!
+  jobScopeItem: JobScopeItem!
+  startTime: DateTime
+  endTime: DateTime
+  notes: String
+  createdAt: DateTime!
+}
+
 type Query {
   searchUsers(userSearchInput: SearchUserInput!): [User!]!
   user(id: String!): User!
@@ -139,10 +172,14 @@ type Query {
   jobCrew(jobId: String!): [JobCrewMember!]!
   searchJobRecords(jobRecordSearchInput: JobRecordSearchInput!): [JobRecord!]!
   jobRecord(id: String!): JobRecord!
+  jobScopeItems(jobId: String!): [JobScopeItem!]!
+  jobAttachments(jobId: String!): [JobAttachment!]!
+  jobAttachment(id: Int!): JobAttachment!
   variationResources(variationId: String!): [VariationResource!]!
   variationResourceSummary(variationId: String!): VariationResourceSummary!
   variationResource(id: String!): VariationResource!
   presignedUrl(key: String!): String!
+  crewLog(id: Int!): CrewLog!
 }
 
 input SearchUserInput {
@@ -187,10 +224,18 @@ type Mutation {
   createJobRecord(createJobRecordInput: CreateJobRecordInput!): JobRecord!
   updateJobRecord(updateJobRecordInput: UpdateJobRecordInput!): JobRecord!
   removeVariation(id: Int!): JobRecord!
+  createJobScopeItem(createJobScopeItemInput: CreateJobScopeItemInput!): JobScopeItem!
+  updateJobScopeItem(updateJobScopeItemInput: UpdateJobScopeItemInput!): JobScopeItem!
+  removeJobScopeItem(id: String!): JobScopeItem!
+  createJobAttachments(createJobAttachmentInput: CreateJobAttachmentsInput!): [JobAttachment!]!
+  removeJobAttachment(id: String!): Boolean!
   createVariationInitialData(createVariationInitialDataInput: CreateVariationInitialDataInput!): VariationInitialData!
   createVariationResource(createVariationResourceInput: CreateVariationResourceInput!): VariationResource!
   updateVariationResource(updateVariationResourceInput: UpdateVariationResourceInput!): VariationResource!
   removeVariationResource(id: String!): VariationResource!
+  createCrewLog(createCrewLogInput: CreateCrewLogInput!): CrewLog!
+  updateCrewLog(updateCrewLogInput: UpdateCrewLogInput!): CrewLog!
+  removeCrewLog(id: Int!): CrewLog!
 }
 
 input LoginInput {
@@ -237,11 +282,13 @@ input UpdateUserInput {
 
 input CreateOrganisationInput {
   name: String!
+  logoUrl: String
 }
 
 input UpdateOrganisationInput {
   name: String
-  id: Int!
+  logoUrl: String
+  id: String!
 }
 
 input CreateJobInput {
@@ -251,6 +298,13 @@ input CreateJobInput {
   status: String
   dueDate: DateTime
   crew: [String!]
+  scopeItems: [CreateJobScopeItemViaJobInput!]
+}
+
+input CreateJobScopeItemViaJobInput {
+  reference: String
+  title: String
+  description: String
 }
 
 input UpdateJobInput {
@@ -260,6 +314,7 @@ input UpdateJobInput {
   status: String
   dueDate: DateTime
   crew: [String!]
+  scopeItems: [CreateJobScopeItemViaJobInput!]
   id: String!
 }
 
@@ -296,6 +351,32 @@ input UpdateJobRecordInput {
   id: String!
 }
 
+input CreateJobScopeItemInput {
+  jobId: String!
+  reference: String
+  title: String
+  description: String
+}
+
+input UpdateJobScopeItemInput {
+  jobId: String
+  reference: String
+  title: String
+  description: String
+  id: String!
+}
+
+input CreateJobAttachmentsInput {
+  jobId: String!
+  attachments: [AttachmentsInput!]!
+}
+
+input AttachmentsInput {
+  name: String!
+  url: String!
+  type: String!
+}
+
 input CreateVariationInitialDataInput {
   hours: String
   numPeople: String
@@ -327,4 +408,22 @@ input UpdateVariationResourceInput {
   rate: String
   numPeople: String
   id: String!
+}
+
+input CreateCrewLogInput {
+  jobId: String!
+  jobScopeItemId: String
+  startTime: DateTime
+  endTime: DateTime
+  notes: String
+}
+
+input UpdateCrewLogInput {
+  jobId: String
+  jobScopeItemId: String
+  startTime: DateTime
+  endTime: DateTime
+  notes: String
+  id: String!
+  imageUrls: [String!]
 }

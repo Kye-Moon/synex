@@ -1,10 +1,11 @@
-import {JobWithCrewAndVariationsQuery} from "gql-types";
+import {VariationTableSearchVariationsQuery} from "gql-types";
 import {TableCell, TableRow} from "@/Primitives/Table";
 import {useNavigate} from "@tanstack/react-router";
 import ActionsDropMenu, {Action} from "@/Components/ActionsDropMenu/ActionsDropMenu";
 import {EditIcon, NewspaperIcon, TrashIcon} from "lucide-react";
 import JobRecordTable from "@/Pages/JobRecordsPage/JobRecordsTable/JobRecordTable";
 import {Suspense} from "react";
+import TableWithHeaderLoadingSkeleton from "@/Components/Loading/Skeletons/TableWithHeaderLoadingSkeleton";
 
 interface JobVariationsProps {
 	jobId: string | undefined;
@@ -14,7 +15,7 @@ export default function JobRecords({jobId}: JobVariationsProps) {
 
 	return (
 		<div className={'py-4'}>
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<TableWithHeaderLoadingSkeleton/>}>
 				<JobRecordTable jobId={jobId}/>
 			</Suspense>
 		</div>
@@ -22,7 +23,7 @@ export default function JobRecords({jobId}: JobVariationsProps) {
 }
 
 export function JobVariationTableRow({variation}: {
-	variation: JobWithCrewAndVariationsQuery['searchJobRecords'][0]
+	variation: VariationTableSearchVariationsQuery['searchJobRecords'][0]
 }) {
 	const navigate = useNavigate();
 	const JobsTableColumnActions: Action[] = [

@@ -27,8 +27,8 @@ export class OrganisationService {
         return this.organisationRepository.findOneByName(name);
     }
 
-    update(id: number, updateOrganisationInput: UpdateOrganisationInput) {
-        return `This action updates a #${id} organisation`;
+    async update(id: string, updateOrganisationInput: UpdateOrganisationInput) {
+        return await this.organisationRepository.update(id, updateOrganisationInput);
     }
 
     remove(id: number) {

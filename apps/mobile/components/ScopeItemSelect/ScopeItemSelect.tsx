@@ -10,8 +10,10 @@ import {
     SelectPortal,
     SelectTrigger
 } from "@gluestack-ui/themed";
-import React from "react";
+import React, {useEffect} from "react";
 import {StyleSheet} from "react-native";
+import {graphql} from "gql-types";
+import {useLazyQuery, useQuery} from "@apollo/client";
 
 
 interface ScopeItemSelectProps {
@@ -19,8 +21,33 @@ interface ScopeItemSelectProps {
     jobId?: string
 }
 
+const query = graphql(`
+    query GetScopeItems($jobId: String!) {
+        jobScopeItems(jobId: $jobId) {
+            id
+            title
+            reference
+            description
+        }
+    }
+`)
+
 export default function ScopeItemSelect({onValueChange, jobId}: ScopeItemSelectProps) {
-    const data: any[] = []
+    const [getScopeItems, {loading, data}] = useLazyQuery(query)
+    //Filter to include on the ones with a title
+    const filteredScopeItems = data?.jobScopeItems?.filter((item) => item.title) || []
+
+    //Get the scope items when the jobId changes
+    useEffect(() => {
+        async function _getScopeItems() {
+            if (jobId !== undefined) {
+                await getScopeItems({variables: {jobId: jobId}})
+            }
+        }
+
+        _getScopeItems()
+
+    }, [jobId]);
     return (
         <Select isRequired onValueChange={onValueChange}>
             <SelectTrigger variant="outline" size="md">
@@ -34,12 +61,15 @@ export default function ScopeItemSelect({onValueChange, jobId}: ScopeItemSelectP
                     </SelectDragIndicatorWrapper>
                     <SelectItem label="Select a scope reference" value="" isDisabled={!jobId}/>
                     <ScrollView width={'100%'}>
-                        {
-                            data.map((job) => {
-                                return (
-                                    <SelectItem key={job.id} label={job.title} value={job.id}/>
-                                )
-                            })
+                        {filteredScopeItems.map((item) => {
+                            return (
+                                <SelectItem
+                                    key={item.id}
+                                    label={`[${item.reference}] - ${item.title}`}
+                                    value={item.id}
+                                />
+                            )
+                        })
                         }
                     </ScrollView>
                 </SelectContent>

@@ -38,7 +38,7 @@ export const loginMutationMobile = graphql(`
 export default function SignIn() {
     const router = useRouter();
     const [logoPressCount, setLogoPressCount] = useState(0);
-    const  setApi = useSetRecoilState(apiUrlState);
+    const  [apiUrl, setApi] = useRecoilState(apiUrlState);
     const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
     useEffect(() => {
@@ -105,6 +105,7 @@ export default function SignIn() {
                 <Center style={styles.content}>
                     <Pressable onPress={handlePressLogo}>
                         <Image alt={'logo'} source={require('../../assets/images/Logo.png')} style={styles.logo}/>
+                        {apiUrl === API_URLS.local && <Text size={'xs'}>LOCAL</Text>}
                     </Pressable>
                     <Controller
                         control={form.control}

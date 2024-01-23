@@ -59,7 +59,6 @@ export default function EditableMaterialsResourcesTable() {
 			data={_data}
 			originalData={originalData}
 			setData={setData}
-			setOriginalData={setOriginalData}
 			updateRow={updateResource}
 			addRow={addResource}
 			deleteRow={removeResource}

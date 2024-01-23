@@ -34,10 +34,13 @@ export class JobRepository {
             .where(or(
                 eq(job.ownerId, searchInput.ownerId),
                 eq(jobCrew.crewMemberId, searchInput.ownerId)
-            )).limit(searchInput.limit).orderBy(asc(job.createdAt))
+            ))
+            .offset(searchInput.offset)
+            .limit(searchInput.limit)
+            .orderBy(asc(job.createdAt))
     }
 
-    async ownerSearch({orgId}: { orgId: string }) {
+    async ownerSearch({orgId,limit,offset}: { orgId: string, limit: number, offset: number }): Promise<Job[]> {
         const sq = this.db.select({id: user.id})
             .from(user)
             .where(
@@ -53,6 +56,9 @@ export class JobRepository {
             .where(
                 inArray(job.ownerId, await this.db.select().from(sq).then((res) => res.map((r) => r.id))),
             )
+            .orderBy(asc(job.createdAt))
+            .limit(limit)
+            .offset(offset)
     }
 
     async findOne(id: string): Promise<Job> {

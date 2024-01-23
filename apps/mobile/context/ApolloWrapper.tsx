@@ -15,7 +15,7 @@ export function ApolloWrapper({children}: React.PropsWithChildren) {
                     setAuthToken("")
                 }
             })
-        if (networkError) console.log(`[Network error]: ${networkError}`);
+        if (networkError) console.log(`[Network error]: ${networkError.message}`);
     });
 
     const httpLink = new HttpLink({

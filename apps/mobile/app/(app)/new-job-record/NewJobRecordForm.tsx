@@ -16,12 +16,12 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import FormInputWrapper from "../../../components/FormInputWrapper";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {graphql} from "gql-types";
-import {showErrorToast} from "../../../lib/toasts";
+import {showErrorToast, showSuccessToast} from "../../../lib/toasts";
 import * as ImagePicker from 'expo-image-picker';
 import FormPageTemplate from "../../../components/FormPageTemplate";
 import {uploadImages} from "../../../lib/s3";
 import {useRouter} from "expo-router";
-import {createMutation, updateMutation} from "../../../lib/variationService";
+import {createMutation, updateMutation} from "../../../lib/jobRecordService";
 import JobSelect from "../../../components/JobSelect/JobSelect";
 import ImageUploadLoading from "../../../components/ImageUploadLoading";
 import {newJobRecordDetailsSchema} from "./newJobRecordFormSchema";
@@ -32,6 +32,10 @@ import {ImageGridPreview} from "../../../components/ImageGridPreview";
 import VariationAdditionalFormFields from "./VariationAdditionalFormFields";
 import RiskLevelSelect from "../../../components/RiskLevelSelect/RiskLevelSelect";
 import {stripEmptyValues} from "../../../lib/utils";
+import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
+import {createCrewLogMutation, updateCrewLogMutation} from "../../../lib/crewLogService";
+import {variationsCellQuery} from "../../../components/home/VariationsCell/VariationsCell";
 
 const preSignedUrlQuery = graphql(`
     query PreSignedUrl($key: String!) {
@@ -102,25 +106,38 @@ export default function NewJobRecordForm() {
     const toast = useToast()
     const [saveDetails, {loading}] = useMutation(createMutation, {
         onError: (error) => showErrorToast({error, toast}),
-        onCompleted: (data) => console.log(data),
-        refetchQueries: ['VariationsCell'],
+        onCompleted: (data) => showSuccessToast({toast, message: 'Job record saved'}),
+        refetchQueries: [{query: variationsCellQuery, variables: {input: {}}}],
         awaitRefetchQueries: true
     })
     const [updateDetails, {loading: updateLoading}] = useMutation(updateMutation, {
-        onError: (error) => console.log(error),
-        onCompleted: (data) => console.log(data),
+        onError: (error) => showErrorToast({toast, message: "Error saving job record images"}),
+        onCompleted: (data) => showSuccessToast({toast, message: 'Job record images saved'}),
     })
+
+    // const [saveCrewLog, {loading: crewLogLoading}] = useMutation(createCrewLogMutation, {
+    //     onError: (error) => showErrorToast({error, toast}),
+    //     onCompleted: (data) => showSuccessToast({toast, message: 'Crew log saved'}),
+    //     refetchQueries: [{query: variationsCellQuery, variables: {input: {}}}],
+    //     awaitRefetchQueries: true
+    // })
+    // const [updateCrewLog, {loading: updateCrewLogLoading}] = useMutation(updateCrewLogMutation, {
+    //     onError: (error) => showErrorToast({toast, error}),
+    // })
+
+
     const onSubmit = async (data: any) => {
         const strippedData = stripEmptyValues(data)
 
-        const variation = await saveDetails({
+        const jobRecord = await saveDetails({
             variables: {
                 input: {
-                    ...strippedData
+                    ...strippedData,
                 }
             }
         })
-        if (!variation.data?.createJobRecord) {
+
+        if (!jobRecord.data?.createJobRecord) {
             return;
         }
         if (images.length > 0) {
@@ -128,21 +145,43 @@ export default function NewJobRecordForm() {
             const imageUrls = await uploadImages({
                 images: images,
                 getPresignedUrl: getPresignedUrl,
-                variationId: variation.data.createJobRecord.id,
+                variationId: jobRecord.data.createJobRecord.id,
             })
 
             await updateDetails({
                 variables: {
                     input: {
-                        id: variation.data.createJobRecord.id,
+                        id: jobRecord.data.createJobRecord.id,
                         imageUrls: imageUrls
                     }
                 }
             })
         }
+
+        form.reset()
         setUploadingImages(false)
         router.push('/')
     };
+
+    // const setStartTime = (event: DateTimePickerEvent, date: Date | undefined) => {
+    //     const {
+    //         type,
+    //         nativeEvent: {timestamp},
+    //     } = event;
+    //     if (date) {
+    //         form.setValue('startTime', date)
+    //     }
+    // };
+    //
+    // const setEndTime = (event: DateTimePickerEvent, date: Date | undefined) => {
+    //     const {
+    //         type,
+    //         nativeEvent: {timestamp},
+    //     } = event;
+    //     if (date) {
+    //         form.setValue('endTime', date)
+    //     }
+    // };
 
     return (
         <>
@@ -187,7 +226,8 @@ export default function NewJobRecordForm() {
                             control={form.control}
                             name="title"
                             render={({field, formState, fieldState}) => (
-                                <FormInputWrapper isRequired={true} title={'Title'} formState={formState} field={field}>
+                                <FormInputWrapper isRequired={true} title={'Title'} formState={formState}
+                                                  field={field}>
                                     <Input>
                                         <InputField
                                             onBlur={field.onBlur}
@@ -225,7 +265,34 @@ export default function NewJobRecordForm() {
                                 )}
                             />
                         )}
-
+                        {/*{recordType === 'CREW_LOG' && (*/}
+                        {/*    <>*/}
+                        {/*        <Controller*/}
+                        {/*            control={form.control}*/}
+                        {/*            name="startTime"*/}
+                        {/*            render={({field, formState, fieldState}) => (*/}
+                        {/*                <FormInputWrapper title={'Start time'} formState={formState}*/}
+                        {/*                                  field={field}>*/}
+                        {/*                    <RNDateTimePicker mode="time"*/}
+                        {/*                                      value={dayjs(field.value).toDate()}*/}
+                        {/*                                      onChange={(event, date) => setStartTime(event, date)}/>*/}
+                        {/*                </FormInputWrapper>*/}
+                        {/*            )}*/}
+                        {/*        />*/}
+                        {/*        <Controller*/}
+                        {/*            control={form.control}*/}
+                        {/*            name="endTime"*/}
+                        {/*            render={({field, formState, fieldState}) => (*/}
+                        {/*                <FormInputWrapper title={'Finish time'} formState={formState}*/}
+                        {/*                                  field={field}>*/}
+                        {/*                    <RNDateTimePicker mode="time"*/}
+                        {/*                                      value={dayjs(field.value).toDate()}*/}
+                        {/*                                      onChange={(event, date) => setEndTime(event, date)}/>*/}
+                        {/*                </FormInputWrapper>*/}
+                        {/*            )}*/}
+                        {/*        />*/}
+                        {/*    </>*/}
+                        {/*)}*/}
                         <Box>
                             <HStack marginTop={12} width={'$full'} gap={'$4'} justifyContent='space-between'
                                     alignItems={'center'}>

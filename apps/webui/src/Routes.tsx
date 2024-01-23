@@ -158,7 +158,7 @@ const adminRoute = new Route({
 	path: "/admins",
 	component: AdminPage,
 });
-const settingsRoute = new Route({
+export const settingsRoute = new Route({
 	getParentRoute: () => layoutRoute,
 	path: "/settings",
 	component: SettingsPage,

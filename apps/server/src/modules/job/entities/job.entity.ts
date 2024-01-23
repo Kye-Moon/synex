@@ -1,5 +1,6 @@
 import {Field, ObjectType} from '@nestjs/graphql';
 import {JobRecord} from "../../job-record/entities/job-record.entity";
+import {JobScopeItem} from "../../job-scope-item/entities/job-scope-item.entity";
 
 @ObjectType()
 export class Job {
@@ -32,6 +33,9 @@ export class Job {
 
     @Field(() => [JobRecord], {nullable: true})
     variations: JobRecord[];
+
+    @Field(() => [JobScopeItem], {nullable: true})
+    scopeItems: JobScopeItem[];
 }
 
 export enum JobStatus {

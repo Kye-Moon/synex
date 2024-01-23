@@ -58,7 +58,6 @@ export default function EditableEquipmentResourcesTable() {
             data={_data}
             originalData={originalData}
             setData={setData}
-            setOriginalData={setOriginalData}
             updateRow={updateResource}
             addRow={addResource}
             deleteRow={removeResource}

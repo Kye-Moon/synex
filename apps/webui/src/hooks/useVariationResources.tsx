@@ -69,14 +69,14 @@ export default function useVariationResources({variationId}: VariationResourceHo
 
 
     const [create] = useMutation(createVariationResource, {
-        refetchQueries: ['VariationResources',],
+        refetchQueries: ['VariationResources','ResourceSummary'],
     })
     const [update] = useMutation(updateVariationResource, {
-        refetchQueries: ['VariationResources'],
+		refetchQueries: ['VariationResources','ResourceSummary'],
     })
 
     const [deleteResource] = useMutation(deleteVariationResource, {
-        refetchQueries: ['VariationResources'],
+		refetchQueries: ['VariationResources','ResourceSummary'],
     })
 
     const addResource = async (resource: Omit<CreateVariationResourceInput, 'variationId'>) => {

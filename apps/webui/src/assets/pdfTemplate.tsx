@@ -2,9 +2,13 @@ import React from 'react';
 import {Document, Image, Page, StyleSheet, Text, View} from "@react-pdf/renderer";
 import {ResourceSummaryQuery, VariationQuery} from "gql-types";
 import logo from "@/Assets/Logo.png";
+import {generateRandomDocumentId} from "@/Lib/utils";
+import {format} from "date-fns";
 
 interface Props {
 	variation: VariationQuery['jobRecord']
+	organisationLogoUrl: string | undefined | null
+	orgName: string | undefined | null
 	labourResources: {
 		id: string,
 		description: string | null | undefined,
@@ -39,22 +43,24 @@ export const MyDocument = ({
 							   materialResources,
 							   equipmentResources,
 							   otherResources,
-							   summaryData
+							   summaryData,
+							   organisationLogoUrl,
+							   orgName
 						   }: Props) => {
-
 
 	return (
 
 		<Document>
 			<Page size="A4" style={styles.page}>
 				<View>
-					<Image src={logo} style={{width: "40px", height: "auto", margin: '2'}}/>
+					<Image src={organisationLogoUrl ?? logo}
+						   style={{width: "40px", height: "auto", margin: '2'}}/>
 					<View style={styles.invoiceTextNumberContainer}>
 						<Text>{`Title: ${variation.title}`}</Text>
-						<Text style={styles.invoiceId}>{`Variation ID: INVOICE_#`}</Text>
+						<Text style={styles.invoiceId}>{`Document ID: ${generateRandomDocumentId(orgName ?? "DOC")}`}</Text>
 					</View>
 					<View style={styles.invoiceTextNumberContainer}>
-						<Text>{`Date of work: ${variation.createdAt}`}</Text>
+						<Text>{`Date of work: ${format(new Date(variation.createdAt)," hh:mm a dd, MMM, yyyy")}`}</Text>
 					</View>
 					<View style={styles.descriptionContainer}>
 						<Text>{`Description of work`}</Text>

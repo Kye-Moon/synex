@@ -3,7 +3,7 @@ import {graphql} from "gql-types";
 import {useSuspenseQuery} from "@apollo/client";
 import React from "react";
 
-const Query = graphql(`
+export const variationsCellQuery = graphql(`
     query VariationsCell($input: JobRecordSearchInput!) {
         searchJobRecords(jobRecordSearchInput: $input) {
             id
@@ -20,7 +20,7 @@ const Query = graphql(`
     }
 `)
 export default function VariationsCell() {
-    const {data} = useSuspenseQuery(Query, {variables: {input: {}}})
+    const {data} = useSuspenseQuery(variationsCellQuery, {variables: {input: {}}})
     return (
         <>
             <JobRecordList jobRecords={data.searchJobRecords}/>

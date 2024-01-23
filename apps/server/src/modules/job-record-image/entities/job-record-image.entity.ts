@@ -6,7 +6,7 @@ export class JobRecordImage {
     id: string;
 
     @Field(() => String)
-    jobRecordId: string;
+    crewLogId: string;
 
     @Field(() => String)
     url: string;

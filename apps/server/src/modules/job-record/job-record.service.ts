@@ -86,7 +86,7 @@ export class JobRecordService {
         return `This action removes a #${id} variation`;
     }
 
-    async findJobVariations(jobId: string) {
+    async findJobRecords(jobId: string) {
         return await this.jobRecordRepository.findByJobId(jobId)
     }
 

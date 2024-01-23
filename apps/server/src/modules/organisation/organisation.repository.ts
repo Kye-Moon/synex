@@ -27,4 +27,9 @@ export class OrganisationRepository {
         return _org[0];
     }
 
+    async update(id: string, input: Partial<NewOrganisation>) {
+        const _org = await this.db.update(organisation).set(input).where(eq(organisation.id, id)).returning();
+        return _org[0];
+    }
+
 }

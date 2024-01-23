@@ -13,4 +13,8 @@ export class JobRecordImageService {
         const _variationImage = await this.db.insert(jobRecordImage).values([input]).returning()
         return _variationImage[0]
     }
+
+    async createMany(images: NewJobRecordImage[]) {
+        return this.db.insert(jobRecordImage).values(images).returning();
+    }
 }

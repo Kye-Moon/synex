@@ -7,7 +7,10 @@ const cookieParser = require('cookie-parser');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:3001','http://localhost:3000', 'http://localhost:4000','https://webui-szl9.onrender.com'],
+    origin:
+        ['http://localhost:3001','http://localhost:3000', 'http://localhost:4000',
+          'https://webui-szl9.onrender.com','https://production-varify-server.onrender.com/','https://production-varify-server.onrender.com',
+          'https://varify.synex.one'],
     credentials: true,
   })
 

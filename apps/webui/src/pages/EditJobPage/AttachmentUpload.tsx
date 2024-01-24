@@ -59,7 +59,7 @@ export default function AttachmentUpload({jobId}: AttachmentUploadProps) {
 		const uploaded = await uploadAttachments({
 				files: files,
 				getPresignedUrl: getPresignedUrl,
-				key: `attachments`,
+				key: `${jobId}/attachments`,
 			}
 		)
 		await createAttachments({

@@ -51,7 +51,7 @@ export const uploadAttachments = async ({
 }[]> => {
 	// Mapping each image upload to a promise
 	const uploadPromises = files.map(async (file, index) => {
-		const preSignedUrl = await getPresignedUrl({variables: {key: `/${key}/${file.name}`}});
+		const preSignedUrl = await getPresignedUrl({variables: {key: `${key}/${file.name}`}});
 		if (!!preSignedUrl.data?.presignedUrl) {
 			const response = await fetch(preSignedUrl.data.presignedUrl, {
 				method: 'PUT',

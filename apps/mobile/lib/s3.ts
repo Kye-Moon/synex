@@ -16,7 +16,7 @@ export const uploadImages = async ({
                                    }: UploadImagesProps): Promise<string[]> => {
     // Mapping each image upload to a promise
     const uploadPromises = images.map(async (result,index) => {
-        const preSignedUrl = await getPresignedUrl({variables: {key: `${variationId}-${result.fileName}`}});
+        const preSignedUrl = await getPresignedUrl({variables: {key: `${variationId}/${result.fileName}`}});
         const picture = await (await fetch(result.uri)).blob();
 
         if (!!preSignedUrl.data?.presignedUrl) {

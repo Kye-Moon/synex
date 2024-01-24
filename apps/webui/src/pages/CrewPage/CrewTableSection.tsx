@@ -22,7 +22,7 @@ interface CrewTableSectionProps {
 }
 
 export default function CrewTableSection({showSelect, tableCaption,  initialSelected = []}: CrewTableSectionProps) {
-    const {data} = useSuspenseQuery(query, {variables: {input: {role: ["CREW_MEMBER", "SUPERVISOR"]}}})
+    const {data} = useSuspenseQuery(query, {variables: {input: {role: ["CREW_MEMBER", "SUPERVISOR","ADMIN","OWNER"]}}});
 
 	//Empty state
 	if (data.searchUsers.length === 0) {

@@ -5,7 +5,7 @@ import PageHeadingWithMetaAndActions from "@/Components/PageHeadingWithMetaAndAc
 import PageContentSection from "@/Components/PageContentSection";
 import {ProductCard} from "@/Components/ProductCard";
 import VarifyLogo from "@/Assets/varify.png";
-import FieldlenzLogo from "@/Assets/Fieldlens.png";
+import FieldlenzLogo from "@/Assets/FieldLens.png";
 import useClient from "../hooks/useClient";
 
 export default function DashboardPage() {

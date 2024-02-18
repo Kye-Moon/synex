@@ -84,7 +84,7 @@ export class PaymentsService {
         const org = await this.organisationRepository.findOneByAuthServiceId(this.requestService.organisationId)
         return await this.stripe.billingPortal.sessions.create({
             customer: org.customerId,
-            return_url: 'http://localhost:5173/dashboard',
+            return_url: process.env.STRIPE_PORTAL_RETURN_URL
         });
     }
 

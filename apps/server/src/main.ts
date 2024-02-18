@@ -10,7 +10,7 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {rawBody: true});
     app.enableCors({
         origin:
-            ['http://localhost:5173','http://localhost:5173/',  'http://localhost:3000'],
+            ['http://localhost:5173', 'http://localhost:3000', 'https://stage-synex-home-webui.onrender.com', 'https://synex.one'],
         credentials: true,
     })
 

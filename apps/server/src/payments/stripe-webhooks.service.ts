@@ -55,6 +55,7 @@ export class StripeWebhooksService {
             })
         } catch (e) {
             console.log(e);
+            throw e;
         }
     }
 
@@ -74,6 +75,7 @@ export class StripeWebhooksService {
             })
         } catch (e) {
             console.log(e);
+            throw e;
         }
     }
 
@@ -93,6 +95,7 @@ export class StripeWebhooksService {
             })
         } catch (e) {
             console.log(e);
+            throw e;
         }
     }
 

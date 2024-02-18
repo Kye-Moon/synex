@@ -1,10 +1,11 @@
-import Header from "../components/Header.tsx";
-import Hero1 from "../components/Hero1.tsx";
-import ProductsGrid from "../components/ProductsGrid.tsx";
-import VarifyProductContent from "../components/VarifyProductContent.tsx";
-import Footer from "../components/Footer.tsx";
+import Header from "@/Components/Header";
+import Hero1 from "@/Components/Hero1";
+import ProductsGrid from "@/Components/ProductsGrid";
+import VarifyProductContent from "@/Components/VarifyProductContent";
+import Footer from "@/Components/Footer";
 
 export default function HomePage() {
+
 
     return (
         <>

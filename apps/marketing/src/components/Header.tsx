@@ -1,15 +1,19 @@
 import {Fragment, useState} from "react";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
-import {Dialog, Disclosure, Popover, Transition} from "@headlessui/react";
+import {Dialog, Popover, Transition} from "@headlessui/react";
 import {ChevronDownIcon, PhoneIcon, PlayCircleIcon} from "@heroicons/react/20/solid";
 import Logo from "../assets/synex1.png";
 import varify from "../assets/varify.png";
 import estiq from "../assets/EstiQ.png";
 import fieldlens from "../assets/FieldLens.png";
+import {Button} from "@/Primitives/Button/Button";
+import {useNavigate} from "@tanstack/react-router";
+import {SignInButton, useAuth} from "@clerk/clerk-react";
+
 
 const products = [
     {name: 'Varify', description: 'Avoid missed revenue', href: '#varify', img: varify},
-    {name: 'EstiQ', description: 'Streamline project cost estimation',  href: '#varify', img: estiq},
+    {name: 'EstiQ', description: 'Streamline project cost estimation', href: '#varify', img: estiq},
     {name: 'Field lens', description: 'Apply meaningful context to photos', href: '#varify', img: fieldlens},
 ]
 const callsToAction = [
@@ -23,6 +27,9 @@ function classNames(...classes: string[]) {
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const navigate = useNavigate();
+    const {getToken, isLoaded, isSignedIn} = useAuth();
+
 
     return (
         <header className="bg-white h-20 w-full ">
@@ -84,34 +91,17 @@ export default function Header() {
                                         </div>
                                     ))}
                                 </div>
-                                {/*<div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">*/}
-                                {/*    {callsToAction.map((item) => (*/}
-                                {/*        <a*/}
-                                {/*            key={item.name}*/}
-                                {/*            href={item.href}*/}
-                                {/*            className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"*/}
-                                {/*        >*/}
-                                {/*            <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>*/}
-                                {/*            {item.name}*/}
-                                {/*        </a>*/}
-                                {/*    ))}*/}
-                                {/*</div>*/}
                             </Popover.Panel>
                         </Transition>
                     </Popover>
-                    {/*<a href="#" className="text-sm font-semibold leading-6 text-gray-900">*/}
-                    {/*    About*/}
-                    {/*</a>*/}
-                    {/*<a href="#" className="text-sm font-semibold leading-6 text-gray-900">*/}
-                    {/*    Blog*/}
-                    {/*</a>*/}
                     <a href="#contact" className="text-sm font-semibold leading-6 text-gray-900">
                         Contact
                     </a>
-
                 </Popover.Group>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-2">
+                    {isSignedIn && <Button onClick={() => navigate({to: '/dashboard'})}>Dashboard</Button>}
+                    {!isSignedIn && <SignInButton><Button>Log in</Button></SignInButton>}
+                    {!isSignedIn && <Button onClick={() => navigate({to: '/signup'})}>Get A Free Account</Button>}
                 </div>
             </nav>
             <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -138,59 +128,12 @@ export default function Header() {
                     </div>
                     <div className="mt-6 flow-root">
                         <div className="-my-6 divide-y divide-gray-500/10">
-                            <div className="space-y-2 py-6">
-                                <Disclosure as="div" className="-mx-3">
-                                    {({open}) => (
-                                        <>
-                                            <Disclosure.Button
-                                                className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                                                Product
-                                                <ChevronDownIcon
-                                                    className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
-                                                    aria-hidden="true"
-                                                />
-                                            </Disclosure.Button>
-                                            <Disclosure.Panel className="mt-2 space-y-2">
-                                                {[...products, ...callsToAction].map((item) => (
-                                                    <Disclosure.Button
-                                                        key={item.name}
-                                                        as="a"
-                                                        href={item.href}
-                                                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                                    >
-                                                        {item.name}
-                                                    </Disclosure.Button>
-                                                ))}
-                                            </Disclosure.Panel>
-                                        </>
-                                    )}
-                                </Disclosure>
-                                <a
-                                    href="#"
-                                    className="-mx-3 z-999 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Features
-                                </a>
-                                <a
-                                    href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Marketplace
-                                </a>
-                                <a
-                                    href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Company
-                                </a>
-                            </div>
                             <div className="py-6">
-                                <a
-                                    href="#"
-                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Log in
-                                </a>
+                                <div className=" lg:flex lg:flex-1 lg:justify-end space-x-2">
+                                    {isSignedIn && <Button onClick={() => navigate({to: '/dashboard'})}>Dashboard</Button>}
+                                    {!isSignedIn && <SignInButton><Button>Log in</Button></SignInButton>}
+                                    {!isSignedIn && <Button onClick={() => navigate({to: '/signup'})}>Get A Free Account</Button>}
+                                </div>
                             </div>
                         </div>
                     </div>

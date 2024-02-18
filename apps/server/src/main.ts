@@ -1,23 +1,29 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
-import { Logger } from 'nestjs-pino';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+import {NestFactory} from '@nestjs/core';
+import {AppModule} from './app.module';
+import {Logger} from 'nestjs-pino';
+import {ConfigService} from "@nestjs/config";
+import {NestExpressApplication} from "@nestjs/platform-express";
+
 const cookieParser = require('cookie-parser');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin:
-        ['http://localhost:3001','http://localhost:3000','https://webui-szl9.onrender.com','https://production-varify-server.onrender.com', 'https://varify.synex.one'],
-    credentials: true,
-  })
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {rawBody: true});
+    app.enableCors({
+        origin:
+            ['http://localhost:5173','http://localhost:5173/',  'http://localhost:3000'],
+        credentials: true,
+    })
 
-  // Add Pino logger
-  app.useLogger(app.get(Logger));
+    const configService = app.get(ConfigService);
 
-  // Add cookie parser
-  app.use(cookieParser());
 
-  await app.listen(4000);
+    // Add Pino logger
+    app.useLogger(app.get(Logger));
+
+    // Add cookie parser
+    app.use(cookieParser());
+
+    await app.listen(configService.get('GLOBAL.PORT'));
 }
+
 bootstrap();

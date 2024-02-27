@@ -25,7 +25,7 @@ export default function DashboardPage() {
             <PageContentSection>
                 <h1 className={'text-lg font-semibold'}>Your Applications</h1>
                 <div className={'py-6 grid grid-cols-2 lg:grid-cols-3 '}>
-                    {organization?.publicMetadata?.varify_access === 'true' && (
+                    {organization?.publicMetadata?.varify_access === true && (
                         <div className={'col-span-1'}>
                             <ProductCard
                                 productName={'Varify'}
@@ -36,7 +36,7 @@ export default function DashboardPage() {
                             />
                         </div>
                     )}
-                    {organization?.publicMetadata?.field_lenz_access === 'true' && (
+                    {organization?.publicMetadata?.field_lenz_access === true && (
                         <div className={'col-span-1'}>
                             <ProductCard
                                 productName={'Fieldlenz'}
@@ -52,7 +52,7 @@ export default function DashboardPage() {
             <PageContentSection>
                 <h1 className={'text-lg font-semibold'}>Our other products</h1>
                 <div className={'py-6 grid grid-cols-2 lg:grid-cols-3 '}>
-                    {organization?.publicMetadata?.varify_access !== 'true' && (
+                    {organization?.publicMetadata?.varify_access !== true && (
                         <div className={'col-span-1'}>
                             <ProductCard
                                 productName={'Varify'}
@@ -68,7 +68,7 @@ export default function DashboardPage() {
                             />
                         </div>
                     )}
-                    {organization?.publicMetadata?.field_lenz_access !== 'true' && (
+                    {organization?.publicMetadata?.field_lenz_access !== true && (
                         <div className={'col-span-1'}>
                             <ProductCard
                                 productName={'Fieldlenz'}

@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709027724221,
+      "tag": "0000_redundant_morg",
+      "breakpoints": true
+    }
+  ]
+}

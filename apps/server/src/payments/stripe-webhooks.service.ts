@@ -11,9 +11,7 @@ import {SubscriptionRepository} from "../subscription/subscription.repository";
 export class StripeWebhooksService {
     constructor(
         @InjectStripeClient() private stripe: Stripe,
-        private userRepository: UserRepository,
         private organisationRepository: OrganisationRepository,
-        private subscriptionRepository: SubscriptionRepository
     ) {
     }
 
@@ -25,13 +23,13 @@ export class StripeWebhooksService {
             const customer = await this.stripe.customers.retrieve(dataObject.customer as string) as Stripe.Customer;
 
             const accountOrg = await this.organisationRepository.findOneById(customer.metadata.organisation as string);
-            const userRole = await this.getAccessRoleFromSubscriptionEvent(dataObject);
+            const userRole = this.getAccessRoleFromSubscriptionEvent(dataObject);
 
             const authServiceOrg = await this.getAuthServiceOrganisationFromSubscriptionEvent(dataObject);
             await clerkClient.organizations.updateOrganization(accountOrg.authServiceId, {
                 publicMetadata: {
                     ...authServiceOrg.publicMetadata,
-                    [userRole]: 'true'
+                    [userRole]: true
                 }
             })
         } catch (e) {
@@ -50,7 +48,7 @@ export class StripeWebhooksService {
             await clerkClient.organizations.updateOrganization(authServiceOrg.id, {
                 publicMetadata: {
                     ...authServiceOrg.publicMetadata,
-                    [userRole]: 'false'
+                    [userRole]: false
                 }
             })
         } catch (e) {
@@ -70,7 +68,7 @@ export class StripeWebhooksService {
             await clerkClient.organizations.updateOrganization(authServiceOrg.id, {
                 publicMetadata: {
                     ...authServiceOrg.publicMetadata,
-                    [userRole]: 'false'
+                    [userRole]: false
                 }
             })
         } catch (e) {
@@ -90,7 +88,7 @@ export class StripeWebhooksService {
             await clerkClient.organizations.updateOrganization(authServiceOrg.id, {
                 publicMetadata: {
                     ...authServiceOrg.publicMetadata,
-                    [userRole]: 'true'
+                    [userRole]: true
                 }
             })
         } catch (e) {

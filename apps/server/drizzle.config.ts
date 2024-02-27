@@ -1,9 +1,11 @@
 import type { Config } from 'drizzle-kit';
-
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
 export default {
   schema: './src/drizzle/schema.ts',
   driver: 'pg',
+  out: './src/drizzle/generated',
   dbCredentials: {
-    connectionString: `postgresql://postgres:Bd2ca4f342fFG-BB*GeeecGaEe63*5EA@roundhouse.proxy.rlwy.net:39289/railway`,
+    connectionString: process.env.DATABASE_URL,
   },
 } as Config;

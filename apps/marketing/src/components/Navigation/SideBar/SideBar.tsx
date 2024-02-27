@@ -4,10 +4,12 @@ import React from "react";
 import {Separator} from "@/Primitives/Seperator";
 import {LogOutIcon} from "lucide-react";
 import Logo from "@/Assets/synex1.png";
-import {OrganizationSwitcher, SignOutButton} from "@clerk/clerk-react";
+import {OrganizationSwitcher, SignOutButton, useOrganization} from "@clerk/clerk-react";
 import SubscriptionSettings from "@/Pages/SubscriptionSettings";
 
 export default function SideBar() {
+    const {organization} = useOrganization();
+
     return (
         <div className="flex bg-white shadow grow flex-col gap-y-5 overflow-y-auto px-6 pb-2">
             <div className="flex justify-center cursor-pointer space-x-4 pt-4">
@@ -20,7 +22,10 @@ export default function SideBar() {
                 </a>
             </div>
             <OrganizationSwitcher/>
-            <SubscriptionSettings/>
+            {(organization?.publicMetadata?.field_lenz_access === true || organization?.publicMetadata?.varify_access === true) && (
+                <SubscriptionSettings/>
+
+            )}
             <Separator/>
             <nav className="flex flex-1 flex-col">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">

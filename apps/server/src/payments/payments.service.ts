@@ -95,8 +95,9 @@ export class PaymentsService {
     ): Promise<Stripe.Response<Stripe.Checkout.Session> | undefined> {
         try {
             return this.stripe.checkout.sessions.create({
-                success_url: 'http://localhost:3000/success',
-                customer: customerId, // it should not work
+                success_url: process.env.STRIPE_CHECKOUT_SUCCESS_URL,
+                customer: customerId,
+                allow_promotion_codes: true,
                 line_items: [
                     {
                         price: priceId,

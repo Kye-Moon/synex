@@ -36,17 +36,17 @@ export default function DashboardPage() {
                             />
                         </div>
                     )}
-                    {organization?.publicMetadata?.field_lenz_access === true && (
-                        <div className={'col-span-1'}>
-                            <ProductCard
-                                productName={'Fieldlenz'}
-                                productDescription={'The leading on site image capture and documentation tool'}
-                                productImage={FieldlenzLogo}
-                                productSiteLink={''}
-                                isSubscribed={true}
-                            />
-                        </div>
-                    )}
+                    {/*{organization?.publicMetadata?.field_lenz_access === true && (*/}
+                    {/*    <div className={'col-span-1'}>*/}
+                    {/*        <ProductCard*/}
+                    {/*            productName={'Fieldlenz'}*/}
+                    {/*            productDescription={'The leading on site image capture and documentation tool'}*/}
+                    {/*            productImage={FieldlenzLogo}*/}
+                    {/*            productSiteLink={''}*/}
+                    {/*            isSubscribed={true}*/}
+                    {/*        />*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             </PageContentSection>
             <PageContentSection>
@@ -68,22 +68,22 @@ export default function DashboardPage() {
                             />
                         </div>
                     )}
-                    {organization?.publicMetadata?.field_lenz_access !== true && (
-                        <div className={'col-span-1'}>
-                            <ProductCard
-                                productName={'Fieldlenz'}
-                                productDescription={'The leading on site image capture and documentation tool'}
-                                productImage={FieldlenzLogo}
-                                productSiteLink={'https://varify.synex.one/login'}
-                                onSubscribe={async () => {
-                                    const response = await client.post('/payments', {
-                                        priceId: import.meta.env.VITE_FIELD_LENZ_PRICE_ID
-                                    })
-                                    window.open(response.data.url, '_blank')
-                                }}
-                            />
-                        </div>
-                    )}
+                    {/*{organization?.publicMetadata?.field_lenz_access !== true && (*/}
+                    {/*    <div className={'col-span-1'}>*/}
+                    {/*        <ProductCard*/}
+                    {/*            productName={'Fieldlenz'}*/}
+                    {/*            productDescription={'The leading on site image capture and documentation tool'}*/}
+                    {/*            productImage={FieldlenzLogo}*/}
+                    {/*            productSiteLink={'https://varify.synex.one/login'}*/}
+                    {/*            onSubscribe={async () => {*/}
+                    {/*                const response = await client.post('/payments', {*/}
+                    {/*                    priceId: import.meta.env.VITE_FIELD_LENZ_PRICE_ID*/}
+                    {/*                })*/}
+                    {/*                window.open(response.data.url, '_blank')*/}
+                    {/*            }}*/}
+                    {/*        />*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             </PageContentSection>
         </div>

@@ -16,20 +16,11 @@ const products = [
     {name: 'EstiQ', description: 'Streamline project cost estimation', href: '#varify', img: estiq},
     {name: 'Field lens', description: 'Apply meaningful context to photos', href: '#varify', img: fieldlens},
 ]
-const callsToAction = [
-    {name: 'Watch demo', href: '#', icon: PlayCircleIcon},
-    {name: 'Contact sales', href: '#', icon: PhoneIcon},
-]
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const navigate = useNavigate();
-    const {getToken, isLoaded, isSignedIn} = useAuth();
-
+    const {isSignedIn} = useAuth();
 
     return (
         <header className="bg-white h-20 w-full ">
@@ -42,16 +33,20 @@ export default function Header() {
                     </a>
                     <span className="pl-4 mt-2 text-3xl font-bold">Synex</span>
                 </div>
-                <div className="flex lg:hidden">
-                    <button
-                        type="button"
-                        className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-                        onClick={() => setMobileMenuOpen(true)}
-                    >
-                        <span className="sr-only">Open main menu</span>
-                        <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
-                    </button>
-                </div>
+                {isSignedIn ? (
+                    <Button className={'lg:hidden'} onClick={() => navigate({to: '/dashboard'})}>Dashboard</Button>
+                ) : (
+                    <div className="flex lg:hidden">
+                        <button
+                            type="button"
+                            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                            onClick={() => setMobileMenuOpen(true)}
+                        >
+                            <span className="sr-only">Open main menu</span>
+                            <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
+                        </button>
+                    </div>
+                )}
                 <Popover.Group className="hidden lg:flex lg:gap-x-12">
                     <Popover className="relative">
                         <Popover.Button
@@ -59,7 +54,6 @@ export default function Header() {
                             Products
                             <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
                         </Popover.Button>
-
                         <Transition
                             as={Fragment}
                             enter="transition ease-out duration-200"
@@ -111,11 +105,8 @@ export default function Header() {
                     <div className="flex items-center justify-between">
                         <a href="#" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
-                            <img
-                                className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                alt=""
-                            />
+                            <img className="h-12 w-auto"
+                                 src={Logo} alt=""/>
                         </a>
                         <button
                             type="button"
@@ -129,16 +120,25 @@ export default function Header() {
                     <div className="mt-6 flow-root">
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="py-6">
-                                <div className=" lg:flex lg:flex-1 lg:justify-end space-x-2">
-                                    {isSignedIn && <Button onClick={() => navigate({to: '/dashboard'})}>Dashboard</Button>}
-                                    {!isSignedIn && <SignInButton><Button>Log in</Button></SignInButton>}
-                                    {!isSignedIn && <Button onClick={() => navigate({to: '/signup'})}>Get A Free Account</Button>}
+                                <div className="lg:flex flex flex-col lg:flex-1 lg:justify-end space-y-2">
+                                    {isSignedIn &&
+                                        <Button onClick={() => navigate({to: '/dashboard'})}>Dashboard</Button>}
+                                    {!isSignedIn && (
+                                        <SignInButton
+                                            afterSignInUrl={window.location.origin + '/dashboard'}
+                                        >
+                                            <Button>Log in</Button>
+                                        </SignInButton>
+                                    )}
+                                    {!isSignedIn && <Button onClick={() => navigate({to: '/signup'})}>Get A Free
+                                        Account</Button>}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Dialog.Panel>
             </Dialog>
+
         </header>
     )
 }

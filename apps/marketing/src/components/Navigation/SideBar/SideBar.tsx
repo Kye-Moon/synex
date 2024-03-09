@@ -22,10 +22,6 @@ export default function SideBar() {
                 </a>
             </div>
             <OrganizationSwitcher/>
-            {(organization?.publicMetadata?.field_lenz_access === true || organization?.publicMetadata?.varify_access === true) && (
-                <SubscriptionSettings/>
-
-            )}
             <Separator/>
             <nav className="flex flex-1 flex-col">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">

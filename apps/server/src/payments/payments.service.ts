@@ -22,7 +22,7 @@ export class PaymentsService {
             organizationId: this.requestService.organisationId
         });
 
-        const localOrg = await this.organisationService.findOrCreateByAuthServiceId({
+        const localOrg = await this.organisationService.findOrCreateByAuthId({
             authServiceId: authOrganisation.id,
             name: authOrganisation.name
         });
@@ -81,7 +81,7 @@ export class PaymentsService {
     }
 
     async createStripePortalSession() {
-        const org = await this.organisationRepository.findOneByAuthServiceId(this.requestService.organisationId)
+        const org = await this.organisationRepository.findOneByAuthId(this.requestService.organisationId)
         return await this.stripe.billingPortal.sessions.create({
             customer: org.customerId,
             return_url: process.env.STRIPE_PORTAL_RETURN_URL

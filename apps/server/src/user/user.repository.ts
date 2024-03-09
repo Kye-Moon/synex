@@ -10,7 +10,7 @@ export class UserRepository {
     constructor(@Inject(ORM) private db: NodePgDatabase<typeof schema>) {
     }
 
-    async findOneByAuthServiceId(authServiceId: string) {
+    async findOneByAuthId(authServiceId: string) {
         const _user = await this.db
             .select()
             .from(user)

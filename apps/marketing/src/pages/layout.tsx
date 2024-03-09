@@ -3,18 +3,59 @@ import SideBar from "@/Components/Navigation/SideBar/SideBar";
 import StickyTopMobileSideBar from "@/Components/Navigation/StickyTopMobileSideBar/StickyTopMobileSideBar";
 import SidebarDialog from "@/Components/Navigation/SidebarDialog/SidebarDialog";
 import {Outlet, useNavigate} from "@tanstack/react-router";
-import {CreateOrganization, useAuth} from "@clerk/clerk-react";
+import {CreateOrganization, useAuth, useUser} from "@clerk/clerk-react";
+import {Spinner} from "@/Components/Loading/Spinner";
+import SynexLogo from "@/Assets/synex1.png";
+import useClient from "../hooks/useClient";
 
 export default function AppLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const {isSignedIn, isLoaded, orgId} = useAuth();
     const navigate = useNavigate();
+    const {user} = useUser();
+    const client = useClient();
+
+    const isInitialised = async () => {
+        const response = await client.get('user/initialised')
+        console.log(response)
+        return false
+    }
+
+    const initialiseUser = async () => {
+        const response = await client.post('user/initialise')
+        console.log(response)
+        return true
+    }
+
+    useEffect(() => {
+        const initUser = async () => {
+            const response = await isInitialised()
+            if (response === false) {
+                await initialiseUser()
+                await user?.reload()
+            }
+        }
+        if (isLoaded && !user?.publicMetadata.synex_initialised) {
+            initUser()
+        }
+    }, [user?.publicMetadata.synex_initialised, isSignedIn])
+
 
     useEffect(() => {
         if (!isSignedIn && isLoaded) {
             navigate({to: "/"});
         }
     }, [isSignedIn, isLoaded]);
+
+
+    if (!user?.publicMetadata.synex_initialised) {
+        return (
+            <div className="flex bg-white justify-center items-center h-screen flex-col space-y-6">
+                <img src={SynexLogo} alt={''} className={'h-16'}/>
+                <Spinner/>
+            </div>
+        )
+    }
 
     return (
         <>

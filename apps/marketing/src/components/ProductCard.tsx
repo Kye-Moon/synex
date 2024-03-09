@@ -2,7 +2,12 @@ import * as React from "react"
 
 import {Button} from "@/Primitives/Button/Button"
 import {Card, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/Primitives/Card"
-import {useAuth} from "@clerk/clerk-react";
+import {useAuth, useUser} from "@clerk/clerk-react";
+
+
+export enum PRODUCT_NAMES {
+    VARIFY = "Varify",
+}
 
 interface ProductCardProps {
     productName: string
@@ -11,6 +16,7 @@ interface ProductCardProps {
     productSiteLink: string
     isSubscribed?: boolean
     onSubscribe?: () => void
+    appLink?: string
 }
 
 export function ProductCard({
@@ -19,10 +25,10 @@ export function ProductCard({
                                 productImage,
                                 productSiteLink,
                                 isSubscribed,
-                                onSubscribe,
+                                appLink
                             }: ProductCardProps) {
-
-    const {has, isLoaded} = useAuth();
+    const {has} = useAuth();
+    const {user} = useUser();
     return (
         <Card className="w-[250px] ">
             <CardHeader className={'space-y-4'}>
@@ -33,19 +39,21 @@ export function ProductCard({
                 <CardDescription>{productDescription}</CardDescription>
             </CardHeader>
             <CardFooter className="flex justify-end">
-                {has && has({role: 'org:admin'}) && (
-                    <>
-                        {!isSubscribed && (
-                            <div className={'space-x-2'}>
-                                <Button>More</Button>
-                                <Button onClick={() => onSubscribe && onSubscribe()}>Subscribe</Button>
-                            </div>
-                        )}
-                    </>
-                )}
+                <div className={'space-x-2'}>
+                    <Button>More Info</Button>
+                </div>
                 {isSubscribed && (
                     <div className={'space-x-2'}>
-                        <Button onClick={() => window.open(productSiteLink)}>Open</Button>
+                        {user?.publicMetadata?.['varify_role'] === "ADMIN" && (
+                            <Button onClick={() => window.open(productSiteLink)}>Open</Button>
+                        )}
+                        {user?.publicMetadata?.['varify_role'] === "MEMBER" && (
+                            <Button>
+                                <a href={appLink}>
+                                    Open App
+                                </a>
+                            </Button>
+                        )}
                     </div>
                 )}
             </CardFooter>

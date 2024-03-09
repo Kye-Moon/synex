@@ -3,10 +3,10 @@ import {useEffect} from "react";
 import {useOrganization, useUser} from "@clerk/clerk-react";
 import PageHeadingWithMetaAndActions from "@/Components/PageHeadingWithMetaAndActions/PageHeadingWithMetaAndActions";
 import PageContentSection from "@/Components/PageContentSection";
-import {ProductCard} from "@/Components/ProductCard";
-import VarifyLogo from "@/Assets/varify.png";
-import FieldlenzLogo from "@/Assets/FieldLens.png";
 import useClient from "../hooks/useClient";
+import {VarifyCard} from "@/Components/ProductCards/VarifyCard";
+import {FieldLenzCard} from "@/Components/ProductCards/FieldLenzCard";
+import {EstiQCard} from "@/Components/ProductCards/EstiQCard";
 
 export default function DashboardPage() {
     const navigate = useNavigate();
@@ -23,67 +23,22 @@ export default function DashboardPage() {
         <div>
             <PageHeadingWithMetaAndActions pageHeading={"Dashboard"}/>
             <PageContentSection>
-                <h1 className={'text-lg font-semibold'}>Your Applications</h1>
-                <div className={'py-6 grid grid-cols-2 lg:grid-cols-3 '}>
-                    {organization?.publicMetadata?.varify_access === true && (
-                        <div className={'col-span-1'}>
-                            <ProductCard
-                                productName={'Varify'}
-                                productDescription={'Streamlined On to Off site communication for industrial sites'}
-                                productImage={VarifyLogo}
-                                productSiteLink={'https://varify.synex.one/login'}
-                                isSubscribed={true}
-                            />
-                        </div>
-                    )}
-                    {/*{organization?.publicMetadata?.field_lenz_access === true && (*/}
-                    {/*    <div className={'col-span-1'}>*/}
-                    {/*        <ProductCard*/}
-                    {/*            productName={'Fieldlenz'}*/}
-                    {/*            productDescription={'The leading on site image capture and documentation tool'}*/}
-                    {/*            productImage={FieldlenzLogo}*/}
-                    {/*            productSiteLink={''}*/}
-                    {/*            isSubscribed={true}*/}
-                    {/*        />*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
+                <h1 className={'text-lg font-semibold'}>Synex Products</h1>
+                <div className=" flex flex-col items-center  lg:flex-row  lg:space-x-6">
+                    <div className="w-full lg:w-auto py-2">
+                        <VarifyCard/>
+                    </div>
                 </div>
             </PageContentSection>
             <PageContentSection>
-                <h1 className={'text-lg font-semibold'}>Our other products</h1>
-                <div className={'py-6 grid grid-cols-2 lg:grid-cols-3 '}>
-                    {organization?.publicMetadata?.varify_access !== true && (
-                        <div className={'col-span-1'}>
-                            <ProductCard
-                                productName={'Varify'}
-                                productDescription={'Streamlined On to Off site communication for industrial sites'}
-                                productImage={VarifyLogo}
-                                productSiteLink={'https://varify.synex.one/login'}
-                                onSubscribe={async () => {
-                                    const response = await client.post('/payments', {
-                                        priceId: import.meta.env.VITE_VARIFY_PRICE_ID
-                                    })
-                                    window.open(response.data.url, '_blank')
-                                }}
-                            />
-                        </div>
-                    )}
-                    {/*{organization?.publicMetadata?.field_lenz_access !== true && (*/}
-                    {/*    <div className={'col-span-1'}>*/}
-                    {/*        <ProductCard*/}
-                    {/*            productName={'Fieldlenz'}*/}
-                    {/*            productDescription={'The leading on site image capture and documentation tool'}*/}
-                    {/*            productImage={FieldlenzLogo}*/}
-                    {/*            productSiteLink={'https://varify.synex.one/login'}*/}
-                    {/*            onSubscribe={async () => {*/}
-                    {/*                const response = await client.post('/payments', {*/}
-                    {/*                    priceId: import.meta.env.VITE_FIELD_LENZ_PRICE_ID*/}
-                    {/*                })*/}
-                    {/*                window.open(response.data.url, '_blank')*/}
-                    {/*            }}*/}
-                    {/*        />*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
+                <h1 className="text-lg font-semibold">Coming Soon</h1>
+                <div className="flex flex-col items-center md:flex-row  lg:space-x-6">
+                    <div className="w-full lg:w-auto py-2">
+                        <FieldLenzCard/>
+                    </div>
+                    <div className="w-full lg:w-auto py-2">
+                        <EstiQCard/>
+                    </div>
                 </div>
             </PageContentSection>
         </div>

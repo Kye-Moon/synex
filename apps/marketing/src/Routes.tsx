@@ -10,6 +10,7 @@ import CreateOrganisationPage from "@/Pages/CreateOrganisationPage";
 import AppLayout from "@/Pages/layout";
 import z from "zod";
 import SubscriptionSettings from "@/Pages/SubscriptionSettings";
+import VarifyMoreInfo from "@/Pages/VarifyMoreInfo";
 
 
 const rootRoute = new RootRoute({
@@ -67,6 +68,12 @@ export const subscriptionSettingsRoute = new Route({
     validateSearch: subscriptionSettingsSchema,
 });
 
+export const varifyMoreInfoRoute = new Route({
+    getParentRoute: () => layoutRoute,
+    path: "/varify-more-info",
+    component: VarifyMoreInfo,
+});
+
 
 const routeTree = rootRoute.addChildren([
     indexRoute,
@@ -77,7 +84,7 @@ const routeTree = rootRoute.addChildren([
     ]),
     signUpRoute,
     createOrganisationRoute,
-
+    varifyMoreInfoRoute,
 ]);
 const router = new Router({
     routeTree,

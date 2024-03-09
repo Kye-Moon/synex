@@ -10,7 +10,6 @@ export class RequestService {
     }
 
     get organisationId(): any {
-        console.log(`this.request`, this.request.orgId)
         return this.request.orgId;
     }
 

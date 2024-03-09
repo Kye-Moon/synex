@@ -9,8 +9,8 @@ export class OrganisationService {
     ) {
     }
 
-    async findOrCreateByAuthServiceId(input: NewOrganisation) {
-        const organisation = await this.organisationRepository.findOneByAuthServiceId(input.authServiceId);
+    async findOrCreateByAuthId(input: NewOrganisation) {
+        const organisation = await this.organisationRepository.findOneByAuthId(input.authServiceId);
         if (organisation) {
             return organisation;
         }

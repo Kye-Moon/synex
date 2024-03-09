@@ -18,7 +18,7 @@ export class OrganisationRepository {
         return _organisation[0];
     }
 
-    async findOneByAuthServiceId(id: string) {
+    async findOneByAuthId(id: string) {
         const _organisation = await this.db
             .select()
             .from(organisation)

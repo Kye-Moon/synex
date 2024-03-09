@@ -15,25 +15,15 @@ export default function AppLayout() {
     const {user} = useUser();
     const client = useClient();
 
-    const isInitialised = async () => {
-        const response = await client.get('user/initialised')
-        console.log(response)
-        return false
-    }
-
     const initialiseUser = async () => {
         const response = await client.post('user/initialise')
-        console.log(response)
         return true
     }
 
     useEffect(() => {
         const initUser = async () => {
-            const response = await isInitialised()
-            if (!response) {
-                await initialiseUser()
-                await user?.reload()
-            }
+            await initialiseUser()
+            await user?.reload()
         }
         if (isLoaded && !user?.publicMetadata.synex_initialised) {
             initUser()

@@ -30,7 +30,7 @@ export default function AppLayout() {
     useEffect(() => {
         const initUser = async () => {
             const response = await isInitialised()
-            if (response === false) {
+            if (!response) {
                 await initialiseUser()
                 await user?.reload()
             }

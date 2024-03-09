@@ -32,31 +32,29 @@ export class UserService {
         });
         const authUser = await clerkClient.users.getUser(this.request.userId)
         let user = await this.userRepository.findOneByAuthId(authUser.id);
-        if (user) {
-            return true;
-        } else {
+        const userOrgRole = await this.getUserRoleFromCurrentOrg(organisation);
+        const invitationList = await clerkClient.organizations.getOrganizationInvitationList({
+            organizationId: this.request.organisationId,
+            status: ['accepted']
+        })
+        const userInvitation = invitationList.find((invitation) => invitation.emailAddress === authUser.emailAddresses[0].emailAddress);
+        if (!user) {
             user = await this.userRepository.create({
                 firstName: authUser.firstName,
                 lastName: authUser.lastName,
                 email: authUser.emailAddresses[0].emailAddress,
                 authServiceId: authUser.id,
             });
-            const invitationList = await clerkClient.organizations.getOrganizationInvitationList({
-                organizationId: this.request.organisationId,
-                status: ['accepted']
-            })
-            const userOrgRole = await this.getUserRoleFromCurrentOrg(organisation);
-            const userInvitation = invitationList.find((invitation) => invitation.emailAddress === authUser.emailAddresses[0].emailAddress);
-            const varifyRole = userOrgRole === 'org:admin' ? "ADMIN" : userInvitation?.publicMetadata['varify_role'] ?? "MEMBER";
-            await clerkClient.users.updateUserMetadata(user.authServiceId, {
-                publicMetadata: {
-                    ...authUser.publicMetadata,
-                    varify_role: varifyRole,
-                    synex_initialised: true
-                }
-            })
-            return true;
         }
+        const varifyRole = userOrgRole === 'org:admin' ? "ADMIN" : userInvitation?.publicMetadata['varify_role'] ?? "MEMBER";
+        await clerkClient.users.updateUserMetadata(user.authServiceId, {
+            publicMetadata: {
+                ...authUser.publicMetadata,
+                varify_role: varifyRole,
+                synex_initialised: true
+            }
+        })
+        return true;
     }
 
     async isUserInitialised() {

@@ -11,8 +11,6 @@ import {EstiQCard} from "@/Components/ProductCards/EstiQCard";
 export default function DashboardPage() {
     const navigate = useNavigate();
     const {isSignedIn, user, isLoaded} = useUser();
-    const {organization} = useOrganization();
-    const client = useClient();
     useEffect(() => {
         if (!isSignedIn && isLoaded) {
             navigate({to: "/"});
@@ -32,7 +30,7 @@ export default function DashboardPage() {
             </PageContentSection>
             <PageContentSection>
                 <h1 className="text-lg font-semibold">Coming Soon</h1>
-                <div className="flex flex-col items-center md:flex-row  lg:space-x-6">
+                <div className="flex flex-col items-stretch md:flex-row md:items-stretch lg:space-x-6">
                     <div className="w-full lg:w-auto py-2">
                         <FieldLenzCard/>
                     </div>

@@ -10,7 +10,9 @@ import CreateOrganisationPage from "@/Pages/CreateOrganisationPage";
 import AppLayout from "@/Pages/layout";
 import z from "zod";
 import SubscriptionSettings from "@/Pages/SubscriptionSettings";
-import VarifyMoreInfo from "@/Pages/VarifyMoreInfo";
+import VarifyMoreInfo from "@/Pages/ProductInfoPages/VarifyMoreInfo";
+import FieldLenzMoreInfo from "@/Pages/ProductInfoPages/FieldLenzMoreInfo";
+import EstiQMoreInfo from "@/Pages/ProductInfoPages/EstiQMoreInfo";
 
 
 const rootRoute = new RootRoute({
@@ -74,6 +76,18 @@ export const varifyMoreInfoRoute = new Route({
     component: VarifyMoreInfo,
 });
 
+export const fieldLenzMoreInfoRoute = new Route({
+    getParentRoute: () => layoutRoute,
+    path: "/fieldLenz-more-info",
+    component: FieldLenzMoreInfo,
+});
+
+export const estiQMoreInfoRoute = new Route({
+    getParentRoute: () => layoutRoute,
+    path: "/estiQ-more-info",
+    component: EstiQMoreInfo,
+});
+
 
 const routeTree = rootRoute.addChildren([
     indexRoute,
@@ -85,6 +99,8 @@ const routeTree = rootRoute.addChildren([
     signUpRoute,
     createOrganisationRoute,
     varifyMoreInfoRoute,
+    fieldLenzMoreInfoRoute,
+    estiQMoreInfoRoute,
 ]);
 const router = new Router({
     routeTree,

@@ -1,15 +1,15 @@
 import EnquiryForm from "@/Components/EnquiryForm/EnquiryForm";
 import PageContentSection from "@/Components/PageContentSection";
-import VarifyProductContent from "@/Components/VarifyProductContent";
+import EstiQProductContent from "@/Components/ProductInfoContent/EstiQProductContent";
 
-export default function VarifyMoreInfo() {
+export default function EstiQMoreInfo() {
     return (
         <div>
             <PageContentSection>
-                <EnquiryForm appName={"Varify"}/>
+                <EnquiryForm appName={"EstiQ"}/>
             </PageContentSection>
             <PageContentSection>
-                <VarifyProductContent/>
+                <EstiQProductContent/>
             </PageContentSection>
         </div>
     )

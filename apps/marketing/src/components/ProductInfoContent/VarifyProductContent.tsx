@@ -1,10 +1,12 @@
-import varify from "../assets/varify.png";
+import varify from "@/Assets/varify.png";
 import {LockClosedIcon} from '@heroicons/react/20/solid'
 import {SmilePlusIcon, UsersIcon} from "lucide-react";
+import {MagnifyingGlassCircleIcon} from "@heroicons/react/16/solid";
 
-export default function EstiQProductContent() {
+export default function VarifyProductContent() {
     return (
-        <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
+        <div id={'varify'}
+             className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <svg
                     className="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
@@ -32,7 +34,7 @@ export default function EstiQProductContent() {
                 </svg>
             </div>
             <div
-                className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+                className="mx-auto grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
                 <div
                     className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
                     <div className="lg:pr-4">
@@ -42,29 +44,24 @@ export default function EstiQProductContent() {
                                     className="flex justify-center items-center w-12 h-12 rounded-full bg-primary-100 lg:h-14 lg:w-14">
                                     <img src={varify} alt="Verification icon"/>
                                 </div>
-                                <p className="text-2xl font-semibold leading-7 text-green-400 ml-2 lg:ml-4">
-                                    EstiQ
+                                <p className="text-4xl font-semibold leading-7  ml-2 lg:ml-4">
+                                    Varify
                                 </p>
                             </div>
 
-                            <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">A better
-                                way to manage contract variations</h1>
+                            <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                Streamline your on-site to office communications and improve job management.
+                            </h1>
                             <p className="mt-6 text-xl leading-8 text-gray-700">
-                                Varify optimizes project management through precise variation tracking, ensuring
-                                accurate identification and billing. Maximize project profitability effortlessly by
-                                avoiding revenue loss through meticulous change management.
+                                Varify optimizes project management by streamlining the process of on-site to office
+                                communications. It provides a centralized platform for all job data, ensuring seamless
+                                job management and enhanced project visibility.
+
                             </p>
                         </div>
                     </div>
                 </div>
-                <div
-                    className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-                    <img
-                        className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-                        src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-                        alt=""
-                    />
-                </div>
+
                 <div
                     className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
                     <div className="lg:pr-4">
@@ -72,7 +69,7 @@ export default function EstiQProductContent() {
                             <ul role="list" className=" space-y-8 text-gray-600">
                                 <li className="flex gap-x-3">
                                     <LockClosedIcon className="mt-1 h-5 w-5 flex-none text-indigo-600"
-                                                      aria-hidden="true"/>
+                                                    aria-hidden="true"/>
                                     <span>
                                         <strong
                                             className="font-semibold text-gray-900">Seamless Revenue Protection: </strong>
@@ -81,8 +78,18 @@ export default function EstiQProductContent() {
                                     </span>
                                 </li>
                                 <li className="flex gap-x-3">
+                                    <MagnifyingGlassCircleIcon className="mt-1 h-5 w-5 flex-none text-indigo-600"
+                                                               aria-hidden="true"/>
+                                    <span>
+                                        <strong
+                                            className="font-semibold text-gray-900">Perfect visibility across the entire job</strong>
+                                        {'  '}
+                                        Track every detail of your job from start to finish. Varify provides a centralized platform for all job data, ensuring seamless job management and enhanced project visibility. Add images, notes, and documents to your jobs, and keep your team in the loop.
+                                    </span>
+                                </li>
+                                <li className="flex gap-x-3">
                                     <UsersIcon className="mt-1 h-5 w-5 flex-none text-indigo-600"
-                                                      aria-hidden="true"/>
+                                               aria-hidden="true"/>
                                     <span>
                                         <strong
                                             className="font-semibold text-gray-900">Effortless Crew Onboarding:</strong>
@@ -92,7 +99,7 @@ export default function EstiQProductContent() {
                                 </li>
                                 <li className="flex gap-x-3">
                                     <SmilePlusIcon className="mt-1 h-5 w-5 flex-none text-indigo-600"
-                                                      aria-hidden="true"/>
+                                                   aria-hidden="true"/>
                                     <span>
                                         <strong
                                             className="font-semibold text-gray-900">Enhanced Customer Relations:</strong>

@@ -27,20 +27,23 @@ export class UserService {
     async initialise() {
         let organisation: Organisation;
         let userOrgRole: string;
+        let invitationList: any[];
+        console.log('initialising user');
         if (this.request.organisationId) {
+            console.log('initialising user with org');
             const org = await clerkClient.organizations.getOrganization({organizationId: this.request.organisationId});
             organisation = await this.organisationService.findOrCreateByAuthId({
                 name: org.name,
                 authServiceId: this.request.organisationId
             });
             userOrgRole = await this.getUserRoleFromCurrentOrg(organisation);
+            invitationList = await clerkClient.organizations.getOrganizationInvitationList({
+                organizationId: this.request.organisationId,
+                status: ['accepted']
+            })
         }
         const authUser = await clerkClient.users.getUser(this.request.userId)
         let user = await this.userRepository.findOneByAuthId(authUser.id);
-        const invitationList = await clerkClient.organizations.getOrganizationInvitationList({
-            organizationId: this.request.organisationId,
-            status: ['accepted']
-        })
         const userInvitation = invitationList.find((invitation) => invitation.emailAddress === authUser.emailAddresses[0].emailAddress);
         if (!user) {
             console.log('creating user');
@@ -52,6 +55,8 @@ export class UserService {
             });
         }
         const varifyRole = userOrgRole === 'org:admin' ? "ADMIN" : userInvitation?.publicMetadata['varify_role'] ?? "MEMBER";
+        console.log('varifyRole', varifyRole);
+        console.log('updating user');
         await clerkClient.users.updateUserMetadata(user.authServiceId, {
             publicMetadata: {
                 ...authUser.publicMetadata,

@@ -3,7 +3,7 @@ import SideBar from "@/Components/Navigation/SideBar/SideBar";
 import StickyTopMobileSideBar from "@/Components/Navigation/StickyTopMobileSideBar/StickyTopMobileSideBar";
 import SidebarDialog from "@/Components/Navigation/SidebarDialog/SidebarDialog";
 import {Outlet, useNavigate} from "@tanstack/react-router";
-import {CreateOrganization, useAuth, useOrganization, useUser} from "@clerk/clerk-react";
+import {CreateOrganization, OrganizationSwitcher, useAuth, useOrganization, useUser} from "@clerk/clerk-react";
 import {Spinner} from "@/Components/Loading/Spinner";
 import SynexLogo from "@/Assets/synex1.png";
 import useClient from "../hooks/useClient";
@@ -26,7 +26,9 @@ export default function AppLayout() {
             await initialiseUser()
             await user?.reload()
         }
-        initUser()
+        if (isSignedIn && !user?.publicMetadata.synex_initialised){
+            initUser()
+        }
     }, [user?.publicMetadata.synex_initialised, isSignedIn, organization])
 
 
@@ -66,7 +68,19 @@ export default function AppLayout() {
                                 You can also invite other people to join your organisation.
                                 If you are a business, use your business name. If you are an individual, use your name.
                             </div>
-                            <CreateOrganization/>
+                            <div className={'rounded-lg bg-white shadow  my-6 py-4 px-24'}>
+                                <div className={'flex flex-col space-y-4 place-items-center'}>
+                                    <h1 className={'text-2xl font-semibold'}>Switch to an organisation</h1>
+                                    <OrganizationSwitcher/>
+                                </div>
+
+                            </div>
+
+                            <div className={'flex flex-col space-y-4 place-items-center'}>
+
+                                <h1>Create a new Organisation</h1>
+                                <CreateOrganization/>
+                            </div>
                         </div>
                     ) : (
                         <Outlet/>

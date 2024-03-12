@@ -25,23 +25,22 @@ export class UserService {
     }
 
     async initialise() {
-        console.log('initialising user');
-        console.log('this.request.organisationId', this.request.organisationId)
-        console.log('this.request.userId', this.request.userId)
-        const org = await clerkClient.organizations.getOrganization({organizationId: this.request.organisationId});
-        const organisation = await this.organisationService.findOrCreateByAuthId({
-            name: org.name,
-            authServiceId: this.request.organisationId
-        });
+        let organisation: Organisation;
+        let userOrgRole: string;
+        if (this.request.organisationId) {
+            const org = await clerkClient.organizations.getOrganization({organizationId: this.request.organisationId});
+            organisation = await this.organisationService.findOrCreateByAuthId({
+                name: org.name,
+                authServiceId: this.request.organisationId
+            });
+            userOrgRole = await this.getUserRoleFromCurrentOrg(organisation);
+        }
         const authUser = await clerkClient.users.getUser(this.request.userId)
-        console.log('authUser', authUser)
         let user = await this.userRepository.findOneByAuthId(authUser.id);
-        const userOrgRole = await this.getUserRoleFromCurrentOrg(organisation);
         const invitationList = await clerkClient.organizations.getOrganizationInvitationList({
             organizationId: this.request.organisationId,
             status: ['accepted']
         })
-        console.log('invitationList', invitationList)
         const userInvitation = invitationList.find((invitation) => invitation.emailAddress === authUser.emailAddresses[0].emailAddress);
         if (!user) {
             console.log('creating user');
@@ -53,8 +52,6 @@ export class UserService {
             });
         }
         const varifyRole = userOrgRole === 'org:admin' ? "ADMIN" : userInvitation?.publicMetadata['varify_role'] ?? "MEMBER";
-        console.log('varifyRole', varifyRole)
-        console.log('Setting user metadata');
         await clerkClient.users.updateUserMetadata(user.authServiceId, {
             publicMetadata: {
                 ...authUser.publicMetadata,

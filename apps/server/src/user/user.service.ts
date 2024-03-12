@@ -27,8 +27,7 @@ export class UserService {
     async initialise() {
         let organisation: Organisation;
         let userOrgRole: string;
-        let invitationList: any[];
-        console.log('initialising user');
+        let invitationList: any[] = [];
         if (this.request.organisationId) {
             console.log('initialising user with org');
             const org = await clerkClient.organizations.getOrganization({organizationId: this.request.organisationId});
